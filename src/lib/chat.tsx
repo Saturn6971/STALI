@@ -22,7 +22,9 @@ export interface Message {
 
 export interface Conversation {
   id: string;
-  system_id: string;
+  system_id: string | null;
+  cpu_listing_id: string | null;
+  gpu_listing_id: string | null;
   buyer_id: string;
   seller_id: string;
   last_message_at: string;
@@ -38,6 +40,18 @@ export interface Conversation {
     id: string;
     username: string;
     display_name: string;
+  };
+  cpu_listing?: {
+    id: string;
+    title: string;
+    price: number;
+    image_urls?: string[] | null;
+  };
+  gpu_listing?: {
+    id: string;
+    title: string;
+    price: number;
+    image_urls?: string[] | null;
   };
   seller?: {
     id: string;
@@ -84,6 +98,8 @@ export function ChatProvider({ children }: { children: React.ReactNode }) {
         .select(`
           *,
           system:systems(id, title, price, image_url),
+          cpu_listing:cpu_listings(id, title, price, image_urls),
+          gpu_listing:gpu_listings(id, title, price, image_urls),
           buyer:users!conversations_buyer_id_fkey(id, username, display_name),
           seller:users!conversations_seller_id_fkey(id, username, display_name),
           messages:messages(

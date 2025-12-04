@@ -129,12 +129,12 @@ export default function CPUDetails() {
   };
 
   const handleContactSeller = async () => {
+    if (!cpuListing) return;
+
     if (!user) {
       router.push('/auth');
       return;
     }
-
-    if (!cpuListing) return;
 
     // Prevent users from contacting themselves
     if (user.id === cpuListing.seller_id) {
@@ -142,7 +142,7 @@ export default function CPUDetails() {
     }
 
     try {
-      const conversation = await startConversation(cpuListing.id, cpuListing.seller_id);
+      const conversation = await startConversation(cpuListing.id, cpuListing.seller_id, 'cpu');
       if (conversation) {
         router.push(`/chat/${conversation.id}`);
       }

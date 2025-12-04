@@ -130,8 +130,13 @@ export default function GPUDetails() {
   };
 
   const handleContactSeller = async () => {
-    if (!user || !gpu) return;
-    
+    if (!gpu) return;
+
+    if (!user) {
+      router.push('/auth');
+      return;
+    }
+
     if (user.id === gpu.seller_id) {
       router.push('/seller');
       return;
@@ -140,7 +145,7 @@ export default function GPUDetails() {
     try {
       setIsContacting(true);
 
-      const conversation = await startConversation(gpu.id, gpu.seller_id);
+      const conversation = await startConversation(gpu.id, gpu.seller_id, 'gpu');
       if (conversation) {
         router.push(`/chat/${conversation.id}`);
       }

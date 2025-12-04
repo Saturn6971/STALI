@@ -102,6 +102,33 @@ export default function ChatPage() {
 
   const otherUser = user.id === conversation.buyer_id ? conversation.seller : conversation.buyer;
 
+  // Determine which listing this conversation is about
+  const listingType = conversation.system_id
+    ? 'system'
+    : conversation.cpu_listing_id
+    ? 'cpu'
+    : conversation.gpu_listing_id
+    ? 'gpu'
+    : null;
+
+  const listingUrl =
+    listingType === 'system'
+      ? `/systems/${conversation.system_id}`
+      : listingType === 'cpu'
+      ? `/cpus/${conversation.cpu_listing_id}`
+      : listingType === 'gpu'
+      ? `/gpus/${conversation.gpu_listing_id}`
+      : '/';
+
+  const listing =
+    listingType === 'system'
+      ? conversation.system
+      : listingType === 'cpu'
+      ? conversation.cpu_listing
+      : listingType === 'gpu'
+      ? conversation.gpu_listing
+      : undefined;
+
   return (
     <div className="min-h-screen bg-[var(--background)] text-[var(--foreground)] flex flex-col">
       {/* Navigation */}
@@ -128,26 +155,31 @@ export default function ChatPage() {
               </div>
             </div>
             <div className="flex items-center space-x-4">
-              <Link
-                href={`/systems/${conversation.system_id}`}
-                className="bg-[var(--brand)] hover:bg-[var(--brand-light)] text-white px-4 py-2 rounded-lg font-medium transition-all duration-200 hover:scale-105"
-              >
-                View System
-              </Link>
+              {listingType && (
+                <Link
+                  href={listingUrl}
+                  className="bg-[var(--brand)] hover:bg-[var(--brand-light)] text-white px-4 py-2 rounded-lg font-medium transition-all duration-200 hover:scale-105"
+                >
+                  View Listing
+                </Link>
+              )}
             </div>
           </div>
         </div>
       </nav>
 
-      {/* System Info */}
+      {/* Listing Info */}
       <div className="bg-[var(--card-bg)] border-b border-[var(--card-border)] px-6 lg:px-12 py-4">
         <div className="max-w-7xl mx-auto">
           <div className="flex items-center space-x-4">
             <div className="w-16 h-16 rounded-lg overflow-hidden bg-gradient-to-br from-[var(--brand)]/20 to-[var(--brand-light)]/20 flex-shrink-0">
-              {conversation.system?.image_url ? (
+              {listing?.image_url || (listing as any)?.image_urls?.[0] ? (
                 <img 
-                  src={conversation.system.image_url} 
-                  alt={conversation.system.title}
+                  src={
+                    (listing as any).image_url ||
+                    ((listing as any).image_urls && (listing as any).image_urls[0])
+                  } 
+                  alt={listing?.title || 'Listing image'}
                   className="w-full h-full object-cover"
                   loading="lazy"
                 />
@@ -158,9 +190,9 @@ export default function ChatPage() {
               )}
             </div>
             <div>
-              <h2 className="text-xl font-bold text-white">{conversation.system?.title}</h2>
+              <h2 className="text-xl font-bold text-white">{listing?.title || 'Listing'}</h2>
               <p className="text-lg text-[var(--brand)] font-semibold">
-                {formatCurrency(conversation.system?.price || 0)}
+                {formatCurrency(listing?.price || 0)}
               </p>
             </div>
           </div>
