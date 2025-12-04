@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useAuth } from '@/lib/auth';
 import Link from 'next/link';
 
@@ -19,6 +20,8 @@ export default function AuthForm({ mode, onModeChange }: AuthFormProps) {
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
 
+  const router = useRouter();
+  const searchParams = useSearchParams();
   const { signIn, signUp } = useAuth();
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -56,6 +59,10 @@ export default function AuthForm({ mode, onModeChange }: AuthFormProps) {
 
         if (error) {
           setError(error.message);
+        } else {
+          // Redirect after successful sign-in
+          const redirectTo = searchParams.get('redirect') || '/';
+          router.replace(redirectTo);
         }
       }
     } catch (err) {
