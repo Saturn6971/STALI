@@ -19,6 +19,8 @@ export default function SystemDetails() {
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [showGamingCompatibility, setShowGamingCompatibility] = useState(false);
   const [isFavorited, setIsFavorited] = useState(false);
+  const [isContacting, setIsContacting] = useState(false);
+  const [isFavoriting, setIsFavoriting] = useState(false);
   const { user, signOut } = useAuth();
   const { startConversation } = useConversationStarter();
 
@@ -145,6 +147,8 @@ export default function SystemDetails() {
     if (!system) return;
     
     try {
+      setIsFavoriting(true);
+
       if (isFavorited) {
         // Remove from favorites
         await supabase
@@ -173,6 +177,8 @@ export default function SystemDetails() {
       setIsFavorited(!isFavorited);
     } catch (err) {
       console.error('Error updating favorite:', err);
+    } finally {
+      setIsFavoriting(false);
     }
   };
 
@@ -190,12 +196,16 @@ export default function SystemDetails() {
     }
 
     try {
+      setIsContacting(true);
+
       const conversation = await startConversation(system.id, system.seller_id);
       if (conversation) {
         router.push(`/chat/${conversation.id}`);
       }
     } catch (error) {
       console.error('Error creating conversation:', error);
+    } finally {
+      setIsContacting(false);
     }
   };
 
@@ -260,10 +270,17 @@ export default function SystemDetails() {
                   </button>
                   {system.status === 'active' && (
                     <button 
-                      onClick={handleContactSeller}
-                      className="bg-[var(--brand)] hover:bg-[var(--brand-light)] text-white px-6 py-2 rounded-lg font-medium transition-all duration-200 hover:scale-105"
+                    onClick={handleContactSeller}
+                    disabled={isContacting || (user && user.id === system.seller_id)}
+                    className="bg-[var(--brand)] hover:bg-[var(--brand-light)] text-white px-6 py-2 rounded-lg font-medium transition-all duration-200 hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed"
                     >
-                      {user && user.id === system.seller_id ? 'Your Listing' : 'Contact Seller'}
+                    {isContacting ? (
+                      <div className="flex items-center justify-center">
+                        <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white" />
+                      </div>
+                    ) : (
+                      user && user.id === system.seller_id ? 'Your Listing' : 'Contact Seller'
+                    )}
                     </button>
                   )}
                   {system.status === 'draft' && user && user.id === system.seller_id && (
@@ -458,19 +475,33 @@ export default function SystemDetails() {
               <div className="flex space-x-3">
                 <button 
                   onClick={handleContactSeller}
-                  className="flex-1 bg-[var(--brand)] hover:bg-[var(--brand-light)] text-white py-4 rounded-lg font-medium text-lg transition-all duration-200 hover:scale-105"
+                  disabled={isContacting || (user && user.id === system.seller_id)}
+                  className="flex-1 bg-[var(--brand)] hover:bg-[var(--brand-light)] text-white py-4 rounded-lg font-medium text-lg transition-all duration-200 hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  {user && user.id === system.seller_id ? 'Your Listing' : 'Contact Seller'}
+                  {isContacting ? (
+                    <div className="flex items-center justify-center">
+                      <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white" />
+                    </div>
+                  ) : (
+                    user && user.id === system.seller_id ? 'Your Listing' : 'Contact Seller'
+                  )}
                 </button>
                 <button 
                   onClick={handleFavorite}
-                  className={`px-6 py-4 border rounded-lg font-medium text-lg transition-all duration-200 ${
+                  disabled={isFavoriting}
+                  className={`px-6 py-4 border rounded-lg font-medium text-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed ${
                     isFavorited 
                       ? 'bg-[var(--brand)] text-white border-[var(--brand)]' 
                       : 'border-[var(--brand)] text-[var(--brand)] hover:bg-[var(--brand)] hover:text-white'
                   }`}
                 >
-                  {isFavorited ? '❤️ Saved' : '❤️ Save'}
+                  {isFavoriting ? (
+                    <div className="flex items-center justify-center">
+                      <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-current" />
+                    </div>
+                  ) : (
+                    isFavorited ? '❤️ Saved' : '❤️ Save'
+                  )}
                 </button>
               </div>
             </div>
