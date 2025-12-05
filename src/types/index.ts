@@ -214,3 +214,85 @@ export interface CPUComparisonProps {
   onRemove: (id: string) => void
   onClear: () => void
 }
+
+// GPU-related types
+export interface GPUListing {
+  id: string
+  gpu_model_id: string
+  seller_id: string
+  title: string
+  description: string | null
+  price: number
+  original_price: number | null
+  condition: 'new' | 'like-new' | 'excellent' | 'good' | 'fair'
+  status: 'active' | 'sold' | 'pending' | 'draft'
+  purchase_date: string | null
+  warranty_remaining_months: number | null
+  overclocked: boolean
+  max_overclock: number | null
+  cooling_included: boolean
+  original_box: boolean
+  original_manual: boolean
+  image_urls: string[] | null
+  view_count: number
+  favorite_count: number
+  location: string | null
+  shipping_available: boolean
+  local_pickup: boolean
+  created_at: string
+  updated_at: string
+  // Joined data
+  gpu_model?: {
+    id: string
+    manufacturer_id: string
+    model_name: string
+    series?: string | null
+    generation?: string | null
+    architecture?: string | null
+    memory_type?: string | null
+    memory_size?: number | null
+    memory_bus_width?: number | null
+    base_clock?: number | null
+    boost_clock?: number | null
+    memory_clock?: number | null
+    cuda_cores?: number | null
+    stream_processors?: number | null
+    ray_tracing_cores?: number | null
+    tensor_cores?: number | null
+    tdp?: number | null
+    pcie_version?: string | null
+    display_outputs?: string[] | null
+    vr_ready?: boolean | null
+    release_date?: string | null
+    msrp?: number | null
+    features?: string[] | null
+    image_url?: string | null
+    specifications_url?: string | null
+    created_at: string
+    updated_at: string
+    manufacturer?: {
+      id: string
+      name: string
+      description?: string | null
+      logo_url?: string | null
+      website_url?: string | null
+      founded_year?: number | null
+      country?: string | null
+      created_at: string
+      updated_at: string
+    }
+  }
+  seller?: User
+}
+
+export interface GPUComparisonProps {
+  gpuListings: GPUListing[]
+  onRemove: (id: string) => void
+  onClear: () => void
+}
+
+export interface SystemComparisonProps {
+  systems: System[]
+  onRemove: (id: string) => void
+  onClear: () => void
+}

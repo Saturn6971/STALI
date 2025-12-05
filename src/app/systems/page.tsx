@@ -7,8 +7,12 @@ import GamingFilter, { GamingFilter as GamingFilterType, popularGames } from '@/
 import { checkGamingCompatibility, getCompatibilityColor, getCompatibilityLabel } from '@/utils/gamingCompatibility';
 import { formatCurrency } from '@/utils';
 import { useAuth } from '@/lib/auth';
+import { useRouter } from 'next/navigation';
+import { useComparison } from '@/hooks/useComparison';
 
 export default function CompleteSystems() {
+  const router = useRouter();
+  const { comparisonList, addToComparison, removeFromComparison, clearComparison, isInComparison } = useComparison();
   const [selectedFilter, setSelectedFilter] = useState('all');
   const [sortBy, setSortBy] = useState('price-low');
   const [hoveredCard, setHoveredCard] = useState<string | null>(null);
@@ -122,6 +126,21 @@ export default function CompleteSystems() {
       default: return 'text-gray-400 bg-gray-400/20';
     }
   };
+
+  const addToComparisonHandler = (systemId: string) => {
+    const success = addToComparison(systemId);
+    if (!success && comparisonList.length >= 4) {
+      alert('You can compare up to 4 systems at once. Please remove one from your comparison first.');
+    }
+  };
+
+  const goToComparison = () => {
+    if (comparisonList.length > 0) {
+      router.push(`/systems/compare?ids=${comparisonList.join(',')}`);
+    }
+  };
+
+  const comparisonSystems = systems.filter(system => comparisonList.includes(system.id));
 
   return (
     <div className="min-h-screen bg-[var(--background)] text-[var(--foreground)]">
@@ -419,6 +438,23 @@ export default function CompleteSystems() {
                           <div className="flex-1 bg-[var(--brand)] text-white py-3 rounded-lg font-medium text-center">
                             View Details
                           </div>
+                          <button 
+                            className={`px-4 py-3 rounded-lg font-medium transition-all duration-200 ${
+                              isInComparison(system.id)
+                                ? 'bg-green-600 text-white'
+                                : comparisonList.length >= 4
+                                ? 'bg-gray-600 text-gray-300 cursor-not-allowed'
+                                : 'border border-[var(--brand)] text-[var(--brand)] hover:bg-[var(--brand)] hover:text-white'
+                            }`}
+                            onClick={(e) => {
+                              e.preventDefault();
+                              e.stopPropagation();
+                              addToComparisonHandler(system.id);
+                            }}
+                            disabled={isInComparison(system.id) || comparisonList.length >= 4}
+                          >
+                            {isInComparison(system.id) ? '✓ Added' : '+ Compare'}
+                          </button>
                           {user && user.id !== system.seller_id && (
                             <button 
                               className="px-4 py-3 border border-[var(--brand)] text-[var(--brand)] hover:bg-[var(--brand)] hover:text-white rounded-lg font-medium transition-all duration-200"
@@ -446,6 +482,40 @@ export default function CompleteSystems() {
           </div>
         </div>
       </section>
+
+      {/* Comparison Sidebar */}
+      {comparisonList.length > 0 && (
+        <div className="fixed bottom-4 right-4 bg-[var(--card-bg)] border border-[var(--card-border)] rounded-lg p-4 max-w-sm">
+          <div className="flex items-center justify-between mb-3">
+            <h3 className="font-semibold text-white">System Comparison ({comparisonList.length}/4)</h3>
+            <button
+              onClick={clearComparison}
+              className="text-gray-400 hover:text-white transition-colors"
+            >
+              ✕
+            </button>
+          </div>
+          <div className="space-y-2">
+            {comparisonSystems.map((system) => (
+              <div key={system.id} className="flex items-center justify-between text-sm">
+                <span className="text-gray-300 truncate">{system.title}</span>
+                <button
+                  onClick={() => removeFromComparison(system.id)}
+                  className="text-red-400 hover:text-red-300 transition-colors"
+                >
+                  ✕
+                </button>
+              </div>
+            ))}
+          </div>
+          <button 
+            onClick={goToComparison}
+            className="w-full mt-3 bg-[var(--brand)] text-white py-2 rounded-lg font-medium hover:bg-[var(--brand-light)] transition-colors"
+          >
+            Compare Systems ({comparisonList.length})
+          </button>
+        </div>
+      )}
 
       {/* Footer */}
       <footer className="px-6 lg:px-12 py-8 border-t border-[var(--card-border)] bg-[var(--card-bg)]/50">

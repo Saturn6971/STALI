@@ -21,5 +21,6 @@ export type {
   CPUModel,
   CPUListing,
   CPUReview,
-  CPUFavorite
+  CPUFavorite,
+  GPUListing
 } from '@/types';
