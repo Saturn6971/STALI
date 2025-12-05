@@ -1,13 +1,66 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, ChangeEvent, FormEvent } from 'react';
 import Link from 'next/link';
 import { useAuth } from '@/lib/auth';
 
 export default function Home() {
   const [hoveredCard, setHoveredCard] = useState<string | null>(null);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    subject: '',
+    message: ''
+  });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle');
+  const [submitMessage, setSubmitMessage] = useState('');
   const { user, signOut } = useAuth();
+
+  const handleInputChange =
+    (field: keyof typeof formData) =>
+    (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+      setFormData((prev) => ({ ...prev, [field]: e.target.value }));
+      if (submitStatus !== 'idle') {
+        setSubmitStatus('idle');
+        setSubmitMessage('');
+      }
+    };
+
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    setSubmitStatus('idle');
+    setSubmitMessage('');
+
+    try {
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(formData)
+      });
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        throw new Error(result.error || 'Failed to send message.');
+      }
+
+      setSubmitStatus('success');
+      setSubmitMessage('Thanks! Your message has been sent.');
+      setFormData({ name: '', email: '', subject: '', message: '' });
+    } catch (error: unknown) {
+      setSubmitStatus('error');
+      setSubmitMessage(
+        error instanceof Error ? error.message : 'Something went wrong. Please try again.'
+      );
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   const categories = [
     {
@@ -247,9 +300,12 @@ export default function Home() {
               <Link href="/seller" className="bg-[var(--brand)] hover:bg-[var(--brand-light)] text-white px-8 py-4 rounded-lg font-medium text-lg transition-all duration-200 hover:scale-105 text-center">
                 Start Selling
               </Link>
-              <button className="border border-[var(--brand)] text-[var(--brand)] hover:bg-[var(--brand)] hover:text-white px-8 py-4 rounded-lg font-medium text-lg transition-all duration-200">
+              <a
+                href="#about"
+                className="border border-[var(--brand)] text-[var(--brand)] hover:bg-[var(--brand)] hover:text-white px-8 py-4 rounded-lg font-medium text-lg transition-all duration-200 text-center"
+              >
                 Learn More
-              </button>
+              </a>
             </div>
           </div>
         </div>
@@ -321,9 +377,12 @@ export default function Home() {
               <p className="text-gray-400 mb-6">
                 Connect with thousands of PC enthusiasts, share builds, and discover the latest components.
               </p>
-              <button className="bg-[var(--brand)] hover:bg-[var(--brand-light)] text-white px-6 py-3 rounded-lg font-medium transition-all duration-200 hover:scale-105">
+              <Link
+                href="/auth"
+                className="inline-block bg-[var(--brand)] hover:bg-[var(--brand-light)] text-white px-6 py-3 rounded-lg font-medium transition-all duration-200 hover:scale-105"
+              >
                 Join Now
-              </button>
+              </Link>
             </div>
           </div>
         </div>
@@ -347,77 +406,101 @@ export default function Home() {
                 <div>
                   <h4 className="text-xl font-bold mb-2">Email Support</h4>
                   <p className="text-gray-400 mb-2">Get help with your account, orders, or general questions.</p>
-                  <a href="mailto:support@stali.com" className="text-[var(--brand)] hover:text-[var(--brand-light)] transition-colors">
-                    support@stali.com
+                  <a href="mailto:ali.dadak@student.htldornbirn.at" className="text-[var(--brand)] hover:text-[var(--brand-light)] transition-colors">
+                    ali.dadak@student.htldornbirn.at
                   </a>
                 </div>
               </div>
               <div className="flex items-start space-x-4">
                 <div className="w-12 h-12 bg-[var(--brand)]/20 rounded-lg flex items-center justify-center flex-shrink-0">
-                  <span className="text-xl">💬</span>
+                  <span className="text-xl">🧾</span>
                 </div>
                 <div>
-                  <h4 className="text-xl font-bold mb-2">Live Chat</h4>
-                  <p className="text-gray-400 mb-2">Chat with our support team in real-time.</p>
-                  <button className="text-[var(--brand)] hover:text-[var(--brand-light)] transition-colors">
-                    Start Chat
-                  </button>
+                  <h4 className="text-xl font-bold mb-2">Support Tickets</h4>
+                  <p className="text-gray-400 mb-2">Open a ticket and we’ll reply via email.</p>
+                  <a href="mailto:ali.dadak@student.htldornbirn.at?subject=Support%20Ticket" className="text-[var(--brand)] hover:text-[var(--brand-light)] transition-colors">
+                    Create Ticket
+                  </a>
                 </div>
               </div>
               <div className="flex items-start space-x-4">
                 <div className="w-12 h-12 bg-[var(--brand)]/20 rounded-lg flex items-center justify-center flex-shrink-0">
-                  <span className="text-xl">📞</span>
+                  <span className="text-xl">📚</span>
                 </div>
                 <div>
-                  <h4 className="text-xl font-bold mb-2">Phone Support</h4>
-                  <p className="text-gray-400 mb-2">Speak directly with our support team.</p>
-                  <a href="tel:+1-555-STALI" className="text-[var(--brand)] hover:text-[var(--brand-light)] transition-colors">
-                    +1 (555) STALI
+                  <h4 className="text-xl font-bold mb-2">Help Center</h4>
+                  <p className="text-gray-400 mb-2">Browse guides and FAQs for quick answers.</p>
+                  <a href="#help" className="text-[var(--brand)] hover:text-[var(--brand-light)] transition-colors">
+                    View Help Center
                   </a>
                 </div>
               </div>
             </div>
             <div className="bg-[var(--card-bg)] rounded-2xl p-8 border border-[var(--card-border)]">
               <h4 className="text-xl font-bold mb-6">Send us a message</h4>
-              <form className="space-y-6">
+              <form className="space-y-6" onSubmit={handleSubmit}>
                 <div>
                   <label className="block text-sm font-medium text-gray-300 mb-2">Name</label>
                   <input
                     type="text"
+                    value={formData.name}
+                    onChange={handleInputChange('name')}
                     className="w-full px-4 py-3 bg-[var(--background)] border border-[var(--card-border)] rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-[var(--brand)] transition-colors"
                     placeholder="Your name"
+                    required
                   />
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-300 mb-2">Email</label>
                   <input
                     type="email"
+                    value={formData.email}
+                    onChange={handleInputChange('email')}
                     className="w-full px-4 py-3 bg-[var(--background)] border border-[var(--card-border)] rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-[var(--brand)] transition-colors"
                     placeholder="your@email.com"
+                    required
                   />
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-300 mb-2">Subject</label>
                   <input
                     type="text"
+                    value={formData.subject}
+                    onChange={handleInputChange('subject')}
                     className="w-full px-4 py-3 bg-[var(--background)] border border-[var(--card-border)] rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-[var(--brand)] transition-colors"
                     placeholder="How can we help?"
+                    required
                   />
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-300 mb-2">Message</label>
                   <textarea
                     rows={4}
+                    value={formData.message}
+                    onChange={handleInputChange('message')}
                     className="w-full px-4 py-3 bg-[var(--background)] border border-[var(--card-border)] rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-[var(--brand)] transition-colors resize-none"
                     placeholder="Tell us more about your inquiry..."
+                    required
                   ></textarea>
                 </div>
                 <button
                   type="submit"
-                  className="w-full bg-[var(--brand)] hover:bg-[var(--brand-light)] text-white py-3 rounded-lg font-medium transition-all duration-200 hover:scale-105"
+                  disabled={isSubmitting}
+                  className={`w-full bg-[var(--brand)] hover:bg-[var(--brand-light)] text-white py-3 rounded-lg font-medium transition-all duration-200 ${
+                    isSubmitting ? 'opacity-70 cursor-not-allowed' : 'hover:scale-105'
+                  }`}
                 >
-                  Send Message
+                  {isSubmitting ? 'Sending...' : 'Send Message'}
                 </button>
+                {submitStatus !== 'idle' && (
+                  <p
+                    className={`text-sm ${
+                      submitStatus === 'success' ? 'text-green-400' : 'text-red-400'
+                    }`}
+                  >
+                    {submitMessage}
+                  </p>
+                )}
               </form>
             </div>
           </div>
