@@ -3,6 +3,7 @@
 import { useState, ChangeEvent, FormEvent } from 'react';
 import Link from 'next/link';
 import { useAuth } from '@/lib/auth';
+import Modal from '@/components/ui/Modal';
 
 export default function Home() {
   const [hoveredCard, setHoveredCard] = useState<string | null>(null);
@@ -16,6 +17,7 @@ export default function Home() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle');
   const [submitMessage, setSubmitMessage] = useState('');
+  const [openModal, setOpenModal] = useState<'buying' | 'selling' | 'safety' | null>(null);
   const { user, signOut } = useAuth();
 
   const handleInputChange =
@@ -517,30 +519,39 @@ export default function Home() {
             </p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            <div className="bg-[var(--card-bg)] rounded-xl p-6 border border-[var(--card-border)] hover:border-[var(--brand)]/50 transition-colors">
+            <button
+              onClick={() => setOpenModal('buying')}
+              className="bg-[var(--card-bg)] rounded-xl p-6 border border-[var(--card-border)] hover:border-[var(--brand)]/50 transition-colors text-left cursor-pointer"
+            >
               <div className="text-3xl mb-4">🛒</div>
               <h4 className="text-xl font-bold mb-3">Buying Guide</h4>
               <p className="text-gray-400 mb-4">Learn how to find and purchase the perfect PC components.</p>
-              <a href="#" className="text-[var(--brand)] hover:text-[var(--brand-light)] transition-colors font-medium">
+              <span className="text-[var(--brand)] hover:text-[var(--brand-light)] transition-colors font-medium">
                 Read Guide →
-              </a>
-            </div>
-            <div className="bg-[var(--card-bg)] rounded-xl p-6 border border-[var(--card-border)] hover:border-[var(--brand)]/50 transition-colors">
+              </span>
+            </button>
+            <button
+              onClick={() => setOpenModal('selling')}
+              className="bg-[var(--card-bg)] rounded-xl p-6 border border-[var(--card-border)] hover:border-[var(--brand)]/50 transition-colors text-left cursor-pointer"
+            >
               <div className="text-3xl mb-4">💰</div>
               <h4 className="text-xl font-bold mb-3">Selling Tips</h4>
               <p className="text-gray-400 mb-4">Maximize your sales with our expert selling strategies.</p>
-              <a href="#" className="text-[var(--brand)] hover:text-[var(--brand-light)] transition-colors font-medium">
+              <span className="text-[var(--brand)] hover:text-[var(--brand-light)] transition-colors font-medium">
                 Learn More →
-              </a>
-            </div>
-            <div className="bg-[var(--card-bg)] rounded-xl p-6 border border-[var(--card-border)] hover:border-[var(--brand)]/50 transition-colors">
+              </span>
+            </button>
+            <button
+              onClick={() => setOpenModal('safety')}
+              className="bg-[var(--card-bg)] rounded-xl p-6 border border-[var(--card-border)] hover:border-[var(--brand)]/50 transition-colors text-left cursor-pointer"
+            >
               <div className="text-3xl mb-4">🔒</div>
               <h4 className="text-xl font-bold mb-3">Safety & Security</h4>
               <p className="text-gray-400 mb-4">Stay safe while buying and selling on our platform.</p>
-              <a href="#" className="text-[var(--brand)] hover:text-[var(--brand-light)] transition-colors font-medium">
+              <span className="text-[var(--brand)] hover:text-[var(--brand-light)] transition-colors font-medium">
                 Safety Tips →
-              </a>
-            </div>
+              </span>
+            </button>
           </div>
         </div>
       </section>
@@ -559,6 +570,193 @@ export default function Home() {
           </div>
         </div>
       </footer>
+
+      {/* Guide Modals */}
+      <Modal
+        isOpen={openModal === 'buying'}
+        onClose={() => setOpenModal(null)}
+        title="Buying Guide"
+        icon="🛒"
+      >
+        <div className="space-y-6 text-gray-300">
+          <div>
+            <h3 className="text-xl font-bold text-white mb-3">Finding the Perfect Components</h3>
+            <p className="mb-4">
+              Searching for PC components on Stali is easy! Use our advanced filters to narrow down your search by:
+            </p>
+            <ul className="list-disc list-inside space-y-2 ml-4 mb-4">
+              <li><strong className="text-white">Category:</strong> CPUs, GPUs, or Complete Systems</li>
+              <li><strong className="text-white">Price Range:</strong> Set your budget to find components within your price range</li>
+              <li><strong className="text-white">Condition:</strong> Filter by new, like-new, excellent, good, or fair condition</li>
+              <li><strong className="text-white">Location:</strong> Find local sellers for pickup or browse shipping options</li>
+              <li><strong className="text-white">Brand & Model:</strong> Search for specific manufacturers and models</li>
+            </ul>
+          </div>
+
+          <div>
+            <h3 className="text-xl font-bold text-white mb-3">Evaluating Listings</h3>
+            <p className="mb-4">
+              When browsing listings, pay attention to these important details:
+            </p>
+            <ul className="list-disc list-inside space-y-2 ml-4 mb-4">
+              <li><strong className="text-white">Photos:</strong> Check multiple images to assess condition and authenticity</li>
+              <li><strong className="text-white">Description:</strong> Read seller notes about usage, overclocking, and included accessories</li>
+              <li><strong className="text-white">Specifications:</strong> Verify technical specs match your requirements</li>
+              <li><strong className="text-white">Warranty:</strong> Check remaining warranty coverage if applicable</li>
+              <li><strong className="text-white">Seller History:</strong> Review seller ratings and previous transactions</li>
+            </ul>
+          </div>
+
+          <div>
+            <h3 className="text-xl font-bold text-white mb-3">Making a Purchase</h3>
+            <p className="mb-4">
+              Before making a purchase, follow these steps:
+            </p>
+            <ol className="list-decimal list-inside space-y-2 ml-4 mb-4">
+              <li><strong className="text-white">Contact the Seller:</strong> Use our messaging system to ask questions about the item</li>
+              <li><strong className="text-white">Verify Compatibility:</strong> Ensure the component is compatible with your system</li>
+              <li><strong className="text-white">Negotiate Price:</strong> Discuss pricing and payment terms with the seller</li>
+              <li><strong className="text-white">Secure Payment:</strong> Use our secure payment system or verified payment methods</li>
+              <li><strong className="text-white">Arrange Delivery:</strong> Coordinate shipping or local pickup</li>
+            </ol>
+          </div>
+
+          <div className="bg-[var(--brand)]/10 border border-[var(--brand)]/30 rounded-lg p-4">
+            <p className="text-[var(--brand-light)] font-medium">
+              💡 <strong>Tip:</strong> Always communicate through our platform's messaging system to maintain records of your conversation and protect your purchase.
+            </p>
+          </div>
+        </div>
+      </Modal>
+
+      <Modal
+        isOpen={openModal === 'selling'}
+        onClose={() => setOpenModal(null)}
+        title="Selling Tips"
+        icon="💰"
+      >
+        <div className="space-y-6 text-gray-300">
+          <div>
+            <h3 className="text-xl font-bold text-white mb-3">Creating an Effective Listing</h3>
+            <p className="mb-4">
+              A great listing is the key to successful sales. Here's how to create one:
+            </p>
+            <ul className="list-disc list-inside space-y-2 ml-4 mb-4">
+              <li><strong className="text-white">High-Quality Photos:</strong> Take clear, well-lit photos from multiple angles showing the component and any included accessories</li>
+              <li><strong className="text-white">Detailed Description:</strong> Include specifications, condition, usage history, and any relevant details about the component</li>
+              <li><strong className="text-white">Accurate Condition:</strong> Be honest about wear, scratches, or any issues - buyers appreciate transparency</li>
+              <li><strong className="text-white">Competitive Pricing:</strong> Research similar listings to price competitively while ensuring fair value</li>
+              <li><strong className="text-white">Complete Information:</strong> Fill out all specification fields to help buyers find your listing</li>
+            </ul>
+          </div>
+
+          <div>
+            <h3 className="text-xl font-bold text-white mb-3">Maximizing Your Sale Price</h3>
+            <p className="mb-4">
+              To get the best price for your components:
+            </p>
+            <ul className="list-disc list-inside space-y-2 ml-4 mb-4">
+              <li><strong className="text-white">Original Packaging:</strong> Include original boxes and manuals - buyers value this</li>
+              <li><strong className="text-white">Accessories:</strong> List all included items (coolers, cables, documentation)</li>
+              <li><strong className="text-white">Warranty Information:</strong> Highlight any remaining warranty coverage</li>
+              <li><strong className="text-white">Testing Proof:</strong> Provide evidence of functionality if possible</li>
+              <li><strong className="text-white">Bundle Deals:</strong> Consider bundling related components for added value</li>
+            </ul>
+          </div>
+
+          <div>
+            <h3 className="text-xl font-bold text-white mb-3">Best Practices for Sellers</h3>
+            <p className="mb-4">
+              Maintain your reputation and build trust:
+            </p>
+            <ul className="list-disc list-inside space-y-2 ml-4 mb-4">
+              <li><strong className="text-white">Quick Responses:</strong> Reply to buyer inquiries promptly</li>
+              <li><strong className="text-white">Clear Communication:</strong> Be professional and transparent in all interactions</li>
+              <li><strong className="text-white">Secure Packaging:</strong> Package items carefully to prevent damage during shipping</li>
+              <li><strong className="text-white">Fast Shipping:</strong> Ship items quickly after payment confirmation</li>
+              <li><strong className="text-white">Follow Up:</strong> Confirm receipt and ensure buyer satisfaction</li>
+            </ul>
+          </div>
+
+          <div className="bg-[var(--brand)]/10 border border-[var(--brand)]/30 rounded-lg p-4">
+            <p className="text-[var(--brand-light)] font-medium">
+              💡 <strong>Pro Tip:</strong> Take advantage of our Seller Dashboard to manage all your listings, track inquiries, and monitor your sales performance in one place.
+            </p>
+          </div>
+        </div>
+      </Modal>
+
+      <Modal
+        isOpen={openModal === 'safety'}
+        onClose={() => setOpenModal(null)}
+        title="Safety & Security"
+        icon="🔒"
+      >
+        <div className="space-y-6 text-gray-300">
+          <div>
+            <h3 className="text-xl font-bold text-white mb-3">Secure Transactions</h3>
+            <p className="mb-4">
+              Your security is our top priority. Follow these guidelines to stay safe:
+            </p>
+            <ul className="list-disc list-inside space-y-2 ml-4 mb-4">
+              <li><strong className="text-white">Use Platform Messaging:</strong> Keep all communications within our messaging system for records and protection</li>
+              <li><strong className="text-white">Verify Seller Identity:</strong> Check seller profiles, ratings, and transaction history before purchasing</li>
+              <li><strong className="text-white">Secure Payment Methods:</strong> Use verified payment systems - avoid wire transfers or cash payments for remote transactions</li>
+              <li><strong className="text-white">Inspect Before Accepting:</strong> For local pickups, inspect items thoroughly before completing payment</li>
+              <li><strong className="text-white">Report Suspicious Activity:</strong> Contact us immediately if you encounter scams or fraud</li>
+            </ul>
+          </div>
+
+          <div>
+            <h3 className="text-xl font-bold text-white mb-3">Red Flags to Watch For</h3>
+            <p className="mb-4">
+              Be cautious if you encounter:
+            </p>
+            <ul className="list-disc list-inside space-y-2 ml-4 mb-4">
+              <li>Requests to communicate outside our platform</li>
+              <li>Pressure to make quick decisions or payments</li>
+              <li>Prices that seem too good to be true</li>
+              <li>Sellers unwilling to provide additional photos or information</li>
+              <li>Payment requests via unusual methods (gift cards, wire transfers, etc.)</li>
+              <li>Poor grammar, urgent requests, or suspicious communication patterns</li>
+            </ul>
+          </div>
+
+          <div>
+            <h3 className="text-xl font-bold text-white mb-3">Protecting Your Account</h3>
+            <p className="mb-4">
+              Keep your account and personal information secure:
+            </p>
+            <ul className="list-disc list-inside space-y-2 ml-4 mb-4">
+              <li><strong className="text-white">Strong Passwords:</strong> Use unique, complex passwords for your account</li>
+              <li><strong className="text-white">Two-Factor Authentication:</strong> Enable 2FA for additional account security</li>
+              <li><strong className="text-white">Privacy Settings:</strong> Review and adjust your privacy settings regularly</li>
+              <li><strong className="text-white">Don't Share Credentials:</strong> Never share your login information with anyone</li>
+              <li><strong className="text-white">Secure Networks:</strong> Avoid accessing your account on public Wi-Fi networks</li>
+            </ul>
+          </div>
+
+          <div>
+            <h3 className="text-xl font-bold text-white mb-3">Local Meetups</h3>
+            <p className="mb-4">
+              For in-person transactions:
+            </p>
+            <ul className="list-disc list-inside space-y-2 ml-4 mb-4">
+              <li>Meet in public, well-lit locations during daytime</li>
+              <li>Bring a friend or let someone know where you're going</li>
+              <li>Inspect the item thoroughly before payment</li>
+              <li>Trust your instincts - if something feels wrong, walk away</li>
+              <li>Verify the item matches the listing description</li>
+            </ul>
+          </div>
+
+          <div className="bg-red-500/10 border border-red-500/30 rounded-lg p-4">
+            <p className="text-red-400 font-medium">
+              ⚠️ <strong>Important:</strong> If you suspect fraud or encounter a scam, report it immediately through our platform or contact support. We take all security concerns seriously and will investigate promptly.
+            </p>
+          </div>
+        </div>
+      </Modal>
     </div>
   );
 }
