@@ -33,8 +33,8 @@ export default function GPUsPage() {
   const uniqueMemorySizes = Array.from(new Set(
     gpuListings
       .map(gpu => gpu.gpu_model?.memory_size)
-      .filter(Boolean)
-  )).sort((a, b) => a - b) as number[];
+      .filter((size): size is number => typeof size === 'number')
+  )).sort((a, b) => a - b);
 
   const uniqueConditions = Array.from(new Set(
     gpuListings.map(gpu => gpu.condition)
