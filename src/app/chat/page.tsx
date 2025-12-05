@@ -11,15 +11,19 @@ export default function ChatListPage() {
   const { conversations, loading, error, refreshConversations } = useChat();
   const [searchTerm, setSearchTerm] = useState('');
 
-  const filteredConversations = conversations.filter(conv => {
+  const filteredConversations = conversations.filter((conv) => {
     const searchLower = searchTerm.toLowerCase();
-    return (
-      conv.system?.title.toLowerCase().includes(searchLower) ||
-      conv.buyer?.display_name?.toLowerCase().includes(searchLower) ||
-      conv.buyer?.username.toLowerCase().includes(searchLower) ||
-      conv.seller?.display_name?.toLowerCase().includes(searchLower) ||
-      conv.seller?.username.toLowerCase().includes(searchLower)
-    );
+    const fields = [
+      conv.system?.title,
+      conv.cpu_listing?.title,
+      conv.gpu_listing?.title,
+      conv.buyer?.display_name,
+      conv.buyer?.username,
+      conv.seller?.display_name,
+      conv.seller?.username,
+    ];
+
+    return fields.some((field) => field?.toLowerCase()?.includes(searchLower) ?? false);
   });
 
   const formatTime = (dateString: string) => {
@@ -166,6 +170,18 @@ export default function ChatListPage() {
               {filteredConversations.map((conversation) => {
                 const otherUser = user.id === conversation.buyer_id ? conversation.seller : conversation.buyer;
                 const isUnread = conversation.unread_count && conversation.unread_count > 0;
+                const listing =
+                  conversation.system ||
+                  conversation.cpu_listing ||
+                  conversation.gpu_listing;
+                const listingImage =
+                  (listing && 'image_url' in listing
+                    ? (listing as { image_url?: string }).image_url
+                    : undefined) ||
+                  (listing && 'image_urls' in listing
+                    ? (listing as { image_urls?: string[] | null }).image_urls?.[0] || undefined
+                    : undefined);
+                const listingPrice = (listing as any)?.price ?? 0;
                 
                 return (
                   <Link
@@ -178,10 +194,10 @@ export default function ChatListPage() {
                     <div className="flex items-center space-x-4">
                       {/* System Image */}
                       <div className="w-16 h-16 rounded-lg overflow-hidden bg-gradient-to-br from-[var(--brand)]/20 to-[var(--brand-light)]/20 flex-shrink-0">
-                        {conversation.system?.image_url ? (
+                        {listingImage ? (
                           <img 
-                            src={conversation.system.image_url} 
-                            alt={conversation.system.title}
+                            src={listingImage} 
+                            alt={listing?.title || 'Listing image'}
                             className="w-full h-full object-cover"
                             loading="lazy"
                           />
@@ -196,7 +212,7 @@ export default function ChatListPage() {
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center justify-between mb-2">
                           <h3 className="text-lg font-bold text-white truncate">
-                            {conversation.system?.title}
+                            {listing?.title || 'Conversation'}
                           </h3>
                           <div className="flex items-center space-x-2">
                             {isUnread && (
@@ -216,10 +232,10 @@ export default function ChatListPage() {
                               {user.id === conversation.buyer_id ? 'Seller:' : 'Buyer:'}
                             </span>
                             <span className="text-sm font-medium text-[var(--brand)]">
-                              {otherUser?.display_name || otherUser?.username}
+                              {otherUser?.display_name || otherUser?.username || 'Unknown user'}
                             </span>
                             <span className="text-sm text-gray-400">
-                              • {formatCurrency(conversation.system?.price || 0)}
+                              • {formatCurrency(listingPrice)}
                             </span>
                           </div>
                           {conversation.last_message && (
