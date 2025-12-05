@@ -195,7 +195,7 @@ export function CPUDetails({ cpuListing }: CPUDetailsProps) {
 
                 {cpuListing.cpu_model.cache_l3 && (
                   <div className="flex items-center space-x-3">
-                    <Memory className="w-5 h-5 text-[var(--brand)]" />
+                    <MemoryStick className="w-5 h-5 text-[var(--brand)]" />
                     <div>
                       <div className="text-sm text-gray-400">L3 Cache</div>
                       <div className="font-medium text-white">{cpuListing.cpu_model.cache_l3} MB</div>

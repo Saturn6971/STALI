@@ -1,11 +1,11 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import AuthForm from '@/components/auth/AuthForm';
 import { useAuth } from '@/lib/auth';
 
-export default function AuthPage() {
+function AuthPageContent() {
   const [mode, setMode] = useState<'signin' | 'signup'>('signin');
   const { user, loading } = useAuth();
   const router = useRouter();
@@ -34,6 +34,18 @@ export default function AuthPage() {
   }
 
   return <AuthForm mode={mode} onModeChange={setMode} />;
+}
+
+export default function AuthPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-[var(--background)] flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[var(--brand)]"></div>
+      </div>
+    }>
+      <AuthPageContent />
+    </Suspense>
+  );
 }
 
 

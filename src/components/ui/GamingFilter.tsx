@@ -248,7 +248,9 @@ export default function GamingFilter({ onFilterChange, className = '' }: GamingF
       '4k': { low: game.fps4kLow, medium: game.fps4kMedium, high: game.fps4kHigh }
     };
     
-    return fpsMap[resolution][qualityPreset] || 60;
+    // Map 'ultra' to 'high' since Game interface doesn't have ultra FPS values
+    const qualityKey = qualityPreset === 'ultra' ? 'high' : qualityPreset;
+    return fpsMap[resolution][qualityKey as 'low' | 'medium' | 'high'] || 60;
   };
 
   return (

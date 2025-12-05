@@ -1,5 +1,5 @@
 import { System } from '@/types';
-import { Game } from './GamingFilter';
+import { Game } from '@/components/ui/GamingFilter';
 
 // GPU performance tiers (simplified)
 const gpuTiers: { [key: string]: number } = {
@@ -166,7 +166,9 @@ function getExpectedFps(game: Game, resolution: '1080p' | '1440p' | '4k', qualit
     '4k': { low: game.fps4kLow, medium: game.fps4kMedium, high: game.fps4kHigh }
   };
   
-  return fpsMap[resolution][qualityPreset] || 60;
+  // Map 'ultra' to 'high' since Game interface doesn't have ultra FPS values
+  const qualityKey = qualityPreset === 'ultra' ? 'high' : qualityPreset;
+  return fpsMap[resolution][qualityKey as 'low' | 'medium' | 'high'] || 60;
 }
 
 export function getCompatibilityColor(score: number): string {

@@ -1,13 +1,13 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { ArrowLeft, X } from 'lucide-react';
 import { GPUComparison } from '@/components/ui/GPUComparison';
 import { supabase, GPUListing } from '@/lib/supabase';
 
-export default function GPUComparePage() {
+function GPUCompareContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const [comparisonIds, setComparisonIds] = useState<string[]>([]);
@@ -178,3 +178,19 @@ export default function GPUComparePage() {
     </div>
   );
 }
+
+export default function GPUComparePage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-[var(--background)] flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[var(--brand)] mx-auto mb-4"></div>
+          <p className="text-gray-400">Loading comparison...</p>
+        </div>
+      </div>
+    }>
+      <GPUCompareContent />
+    </Suspense>
+  );
+}
+
