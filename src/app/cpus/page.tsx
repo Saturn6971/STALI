@@ -41,8 +41,8 @@ export default function CPUsPage() {
   const uniqueCores = Array.from(new Set(
     cpuListings
       .map(cpu => cpu.cpu_model?.cores)
-      .filter(Boolean)
-  )).sort((a, b) => a - b) as number[];
+      .filter((cores): cores is number => typeof cores === 'number')
+  )).sort((a, b) => a - b);
 
   const uniqueConditions = Array.from(new Set(
     cpuListings.map(cpu => cpu.condition)
