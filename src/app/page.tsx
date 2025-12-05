@@ -244,7 +244,7 @@ export default function Home() {
               List your PC parts and complete systems on Stali. Get fair prices and connect with buyers who appreciate quality components.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link href="/cpus/sell" className="bg-[var(--brand)] hover:bg-[var(--brand-light)] text-white px-8 py-4 rounded-lg font-medium text-lg transition-all duration-200 hover:scale-105 text-center">
+              <Link href="/seller" className="bg-[var(--brand)] hover:bg-[var(--brand-light)] text-white px-8 py-4 rounded-lg font-medium text-lg transition-all duration-200 hover:scale-105 text-center">
                 Start Selling
               </Link>
               <button className="border border-[var(--brand)] text-[var(--brand)] hover:bg-[var(--brand)] hover:text-white px-8 py-4 rounded-lg font-medium text-lg transition-all duration-200">

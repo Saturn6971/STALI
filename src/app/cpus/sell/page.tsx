@@ -1,11 +1,11 @@
 'use client';
 
 import { useState } from 'react';
-import { ArrowLeft, Upload, Plus, X } from 'lucide-react';
+import { Upload, Plus, X } from 'lucide-react';
 import Link from 'next/link';
-import { formatCurrency } from '@/utils';
 import { useAuth } from '@/lib/auth';
 import { supabase } from '@/lib/supabase';
+import { useCPUModels } from '@/hooks/useCPUs';
 
 export default function SellCPUPage() {
   const { user, signOut } = useAuth();
@@ -15,15 +15,7 @@ export default function SellCPUPage() {
     price: '',
     original_price: '',
     condition: 'excellent',
-    manufacturer: '',
-    model: '',
-    cores: '',
-    threads: '',
-    base_clock: '',
-    boost_clock: '',
-    tdp: '',
-    socket: '',
-    architecture: '',
+    cpu_model_id: '',
     purchase_date: '',
     warranty_remaining_months: '',
     overclocked: false,
@@ -38,8 +30,13 @@ export default function SellCPUPage() {
     video_url: ''
   });
 
+  const { cpuModels, loading: cpuModelsLoading, error: cpuModelsError } = useCPUModels();
   const [newImageUrl, setNewImageUrl] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const selectedCPUModel = formData.cpu_model_id
+    ? cpuModels.find(model => model.id === formData.cpu_model_id) || null
+    : null;
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value, type } = e.target;
@@ -116,15 +113,7 @@ export default function SellCPUPage() {
           original_price: formData.original_price ? parseFloat(formData.original_price) : null,
           condition: formData.condition as 'new' | 'like-new' | 'excellent' | 'good' | 'fair',
           status: 'draft', // Start as draft
-          manufacturer: formData.manufacturer || null,
-          model: formData.model || null,
-          cores: formData.cores ? parseInt(formData.cores) : null,
-          threads: formData.threads ? parseInt(formData.threads) : null,
-          base_clock: formData.base_clock ? parseInt(formData.base_clock) : null,
-          boost_clock: formData.boost_clock ? parseInt(formData.boost_clock) : null,
-          tdp: formData.tdp ? parseInt(formData.tdp) : null,
-          socket: formData.socket || null,
-          architecture: formData.architecture || null,
+          cpu_model_id: formData.cpu_model_id || null,
           purchase_date: formData.purchase_date || null,
           warranty_remaining_months: formData.warranty_remaining_months ? parseInt(formData.warranty_remaining_months) : null,
           overclocked: formData.overclocked,
@@ -246,11 +235,21 @@ export default function SellCPUPage() {
                   className="w-full px-3 py-2 bg-[var(--card-bg)] border border-[var(--card-border)] rounded-lg text-white focus:outline-none focus:border-[var(--brand)] transition-colors"
                 >
                   <option value="" className="bg-[var(--card-bg)]">Choose a CPU model...</option>
-                  {cpuModels.map((model) => (
-                    <option key={model.id} value={model.id} className="bg-[var(--card-bg)]">
-                      {model.manufacturer?.name} {model.model_name} - {model.cores} cores, {model.threads} threads
+                  {cpuModelsLoading && (
+                    <option value="" disabled className="bg-[var(--card-bg)]">
+                      Loading CPU models...
                     </option>
-                  ))}
+                  )}
+                  {cpuModelsError && (
+                    <option value="" disabled className="bg-[var(--card-bg)]">
+                      Failed to load CPU models
+                    </option>
+                  )}
+                  {!cpuModelsLoading && !cpuModelsError && cpuModels.map((model) => (
+                      <option key={model.id} value={model.id} className="bg-[var(--card-bg)]">
+                        {model.manufacturer?.name} {model.model_name} - {model.cores} cores, {model.threads} threads
+                      </option>
+                    ))}
                 </select>
               </div>
 
