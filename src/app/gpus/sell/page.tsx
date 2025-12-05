@@ -33,7 +33,6 @@ export default function SellGPUPage() {
     original_box: true,
     original_manual: true,
     image_urls: [] as string[],
-    video_url: '',
     location: '',
     shipping_available: true,
     local_pickup: true
@@ -134,7 +133,6 @@ export default function SellGPUPage() {
           original_box: formData.original_box,
           original_manual: formData.original_manual,
           image_urls: formData.image_urls.length > 0 ? formData.image_urls : null,
-          video_url: formData.video_url || null,
           location: formData.location || null,
           shipping_available: formData.shipping_available,
           local_pickup: formData.local_pickup,

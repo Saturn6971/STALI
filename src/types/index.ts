@@ -42,7 +42,6 @@ export interface System {
   cooling: string | null
   image_url: string | null
   image_urls: string[] | null
-  video_url: string | null
   view_count: number
   favorite_count: number
   created_at: string
@@ -146,7 +145,6 @@ export interface CPUListing {
   original_box: boolean
   original_manual: boolean
   image_urls: string[] | null
-  video_url: string | null
   view_count: number
   favorite_count: number
   location: string | null

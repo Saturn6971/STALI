@@ -64,7 +64,6 @@ export interface GPUListing {
   original_box?: boolean;
   original_manual?: boolean;
   image_urls?: string[];
-  video_url?: string;
   view_count?: number;
   favorite_count?: number;
   location?: string;

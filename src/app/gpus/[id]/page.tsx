@@ -293,35 +293,6 @@ export default function GPUDetails() {
               </div>
             )}
 
-            {/* Video */}
-            {gpu.video_url && (
-              <div className="aspect-video bg-[var(--card-bg)] rounded-2xl border border-[var(--card-border)] overflow-hidden">
-                {gpu.video_url.includes('youtube.com') || gpu.video_url.includes('youtu.be') || gpu.video_url.includes('vimeo.com') ? (
-                  <iframe
-                    src={gpu.video_url.includes('youtube.com') || gpu.video_url.includes('youtu.be') 
-                      ? `https://www.youtube.com/embed/${gpu.video_url.includes('youtu.be/') 
-                          ? gpu.video_url.split('youtu.be/')[1]?.split('?')[0]
-                          : gpu.video_url.split('v=')[1]?.split('&')[0]}`
-                      : `https://player.vimeo.com/video/${gpu.video_url.split('vimeo.com/')[1]?.split('?')[0]}`
-                    }
-                    title={`${gpu.title} video`}
-                    className="w-full h-full"
-                    frameBorder="0"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    allowFullScreen
-                  />
-                ) : (
-                  <video 
-                    src={gpu.video_url} 
-                    controls 
-                    className="w-full h-full"
-                    poster={images[0]}
-                  >
-                    Your browser does not support the video tag.
-                  </video>
-                )}
-              </div>
-            )}
           </div>
 
           {/* Right Column - Details */}

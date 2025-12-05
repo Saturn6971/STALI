@@ -28,8 +28,7 @@ export default function AddListingPage() {
     location: '',
     shipping_available: true,
     local_pickup: true,
-    image_urls: [] as string[],
-    video_url: ''
+    image_urls: [] as string[]
   });
   const [newImageUrl, setNewImageUrl] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -133,7 +132,6 @@ export default function AddListingPage() {
           case_model: formData.caseModel || null,
           cooling: formData.cooling || null,
           image_urls: formData.image_urls.length > 0 ? formData.image_urls : null,
-          video_url: formData.video_url || null,
           seller_id: user.id,
           category_id: formData.category,
           view_count: 0,
@@ -498,22 +496,6 @@ export default function AddListingPage() {
                 </div>
               </div>
 
-              <div>
-                <label className="block text-sm font-medium text-gray-300 mb-2">
-                  Video URL
-                </label>
-                <input
-                  type="url"
-                  name="video_url"
-                  value={formData.video_url}
-                  onChange={handleChange}
-                  placeholder="https://youtube.com/watch?v=... or direct video file URL"
-                  className="w-full px-3 py-2 bg-[var(--card-bg)] border border-[var(--card-border)] rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-[var(--brand)] transition-colors"
-                />
-                <p className="text-xs text-gray-500 mt-1">
-                  Supports YouTube, Vimeo, or direct video file URLs (MP4, WebM, etc.)
-                </p>
-              </div>
             </div>
           </div>
 

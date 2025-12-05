@@ -283,19 +283,6 @@ export default function CPUDetails() {
               </div>
             )}
 
-            {/* Video */}
-            {cpuListing.video_url && (
-              <div className="aspect-video bg-[var(--card-bg)] rounded-2xl border border-[var(--card-border)] overflow-hidden">
-                <video 
-                  src={cpuListing.video_url} 
-                  controls 
-                  className="w-full h-full"
-                  poster={images[0]}
-                >
-                  Your browser does not support the video tag.
-                </video>
-              </div>
-            )}
           </div>
 
           {/* Right Column - Details */}

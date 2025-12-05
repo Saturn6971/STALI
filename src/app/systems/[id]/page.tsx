@@ -105,34 +105,6 @@ export default function SystemDetails() {
     }
   };
 
-  const getVideoEmbedUrl = (url: string) => {
-    // Handle YouTube URLs
-    if (url.includes('youtube.com/watch') || url.includes('youtu.be/')) {
-      const videoId = url.includes('youtu.be/') 
-        ? url.split('youtu.be/')[1]?.split('?')[0]
-        : url.split('v=')[1]?.split('&')[0];
-      
-      if (videoId) {
-        return `https://www.youtube.com/embed/${videoId}`;
-      }
-    }
-    
-    // Handle Vimeo URLs
-    if (url.includes('vimeo.com/')) {
-      const videoId = url.split('vimeo.com/')[1]?.split('?')[0];
-      if (videoId) {
-        return `https://player.vimeo.com/video/${videoId}`;
-      }
-    }
-    
-    // Return original URL for direct video files
-    return url;
-  };
-
-  const isEmbeddableVideo = (url: string) => {
-    return url.includes('youtube.com') || url.includes('youtu.be') || url.includes('vimeo.com');
-  };
-
   const getImages = () => {
     if (!system) return [];
     const images = [];
@@ -358,51 +330,6 @@ export default function SystemDetails() {
               </div>
             )}
 
-            {/* Video */}
-            {system.video_url && (
-              <div className="aspect-video bg-[var(--card-bg)] rounded-2xl border border-[var(--card-border)] overflow-hidden">
-                {isEmbeddableVideo(system.video_url) ? (
-                  <iframe
-                    src={getVideoEmbedUrl(system.video_url)}
-                    title={`${system.title} video`}
-                    className="w-full h-full"
-                    frameBorder="0"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    allowFullScreen
-                  />
-                ) : (
-                  <video 
-                    src={system.video_url} 
-                    controls 
-                    className="w-full h-full"
-                    poster={images[0]}
-                    onError={(e) => {
-                      console.error('Video load error:', e);
-                      const target = e.target as HTMLVideoElement;
-                      target.style.display = 'none';
-                      const errorDiv = target.nextElementSibling as HTMLElement;
-                      if (errorDiv) errorDiv.style.display = 'flex';
-                    }}
-                  >
-                    Your browser does not support the video tag.
-                  </video>
-                )}
-                
-                {/* Video Error Fallback */}
-                <div 
-                  className="hidden w-full h-full items-center justify-center bg-[var(--card-bg)] text-gray-400"
-                  style={{ display: 'none' }}
-                >
-                  <div className="text-center">
-                    <div className="text-4xl mb-2">🎥</div>
-                    <p className="text-sm">Video could not be loaded</p>
-                    <p className="text-xs text-gray-500 mt-1">
-                      The video format may not be supported or the URL is invalid
-                    </p>
-                  </div>
-                </div>
-              </div>
-            )}
           </div>
 
           {/* Right Column - Details */}
