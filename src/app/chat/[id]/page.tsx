@@ -129,6 +129,20 @@ export default function ChatPage() {
       ? conversation.gpu_listing
       : undefined;
 
+  // Helper function to get the image URL from any listing type
+  const getListingImageUrl = (listing: typeof conversation.system | typeof conversation.cpu_listing | typeof conversation.gpu_listing | undefined): string | undefined => {
+    if (!listing) return undefined;
+    if ('image_url' in listing && listing.image_url) {
+      return listing.image_url;
+    }
+    if ('image_urls' in listing && listing.image_urls && listing.image_urls.length > 0) {
+      return listing.image_urls[0];
+    }
+    return undefined;
+  };
+
+  const listingImageUrl = getListingImageUrl(listing);
+
   return (
     <div className="min-h-screen bg-[var(--background)] text-[var(--foreground)] flex flex-col">
       {/* Navigation */}
@@ -173,12 +187,9 @@ export default function ChatPage() {
         <div className="max-w-7xl mx-auto">
           <div className="flex items-center space-x-4">
             <div className="w-16 h-16 rounded-lg overflow-hidden bg-gradient-to-br from-[var(--brand)]/20 to-[var(--brand-light)]/20 flex-shrink-0">
-              {listing?.image_url || (listing as any)?.image_urls?.[0] ? (
+              {listingImageUrl ? (
                 <img 
-                  src={
-                    (listing as any).image_url ||
-                    ((listing as any).image_urls && (listing as any).image_urls[0])
-                  } 
+                  src={listingImageUrl} 
                   alt={listing?.title || 'Listing image'}
                   className="w-full h-full object-cover"
                   loading="lazy"
