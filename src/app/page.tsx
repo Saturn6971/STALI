@@ -137,6 +137,12 @@ export default function Home() {
                   >
                     Messages
                   </Link>
+                  <Link 
+                    href="/account"
+                    className="text-gray-300 hover:text-white transition-colors duration-200 font-medium"
+                  >
+                    Account
+                  </Link>
                   <button 
                     onClick={() => signOut()}
                     className="text-gray-300 hover:text-white transition-colors duration-200 font-medium"
@@ -213,6 +219,12 @@ export default function Home() {
                       className="w-full text-gray-300 hover:text-white transition-colors duration-200 font-medium py-2"
                     >
                       Messages
+                    </Link>
+                    <Link 
+                      href="/account"
+                      className="w-full text-gray-300 hover:text-white transition-colors duration-200 font-medium py-2"
+                    >
+                      Account Settings
                     </Link>
                     <button 
                       onClick={() => signOut()}
