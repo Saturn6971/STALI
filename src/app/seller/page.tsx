@@ -183,8 +183,8 @@ export default function SellerDashboard() {
 
   // Combine systems and GPUs for display
   const allListings: SellerListing[] = [
-    ...filteredSystems.map(system => ({ ...system, type: 'system' })),
-    ...filteredGPUs.map(gpu => ({ ...gpu, type: 'gpu' }))
+    ...filteredSystems.map(system => ({ ...system, type: 'system' as const })),
+    ...filteredGPUs.map(gpu => ({ ...gpu, type: 'gpu' as const }))
   ].sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
 
   if (authLoading || loading) {
