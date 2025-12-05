@@ -22,12 +22,27 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Get initial session
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setSession(session);
-      setUser(session?.user ?? null);
-      setLoading(false);
-    });
+    const loadSession = async () => {
+      try {
+        // Get initial session; handle API failures gracefully instead of throwing
+        const { data, error } = await supabase.auth.getSession();
+
+        if (error) {
+          console.error('Failed to fetch auth session', error);
+          setLoading(false);
+          return;
+        }
+
+        setSession(data.session);
+        setUser(data.session?.user ?? null);
+      } catch (err) {
+        console.error('Unexpected error fetching session', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadSession();
 
     // Listen for auth changes
     const {
