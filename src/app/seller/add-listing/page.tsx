@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useAuth } from '@/lib/auth';
 import { supabase } from '@/lib/supabase';
+import { Category } from '@/types';
 import { Upload, Plus, X } from 'lucide-react';
 
 export default function AddListingPage() {
@@ -32,7 +33,7 @@ export default function AddListingPage() {
   });
   const [newImageUrl, setNewImageUrl] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [categories, setCategories] = useState([]);
+  const [categories, setCategories] = useState<Category[]>([]);
 
   useEffect(() => {
     fetchCategories();
