@@ -8,6 +8,7 @@
     "start": "next start"
   },
   "dependencies": {
+    "@getbrevo/brevo": "^3.0.1",
     "@supabase/supabase-js": "^2.74.0",
     "lucide-react": "^0.546.0",
     "next": "15.5.4",
