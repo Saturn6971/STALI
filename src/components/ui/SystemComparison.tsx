@@ -217,3 +217,4 @@ export function SystemComparison({ systems, onRemove, onClear }: SystemCompariso
     </div>
   );
 }
+
