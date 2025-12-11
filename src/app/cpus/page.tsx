@@ -600,10 +600,10 @@ export default function CPUsPage() {
       </section>
 
       {/* Comparison Sidebar */}
-      {comparisonList.length > 0 && (
+      {comparisonCPUs.length > 0 && (
         <div className="fixed bottom-4 right-4 bg-[var(--card-bg)] border border-[var(--card-border)] rounded-lg p-4 max-w-sm">
           <div className="flex items-center justify-between mb-3">
-            <h3 className="font-semibold text-white">CPU Comparison ({comparisonList.length}/4)</h3>
+            <h3 className="font-semibold text-white">CPU Comparison ({comparisonCPUs.length}/4)</h3>
             <button
               onClick={clearComparison}
               className="text-gray-400 hover:text-white transition-colors"
@@ -628,7 +628,7 @@ export default function CPUsPage() {
             onClick={goToComparison}
             className="w-full mt-3 bg-[var(--brand)] text-white py-2 rounded-lg font-medium hover:bg-[var(--brand-light)] transition-colors"
           >
-            Compare CPUs ({comparisonList.length})
+            Compare CPUs ({comparisonCPUs.length})
           </button>
         </div>
       )}
