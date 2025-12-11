@@ -171,6 +171,64 @@ function getExpectedFps(game: Game, resolution: '1080p' | '1440p' | '4k', qualit
   return fpsMap[resolution][qualityKey as 'low' | 'medium' | 'high'] || 60;
 }
 
+// Heuristic FPS estimation for a given system based on simple CPU/GPU tier maps
+export function estimateSystemFps(
+  system: System,
+  game: Game,
+  resolution: '1080p' | '1440p' | '4k',
+  qualityPreset: 'low' | 'medium' | 'high' | 'ultra'
+): number {
+  const baseFps = getExpectedFps(game, resolution, qualityPreset);
+
+  const gpuTier = getGpuTier(system.gpu || '');
+  const cpuTier = getCpuTier(system.cpu || '');
+
+  // Blend GPU heavier than CPU
+  const gpuFactor = 0.55 + gpuTier * 0.07; // baseline ~0.55, top ~1.25
+  const cpuFactor = 0.7 + cpuTier * 0.05; // baseline ~0.7, top ~1.2
+
+  // RAM headroom: simple penalty if below recommended
+  const systemRam = parseInt(system.ram?.replace(/\D/g, '') || '0');
+  const ramPenalty = systemRam && systemRam < game.recommendedRam ? 0.85 : 1;
+
+  const estimated = baseFps * gpuFactor * 0.7 + baseFps * cpuFactor * 0.25;
+  const withRam = estimated * ramPenalty;
+
+  // Clamp to avoid silly numbers
+  return Math.max(10, Math.round(Math.min(withRam, baseFps * 2)));
+}
+
+function getGpuTier(name: string): number {
+  const found = Object.keys(gpuTiers).find((key) =>
+    name.toLowerCase().includes(key.toLowerCase())
+  );
+  return found ? gpuTiers[found] : 5; // mid baseline if unknown
+}
+
+function getCpuTier(name: string): number {
+  const lower = name.toLowerCase();
+
+  // Try to match Intel i3/i5/i7/i9 with generation numbers
+  const intelMatch = lower.match(/i([3579])-(\d{1,2})/);
+  if (intelMatch) {
+    const series = intelMatch[1];
+    const gen = intelMatch[2];
+    return cpuTiers[`${series}${gen}`] || cpuTiers[`i${series}-${gen}`] || 5;
+  }
+
+  // Ryzen patterns
+  const ryzenMatch = lower.match(/ryzen\s*(\d)/);
+  if (ryzenMatch) {
+    const series = ryzenMatch[1];
+    if (series === '3') return 2;
+    if (series === '5') return 4;
+    if (series === '7') return 6;
+    if (series === '9') return 8;
+  }
+
+  return 5; // default mid tier
+}
+
 export function getCompatibilityColor(score: number): string {
   if (score >= 90) return 'text-green-400 bg-green-400/20';
   if (score >= 70) return 'text-yellow-400 bg-yellow-400/20';

@@ -3,8 +3,8 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { supabase, System } from '@/lib/supabase';
-import GamingFilter, { GamingFilter as GamingFilterType, popularGames } from '@/components/ui/GamingFilter';
-import { checkGamingCompatibility, getCompatibilityColor, getCompatibilityLabel } from '@/utils/gamingCompatibility';
+import { popularGames } from '@/components/ui/GamingFilter';
+import { estimateSystemFps } from '@/utils/gamingCompatibility';
 import { formatCurrency } from '@/utils';
 import { useAuth } from '@/lib/auth';
 import { useRouter } from 'next/navigation';
@@ -19,18 +19,90 @@ export default function CompleteSystems() {
   const [systems, setSystems] = useState<System[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [gamingFilter, setGamingFilter] = useState<GamingFilterType>({
-    selectedGames: [],
+  const [gamingSelection, setGamingSelection] = useState({
+    gameId: '',
     resolution: '1080p',
-    qualityPreset: 'medium',
-    targetFps: 60
+    qualityPreset: 'medium'
   });
+  const [fpsMap, setFpsMap] = useState<Record<string, number | null>>({});
+  const [fpsLoading, setFpsLoading] = useState(false);
   const [showGamingFilter, setShowGamingFilter] = useState(false);
   const { user, signOut } = useAuth();
 
   useEffect(() => {
     fetchSystems();
   }, []);
+
+  // Fetch FPS predictions when selection changes
+  useEffect(() => {
+    const run = async () => {
+      if (!gamingSelection.gameId) {
+        setFpsMap({});
+        return;
+      }
+      setFpsLoading(true);
+
+      const game = popularGames.find(g => g.id === gamingSelection.gameId);
+      if (!game) {
+        setFpsLoading(false);
+        return;
+      }
+
+      const fpsProfiles = {
+        '1080p': { low: game.fps1080pLow, medium: game.fps1080pMedium, high: game.fps1080pHigh },
+        '1440p': { low: game.fps1440pLow, medium: game.fps1440pMedium, high: game.fps1440pHigh },
+        '4k': { low: game.fps4kLow, medium: game.fps4kMedium, high: game.fps4kHigh },
+      };
+
+      // Limit to first 20 systems to avoid spamming API; others fall back to heuristic
+      const targetSystems = systems.slice(0, 20);
+      const newMap: Record<string, number | null> = {};
+
+      await Promise.all(
+        targetSystems.map(async (system) => {
+          try {
+            const res = await fetch('/api/fps-estimate', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                system: { cpu: system.cpu, gpu: system.gpu, ram: system.ram },
+                game: { name: game.name, fpsProfiles },
+                resolution: gamingSelection.resolution,
+                quality: gamingSelection.qualityPreset,
+              }),
+            });
+
+            if (!res.ok) {
+              const heuristic = estimateSystemFps(
+                system,
+                game,
+                gamingSelection.resolution as '1080p' | '1440p' | '4k',
+                gamingSelection.qualityPreset as 'low' | 'medium' | 'high' | 'ultra'
+              );
+              newMap[system.id] = heuristic;
+              return;
+            }
+
+            const data = await res.json();
+            newMap[system.id] = typeof data.fps === 'number' ? data.fps : null;
+          } catch {
+            const heuristic = estimateSystemFps(
+              system,
+              game,
+              gamingSelection.resolution as '1080p' | '1440p' | '4k',
+              gamingSelection.qualityPreset as 'low' | 'medium' | 'high' | 'ultra'
+            );
+            newMap[system.id] = heuristic;
+          }
+        })
+      );
+
+      setFpsMap(newMap);
+      setFpsLoading(false);
+    };
+
+    run();
+  }, [gamingSelection, systems]);
 
   const fetchSystems = async () => {
     try {
@@ -83,25 +155,7 @@ export default function CompleteSystems() {
       // Category filter
       const categoryMatch = selectedFilter === 'all' || system.category?.name === selectedFilter;
       
-      // Gaming compatibility filter
-      let gamingMatch = true;
-      if (gamingFilter.selectedGames.length > 0) {
-        const selectedGamesData = popularGames.filter((game) => 
-          gamingFilter.selectedGames.includes(game.id)
-        );
-        
-        const compatibility = checkGamingCompatibility(
-          system,
-          selectedGamesData,
-          gamingFilter.resolution,
-          gamingFilter.qualityPreset,
-          gamingFilter.targetFps
-        );
-        
-        gamingMatch = compatibility.isCompatible;
-      }
-      
-      return categoryMatch && gamingMatch;
+      return categoryMatch;
     })
     .sort((a, b) => {
       switch (sortBy) {
@@ -240,12 +294,12 @@ export default function CompleteSystems() {
               <button
                 onClick={() => setShowGamingFilter(!showGamingFilter)}
                 className={`px-4 py-2 rounded-lg font-medium transition-all duration-200 ${
-                  showGamingFilter || gamingFilter.selectedGames.length > 0
+                  showGamingFilter || gamingSelection.gameId
                     ? 'bg-[var(--brand)] text-white'
                     : 'bg-[var(--card-bg)] text-gray-300 hover:text-white hover:bg-[var(--card-border)]'
                 }`}
               >
-                🎮 Gaming Filter {gamingFilter.selectedGames.length > 0 && `(${gamingFilter.selectedGames.length})`}
+                🎮 Gaming Filter {gamingSelection.gameId && `(1)`}
               </button>
               
               <div className="flex items-center space-x-3">
@@ -271,7 +325,53 @@ export default function CompleteSystems() {
       {showGamingFilter && (
         <section className="px-6 lg:px-12 py-8">
           <div className="max-w-7xl mx-auto">
-            <GamingFilter onFilterChange={setGamingFilter} />
+            <div className="bg-[var(--card-bg)] border border-[var(--card-border)] rounded-2xl p-6">
+              <h3 className="text-lg font-semibold text-white mb-4">Gaming Filter</h3>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div className="md:col-span-3">
+                  <label className="block text-sm font-medium text-gray-300 mb-2">Game</label>
+                  <select
+                    value={gamingSelection.gameId}
+                    onChange={(e) => setGamingSelection({...gamingSelection, gameId: e.target.value})}
+                    className="w-full bg-[var(--background)] border border-[var(--card-border)] rounded-lg px-3 py-2 text-white focus:outline-none focus:border-[var(--brand)] transition-colors"
+                  >
+                    <option value="" className="bg-[var(--background)] text-gray-400">Select a game</option>
+                    {popularGames.map(game => (
+                      <option key={game.id} value={game.id} className="bg-[var(--background)]">
+                        {game.name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-300 mb-2">Resolution</label>
+                  <select
+                    value={gamingSelection.resolution}
+                    onChange={(e) => setGamingSelection({...gamingSelection, resolution: e.target.value as '1080p' | '1440p' | '4k'})}
+                    className="w-full bg-[var(--background)] border border-[var(--card-border)] rounded-lg px-3 py-2 text-white focus:outline-none focus:border-[var(--brand)] transition-colors"
+                  >
+                    <option value="1080p" className="bg-[var(--background)]">1080p (Full HD)</option>
+                    <option value="1440p" className="bg-[var(--background)]">1440p (QHD)</option>
+                    <option value="4k" className="bg-[var(--background)]">4K (Ultra HD)</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-300 mb-2">Quality</label>
+                  <select
+                    value={gamingSelection.qualityPreset}
+                    onChange={(e) => setGamingSelection({...gamingSelection, qualityPreset: e.target.value as 'low' | 'medium' | 'high' | 'ultra'})}
+                    className="w-full bg-[var(--background)] border border-[var(--card-border)] rounded-lg px-3 py-2 text-white focus:outline-none focus:border-[var(--brand)] transition-colors"
+                  >
+                    <option value="low" className="bg-[var(--background)]">Low</option>
+                    <option value="medium" className="bg-[var(--background)]">Medium</option>
+                    <option value="high" className="bg-[var(--background)]">High</option>
+                    <option value="ultra" className="bg-[var(--background)]">Ultra</option>
+                  </select>
+                </div>
+              </div>
+            </div>
           </div>
         </section>
       )}
@@ -359,33 +459,36 @@ export default function CompleteSystems() {
                       )}
                     </div>
 
-                    {/* Gaming Compatibility */}
-                    {gamingFilter.selectedGames.length > 0 && (
+                    {/* Predicted FPS */}
+                    {gamingSelection.gameId && (
                       <div className="mb-4">
                         {(() => {
-                          const selectedGamesData = popularGames.filter((game) => 
-                            gamingFilter.selectedGames.includes(game.id)
-                          );
-                          
-                          const compatibility = checkGamingCompatibility(
-                            system,
-                            selectedGamesData,
-                            gamingFilter.resolution,
-                            gamingFilter.qualityPreset,
-                            gamingFilter.targetFps
-                          );
-                          
+                          const game = popularGames.find(g => g.id === gamingSelection.gameId);
+                          if (!game) return null;
+                          const apiFps = fpsMap[system.id];
+                          const fps =
+                            typeof apiFps === 'number'
+                              ? apiFps
+                              : estimateSystemFps(
+                                  system,
+                                  game,
+                                  gamingSelection.resolution as '1080p' | '1440p' | '4k',
+                                  gamingSelection.qualityPreset as 'low' | 'medium' | 'high' | 'ultra'
+                                );
+                          const isLoading = fpsLoading && typeof apiFps !== 'number';
                           return (
                             <div className="flex items-center justify-between">
-                              <span className="text-sm text-gray-400">Gaming Score:</span>
-                              <div className="flex items-center space-x-2">
-                                <span className={`px-2 py-1 rounded-full text-xs font-medium ${getCompatibilityColor(compatibility.score)}`}>
-                                  {compatibility.score}/100
-                                </span>
-                                <span className="text-xs text-gray-400">
-                                  {getCompatibilityLabel(compatibility.score)}
-                                </span>
+                              <div className="text-sm text-gray-400">
+                                Predicted FPS ({gamingSelection.resolution} {gamingSelection.qualityPreset})
                               </div>
+                              {isLoading ? (
+                                <div className="flex items-center space-x-2 text-gray-300 text-sm">
+                                  <div className="w-4 h-4 border-2 border-gray-500 border-t-[var(--brand)] rounded-full animate-spin" />
+                                  <span>calculating...</span>
+                                </div>
+                              ) : (
+                                <div className="text-lg font-semibold text-white">~{fps} FPS</div>
+                              )}
                             </div>
                           );
                         })()}
