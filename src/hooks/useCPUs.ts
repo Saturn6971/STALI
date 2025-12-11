@@ -247,7 +247,15 @@ export function useCPUFiltered(filters: {
       const { data, error } = await query;
 
       if (error) throw error;
-      setCpuListings(data || []);
+
+      // Ensure manufacturer quick-filter buttons work even if Supabase can't filter on the nested relation
+      const filteredByManufacturer = (data || []).filter((cpu) => {
+        if (!filters.manufacturers || filters.manufacturers.length === 0) return true;
+        const name = cpu.cpu_model?.manufacturer?.name?.toLowerCase() || '';
+        return filters.manufacturers.some((m) => name.includes(m.toLowerCase()));
+      });
+
+      setCpuListings(filteredByManufacturer);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to fetch filtered CPUs');
     } finally {
