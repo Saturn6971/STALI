@@ -244,7 +244,14 @@ export const useGPUFiltered = (filters: GPUFilters) => {
         return;
       }
 
-      setGpuListings(data || []);
+      // Ensure manufacturer quick-filter buttons work even if Supabase can't filter on nested relations
+      const filteredByManufacturer = (data || []).filter((gpu) => {
+        if (!filters.manufacturers || filters.manufacturers.length === 0) return true;
+        const name = gpu.gpu_model?.manufacturer?.name?.toLowerCase() || '';
+        return filters.manufacturers.some((m) => name.includes(m.toLowerCase()));
+      });
+
+      setGpuListings(filteredByManufacturer);
     } catch (err) {
       console.error('Failed to fetch filtered GPUs:', err);
       setError('Failed to fetch GPUs');
