@@ -131,27 +131,27 @@ export default function Home() {
                   <span className="text-gray-300 text-sm max-w-[200px] truncate" title={user.user_metadata?.display_name || user.user_metadata?.username || user.email || ''}>
                     Welcome, {user.user_metadata?.display_name || user.user_metadata?.username || user.email}
                   </span>
-                  <Link 
+                  <Link
                     href="/chat"
-                    className="text-gray-300 hover:text-white transition-colors duration-200 font-medium"
+                    className="text-gray-300 hover:text-white transition-colors duration-200 font-medium whitespace-nowrap"
                   >
                     Messages
                   </Link>
-                  <Link 
+                  <Link
                     href="/account"
-                    className="text-gray-300 hover:text-white transition-colors duration-200 font-medium"
+                    className="text-gray-300 hover:text-white transition-colors duration-200 font-medium whitespace-nowrap"
                   >
                     Account
                   </Link>
-                  <button 
+                  <button
                     onClick={() => signOut()}
-                    className="text-gray-300 hover:text-white transition-colors duration-200 font-medium"
+                    className="text-gray-300 hover:text-white transition-colors duration-200 font-medium whitespace-nowrap"
                   >
                     Sign Out
                   </button>
-                  <Link 
+                  <Link
                     href="/seller"
-                    className="bg-[var(--brand)] hover:bg-[var(--brand-light)] text-white px-6 py-2 rounded-lg font-medium transition-all duration-200 hover:scale-105"
+                    className="bg-[var(--brand)] hover:bg-[var(--brand-light)] text-white px-4 py-2 rounded-lg font-medium transition-all duration-200 hover:scale-105 whitespace-nowrap text-sm"
                   >
                     Seller Dashboard
                   </Link>
