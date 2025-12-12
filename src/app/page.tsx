@@ -128,7 +128,7 @@ export default function Home() {
               
               {user ? (
                 <div className="flex items-center space-x-4">
-                  <span className="text-gray-300 text-sm">
+                  <span className="text-gray-300 text-sm max-w-[200px] truncate" title={user.user_metadata?.display_name || user.user_metadata?.username || user.email || ''}>
                     Welcome, {user.user_metadata?.display_name || user.user_metadata?.username || user.email}
                   </span>
                   <Link 
