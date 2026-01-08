@@ -211,9 +211,7 @@ export const useGPUFiltered = (filters: GPUFilters) => {
         query = query.in('condition', filters.condition);
       }
 
-      if (filters.search) {
-        query = query.or(`title.ilike.%${filters.search}%,description.ilike.%${filters.search}%,gpu_model.model_name.ilike.%${filters.search}%`);
-      }
+      // Note: search is applied client-side to support nested relation filtering
 
       // Apply sorting
       switch (filters.sortBy) {
@@ -244,14 +242,35 @@ export const useGPUFiltered = (filters: GPUFilters) => {
         return;
       }
 
-      // Ensure manufacturer quick-filter buttons work even if Supabase can't filter on nested relations
-      const filteredByManufacturer = (data || []).filter((gpu) => {
-        if (!filters.manufacturers || filters.manufacturers.length === 0) return true;
-        const name = gpu.gpu_model?.manufacturer?.name?.toLowerCase() || '';
-        return filters.manufacturers.some((m) => name.includes(m.toLowerCase()));
-      });
+      // Apply client-side filtering for manufacturer and search (Supabase can't filter on nested relations)
+      let filteredData = data || [];
 
-      setGpuListings(filteredByManufacturer);
+      // Filter by manufacturer
+      if (filters.manufacturers && filters.manufacturers.length > 0) {
+        filteredData = filteredData.filter((gpu) => {
+          const name = gpu.gpu_model?.manufacturer?.name?.toLowerCase() || '';
+          return filters.manufacturers.some((m) => name.includes(m.toLowerCase()));
+        });
+      }
+
+      // Filter by search term (searches title, description, and model name)
+      if (filters.search && filters.search.trim() !== '') {
+        const searchLower = filters.search.toLowerCase().trim();
+        filteredData = filteredData.filter((gpu) => {
+          const title = (gpu.title || '').toLowerCase();
+          const description = (gpu.description || '').toLowerCase();
+          const modelName = (gpu.gpu_model?.model_name || '').toLowerCase();
+          const manufacturerName = (gpu.gpu_model?.manufacturer?.name || '').toLowerCase();
+          return (
+            title.includes(searchLower) ||
+            description.includes(searchLower) ||
+            modelName.includes(searchLower) ||
+            manufacturerName.includes(searchLower)
+          );
+        });
+      }
+
+      setGpuListings(filteredData);
     } catch (err) {
       console.error('Failed to fetch filtered GPUs:', err);
       setError('Failed to fetch GPUs');

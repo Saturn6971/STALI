@@ -219,9 +219,7 @@ export function useCPUFiltered(filters: {
         query = query.in('condition', filters.condition);
       }
 
-      if (filters.search) {
-        query = query.or(`title.ilike.%${filters.search}%,description.ilike.%${filters.search}%,cpu_model.model_name.ilike.%${filters.search}%`);
-      }
+      // Note: search is applied client-side to support nested relation filtering
 
       // Apply sorting
       switch (filters.sortBy) {
@@ -248,14 +246,35 @@ export function useCPUFiltered(filters: {
 
       if (error) throw error;
 
-      // Ensure manufacturer quick-filter buttons work even if Supabase can't filter on the nested relation
-      const filteredByManufacturer = (data || []).filter((cpu) => {
-        if (!filters.manufacturers || filters.manufacturers.length === 0) return true;
-        const name = cpu.cpu_model?.manufacturer?.name?.toLowerCase() || '';
-        return filters.manufacturers.some((m) => name.includes(m.toLowerCase()));
-      });
+      // Apply client-side filtering for manufacturer and search (Supabase can't filter on nested relations)
+      let filteredData = data || [];
 
-      setCpuListings(filteredByManufacturer);
+      // Filter by manufacturer
+      if (filters.manufacturers && filters.manufacturers.length > 0) {
+        filteredData = filteredData.filter((cpu) => {
+          const name = cpu.cpu_model?.manufacturer?.name?.toLowerCase() || '';
+          return filters.manufacturers!.some((m) => name.includes(m.toLowerCase()));
+        });
+      }
+
+      // Filter by search term (searches title, description, and model name)
+      if (filters.search && filters.search.trim() !== '') {
+        const searchLower = filters.search.toLowerCase().trim();
+        filteredData = filteredData.filter((cpu) => {
+          const title = (cpu.title || '').toLowerCase();
+          const description = (cpu.description || '').toLowerCase();
+          const modelName = (cpu.cpu_model?.model_name || '').toLowerCase();
+          const manufacturerName = (cpu.cpu_model?.manufacturer?.name || '').toLowerCase();
+          return (
+            title.includes(searchLower) ||
+            description.includes(searchLower) ||
+            modelName.includes(searchLower) ||
+            manufacturerName.includes(searchLower)
+          );
+        });
+      }
+
+      setCpuListings(filteredData);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to fetch filtered CPUs');
     } finally {

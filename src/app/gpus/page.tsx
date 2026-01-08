@@ -255,9 +255,9 @@ export default function GPUsPage() {
               <p className="text-sm text-gray-400">Refine your search with detailed filters</p>
             </div>
             
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-6">
               {/* Search */}
-              <div>
+              <div className="min-w-0">
                 <label className="block text-sm font-medium text-gray-300 mb-2">Search</label>
                 <input
                   type="text"
@@ -269,31 +269,31 @@ export default function GPUsPage() {
               </div>
 
               {/* Price Range */}
-              <div>
+              <div className="min-w-0">
                 <label className="block text-sm font-medium text-gray-300 mb-2">Price Range (€)</label>
-                <div className="flex space-x-2">
+                <div className="flex items-center space-x-2">
                   <input
                     type="number"
                     value={filters.priceRange[0]}
                     onChange={(e) => setFilters({...filters, priceRange: [parseInt(e.target.value) || 0, filters.priceRange[1]]})}
                     placeholder="Min"
-                    className="flex-1 px-3 py-2 bg-[var(--card-bg)] border border-[var(--card-border)] rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-[var(--brand)] transition-colors"
+                    className="w-full min-w-0 px-3 py-2 bg-[var(--card-bg)] border border-[var(--card-border)] rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-[var(--brand)] transition-colors"
                   />
-                  <span className="text-gray-400 self-center">to</span>
+                  <span className="text-gray-400 flex-shrink-0">to</span>
                   <input
                     type="number"
                     value={filters.priceRange[1]}
                     onChange={(e) => setFilters({...filters, priceRange: [filters.priceRange[0], parseInt(e.target.value) || 10000]})}
                     placeholder="Max"
-                    className="flex-1 px-3 py-2 bg-[var(--card-bg)] border border-[var(--card-border)] rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-[var(--brand)] transition-colors"
+                    className="w-full min-w-0 px-3 py-2 bg-[var(--card-bg)] border border-[var(--card-border)] rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-[var(--brand)] transition-colors"
                   />
                 </div>
               </div>
 
               {/* Memory Sizes */}
-              <div>
+              <div className="min-w-0">
                 <label className="block text-sm font-medium text-gray-300 mb-2">Memory Size (GB)</label>
-                <div className="flex flex-wrap gap-2">
+                <div className="flex flex-wrap gap-2 max-h-24 overflow-y-auto">
                   {uniqueMemorySizes.map(size => (
                     <button
                       key={size}
@@ -303,7 +303,7 @@ export default function GPUsPage() {
                           : [...filters.memorySizes, size];
                         setFilters({...filters, memorySizes: newSizes});
                       }}
-                      className={`px-3 py-1 rounded-full text-xs font-medium transition-colors ${
+                      className={`px-3 py-1 rounded-full text-xs font-medium transition-colors flex-shrink-0 ${
                         filters.memorySizes.includes(size)
                           ? 'bg-[var(--brand)] text-white'
                           : 'bg-[var(--card-bg)] text-gray-300 hover:text-white hover:bg-[var(--card-border)] border border-[var(--card-border)]'
@@ -316,9 +316,9 @@ export default function GPUsPage() {
               </div>
 
               {/* Condition */}
-              <div>
+              <div className="min-w-0">
                 <label className="block text-sm font-medium text-gray-300 mb-2">Condition</label>
-                <div className="flex flex-wrap gap-2">
+                <div className="flex flex-wrap gap-2 max-h-24 overflow-y-auto">
                   {uniqueConditions.map(condition => (
                     <button
                       key={condition}
@@ -328,7 +328,7 @@ export default function GPUsPage() {
                           : [...filters.condition, condition];
                         setFilters({...filters, condition: newConditions});
                       }}
-                      className={`px-3 py-1 rounded-full text-xs font-medium transition-colors ${
+                      className={`px-3 py-1 rounded-full text-xs font-medium transition-colors flex-shrink-0 ${
                         filters.condition.includes(condition)
                           ? 'bg-[var(--brand)] text-white'
                           : 'bg-[var(--card-bg)] text-gray-300 hover:text-white hover:bg-[var(--card-border)] border border-[var(--card-border)]'
