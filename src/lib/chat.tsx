@@ -86,8 +86,10 @@ export function ChatProvider({ children }: { children: React.ReactNode }) {
   const [error, setError] = useState<string | null>(null);
 
   // Fetch conversations
-  const fetchConversations = async () => {
+  const fetchConversations = async (retryCount = 0) => {
     if (!user) return;
+
+    const MAX_RETRIES = 2;
 
     try {
       setLoading(true);
@@ -117,7 +119,7 @@ export function ChatProvider({ children }: { children: React.ReactNode }) {
 
       if (error) {
         console.error('Error fetching conversations:', error);
-        throw new Error(error.message);
+        throw new Error(error.message || 'Failed to fetch conversations');
       }
 
       // Process conversations to get last message and unread count
@@ -141,14 +143,30 @@ export function ChatProvider({ children }: { children: React.ReactNode }) {
       setConversations(processedConversations);
     } catch (err) {
       console.error('Failed to fetch conversations:', err);
-      setError(err instanceof Error ? err.message : 'Failed to fetch conversations');
+      
+      // Check if it's a network error and retry
+      const isNetworkError = err instanceof TypeError && 
+        (err.message.includes('NetworkError') || err.message.includes('fetch'));
+      
+      if (isNetworkError && retryCount < MAX_RETRIES) {
+        console.log(`Retrying fetchConversations (attempt ${retryCount + 1}/${MAX_RETRIES})...`);
+        setLoading(true); // Keep loading state during retry
+        // Exponential backoff: 1s, 2s
+        await new Promise(resolve => setTimeout(resolve, 1000 * (retryCount + 1)));
+        return fetchConversations(retryCount + 1);
+      }
+      
+      const errorMessage = err instanceof Error ? err.message : 'Failed to fetch conversations';
+      setError(isNetworkError ? 'Network error. Please check your connection.' : errorMessage);
     } finally {
       setLoading(false);
     }
   };
 
   // Fetch messages for a conversation
-  const fetchMessages = async (conversationId: string) => {
+  const fetchMessages = async (conversationId: string, retryCount = 0) => {
+    const MAX_RETRIES = 2;
+    
     try {
       const { data, error } = await supabase
         .from('messages')
@@ -161,13 +179,27 @@ export function ChatProvider({ children }: { children: React.ReactNode }) {
 
       if (error) {
         console.error('Error fetching messages:', error);
-        throw new Error(error.message);
+        throw new Error(error.message || 'Failed to fetch messages');
       }
 
       setMessages(data || []);
+      setError(null); // Clear any previous error on success
     } catch (err) {
       console.error('Failed to fetch messages:', err);
-      setError(err instanceof Error ? err.message : 'Failed to fetch messages');
+      
+      // Check if it's a network error and retry
+      const isNetworkError = err instanceof TypeError && 
+        (err.message.includes('NetworkError') || err.message.includes('fetch'));
+      
+      if (isNetworkError && retryCount < MAX_RETRIES) {
+        console.log(`Retrying fetchMessages (attempt ${retryCount + 1}/${MAX_RETRIES})...`);
+        // Exponential backoff: 1s, 2s
+        await new Promise(resolve => setTimeout(resolve, 1000 * (retryCount + 1)));
+        return fetchMessages(conversationId, retryCount + 1);
+      }
+      
+      const errorMessage = err instanceof Error ? err.message : 'Failed to fetch messages';
+      setError(isNetworkError ? 'Network error. Please check your connection.' : errorMessage);
     }
   };
 
