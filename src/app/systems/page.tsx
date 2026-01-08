@@ -630,7 +630,7 @@ export default function CompleteSystems() {
             <span className="text-lg font-bold">Stali</span>
           </div>
           <div className="text-gray-400 text-sm">
-            © 2024 Stali. Your premium PC parts marketplace.
+            © 2026 Stali. Your premium PC parts marketplace.
           </div>
         </div>
       </footer>
