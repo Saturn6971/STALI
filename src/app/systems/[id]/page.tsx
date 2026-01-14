@@ -30,6 +30,34 @@ export default function SystemDetails() {
     }
   }, [params.id, user]);
 
+  // Check if user has favorited this system
+  useEffect(() => {
+    const checkFavoriteStatus = async () => {
+      if (!user || !params.id) {
+        setIsFavorited(false);
+        return;
+      }
+
+      try {
+        const { data, error } = await supabase
+          .from('favorites')
+          .select('id')
+          .eq('user_id', user.id)
+          .eq('system_id', params.id as string)
+          .single();
+
+        if (error && error.code !== 'PGRST116') {
+          console.error('Error checking favorite status:', error);
+        }
+        setIsFavorited(!!data);
+      } catch (err) {
+        console.error('Error checking favorite status:', err);
+      }
+    };
+
+    checkFavoriteStatus();
+  }, [user, params.id]);
+
   const fetchSystem = async (id: string) => {
     try {
       setLoading(true);
@@ -118,6 +146,12 @@ export default function SystemDetails() {
   const handleFavorite = async () => {
     if (!system) return;
     
+    // Require authentication
+    if (!user) {
+      router.push('/auth?redirect=' + encodeURIComponent(`/systems/${system.id}`));
+      return;
+    }
+    
     try {
       setIsFavoriting(true);
 
@@ -126,6 +160,7 @@ export default function SystemDetails() {
         await supabase
           .from('favorites')
           .delete()
+          .eq('user_id', user.id)
           .eq('system_id', system.id);
         
         // Decrement favorite count
@@ -134,10 +169,10 @@ export default function SystemDetails() {
           .update({ favorite_count: Math.max(0, (system.favorite_count || 0) - 1) })
           .eq('id', system.id);
       } else {
-        // Add to favorites (you might want to add user authentication here)
+        // Add to favorites
         await supabase
           .from('favorites')
-          .insert({ system_id: system.id });
+          .insert({ user_id: user.id, system_id: system.id });
         
         // Increment favorite count
         await supabase

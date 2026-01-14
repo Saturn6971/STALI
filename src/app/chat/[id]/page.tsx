@@ -1,35 +1,92 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useAuth } from '@/lib/auth';
-import { useChat } from '@/lib/chat';
+import { useChat, UserRating } from '@/lib/chat';
 import { formatCurrency } from '@/utils';
+import RatingModal from '@/components/ui/RatingModal';
 
 export default function ChatPage() {
   const params = useParams();
   const router = useRouter();
   const { user } = useAuth();
-  const { conversations, messages, sendMessage, setCurrentConversation, markAsRead } = useChat();
+  const { conversations, messages, sendMessage, setCurrentConversation, markAsRead, getUserRating, submitUserRating } = useChat();
   const [messageText, setMessageText] = useState('');
   const [sending, setSending] = useState(false);
+  const [showRatingModal, setShowRatingModal] = useState(false);
+  const [existingRating, setExistingRating] = useState<UserRating | null>(null);
+  const [loadingRating, setLoadingRating] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const conversationId = params.id as string;
 
   const conversation = conversations.find(conv => conv.id === conversationId);
+  const prevMessagesLengthRef = useRef(0);
+  const isInitialLoadRef = useRef(true);
+  const hasSetConversationRef = useRef(false);
 
   useEffect(() => {
-    if (conversation) {
+    // Only set conversation once when we first find it, or when ID changes
+    if (conversation && !hasSetConversationRef.current) {
+      hasSetConversationRef.current = true;
       setCurrentConversation(conversation);
     }
   }, [conversation, setCurrentConversation]);
 
+  // Reset the ref when conversation ID changes
   useEffect(() => {
-    if (messagesEndRef.current) {
-      messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
+    hasSetConversationRef.current = false;
+    isInitialLoadRef.current = true;
+  }, [conversationId]);
+
+  // Only scroll to bottom on initial load or when new messages are added
+  useEffect(() => {
+    const shouldScroll = 
+      isInitialLoadRef.current || 
+      messages.length > prevMessagesLengthRef.current;
+    
+    if (shouldScroll && messagesEndRef.current) {
+      messagesEndRef.current.scrollIntoView({ behavior: isInitialLoadRef.current ? 'auto' : 'smooth' });
+    }
+    
+    prevMessagesLengthRef.current = messages.length;
+    if (messages.length > 0) {
+      isInitialLoadRef.current = false;
     }
   }, [messages]);
+
+  // Determine the other user in the conversation
+  const otherUser = user && conversation
+    ? (user.id === conversation.buyer_id ? conversation.seller : conversation.buyer)
+    : null;
+
+  // Fetch existing rating when opening the modal
+  const handleOpenRatingModal = useCallback(async () => {
+    if (!conversation || !otherUser) return;
+    
+    setLoadingRating(true);
+    setShowRatingModal(true);
+    
+    try {
+      const rating = await getUserRating(conversation.id, otherUser.id);
+      setExistingRating(rating);
+    } catch (error) {
+      console.error('Failed to fetch rating:', error);
+    } finally {
+      setLoadingRating(false);
+    }
+  }, [conversation, otherUser, getUserRating]);
+
+  // Submit rating
+  const handleSubmitRating = async (rating: number, comment: string) => {
+    if (!conversation || !otherUser) return;
+    
+    const result = await submitUserRating(conversation.id, otherUser.id, rating, comment);
+    if (result) {
+      setExistingRating(result);
+    }
+  };
 
   const handleSendMessage = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -100,8 +157,6 @@ export default function ChatPage() {
     );
   }
 
-  const otherUser = user.id === conversation.buyer_id ? conversation.seller : conversation.buyer;
-
   // Determine which listing this conversation is about
   const listingType = conversation.system_id
     ? 'system'
@@ -168,7 +223,14 @@ export default function ChatPage() {
                 </div>
               </div>
             </div>
-            <div className="flex items-center space-x-4">
+            <div className="flex items-center space-x-3">
+              <button
+                onClick={handleOpenRatingModal}
+                className="bg-[var(--card-border)] hover:bg-[var(--card-border)]/80 text-white px-4 py-2 rounded-lg font-medium transition-all duration-200 hover:scale-105 flex items-center space-x-2"
+              >
+                <span>⭐</span>
+                <span>Rate User</span>
+              </button>
               {listingType && (
                 <Link
                   href={listingUrl}
@@ -289,6 +351,16 @@ export default function ChatPage() {
           </form>
         </div>
       </div>
+
+      {/* Rating Modal */}
+      <RatingModal
+        isOpen={showRatingModal}
+        onClose={() => setShowRatingModal(false)}
+        onSubmit={handleSubmitRating}
+        userName={otherUser?.display_name || otherUser?.username || 'User'}
+        existingRating={existingRating}
+        isLoading={loadingRating}
+      />
     </div>
   );
 }

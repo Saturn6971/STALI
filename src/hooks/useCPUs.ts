@@ -196,19 +196,10 @@ export function useCPUFiltered(filters: {
         `)
         .eq('status', 'active');
 
-      // Apply filters
-      if (filters.manufacturers && filters.manufacturers.length > 0) {
-        query = query.in('cpu_model.manufacturer.name', filters.manufacturers);
-      }
+      // Note: Nested relation filters (manufacturer, socket, cores) are applied client-side
+      // because Supabase .in() on nested relations doesn't filter rows, it nullifies unmatched nested data
 
-      if (filters.sockets && filters.sockets.length > 0) {
-        query = query.in('cpu_model.socket', filters.sockets);
-      }
-
-      if (filters.cores && filters.cores.length > 0) {
-        query = query.in('cpu_model.cores', filters.cores);
-      }
-
+      // Apply direct column filters (these work properly in Supabase)
       if (filters.priceRange) {
         query = query
           .gte('price', filters.priceRange[0])
@@ -218,8 +209,6 @@ export function useCPUFiltered(filters: {
       if (filters.condition && filters.condition.length > 0) {
         query = query.in('condition', filters.condition);
       }
-
-      // Note: search is applied client-side to support nested relation filtering
 
       // Apply sorting
       switch (filters.sortBy) {
@@ -246,7 +235,7 @@ export function useCPUFiltered(filters: {
 
       if (error) throw error;
 
-      // Apply client-side filtering for manufacturer and search (Supabase can't filter on nested relations)
+      // Apply client-side filtering for nested relations (Supabase can't filter on nested relations properly)
       let filteredData = data || [];
 
       // Filter by manufacturer
@@ -254,6 +243,22 @@ export function useCPUFiltered(filters: {
         filteredData = filteredData.filter((cpu) => {
           const name = cpu.cpu_model?.manufacturer?.name?.toLowerCase() || '';
           return filters.manufacturers!.some((m) => name.includes(m.toLowerCase()));
+        });
+      }
+
+      // Filter by socket
+      if (filters.sockets && filters.sockets.length > 0) {
+        filteredData = filteredData.filter((cpu) => {
+          const socket = cpu.cpu_model?.socket;
+          return socket && filters.sockets!.includes(socket);
+        });
+      }
+
+      // Filter by cores
+      if (filters.cores && filters.cores.length > 0) {
+        filteredData = filteredData.filter((cpu) => {
+          const cores = cpu.cpu_model?.cores;
+          return cores !== undefined && cores !== null && filters.cores!.includes(cores);
         });
       }
 

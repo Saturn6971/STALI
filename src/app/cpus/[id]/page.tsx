@@ -26,6 +26,34 @@ export default function CPUDetails() {
     }
   }, [params.id]);
 
+  // Check if user has favorited this CPU
+  useEffect(() => {
+    const checkFavoriteStatus = async () => {
+      if (!user || !params.id) {
+        setIsFavorited(false);
+        return;
+      }
+
+      try {
+        const { data, error } = await supabase
+          .from('cpu_favorites')
+          .select('id')
+          .eq('user_id', user.id)
+          .eq('cpu_listing_id', params.id as string)
+          .single();
+
+        if (error && error.code !== 'PGRST116') {
+          console.error('Error checking favorite status:', error);
+        }
+        setIsFavorited(!!data);
+      } catch (err) {
+        console.error('Error checking favorite status:', err);
+      }
+    };
+
+    checkFavoriteStatus();
+  }, [user, params.id]);
+
   const fetchCPU = async (id: string) => {
     try {
       setLoading(true);
@@ -96,12 +124,19 @@ export default function CPUDetails() {
   const handleFavorite = async () => {
     if (!cpuListing) return;
     
+    // Require authentication
+    if (!user) {
+      router.push('/auth?redirect=' + encodeURIComponent(`/cpus/${cpuListing.id}`));
+      return;
+    }
+    
     try {
       if (isFavorited) {
         // Remove from favorites
         await supabase
           .from('cpu_favorites')
           .delete()
+          .eq('user_id', user.id)
           .eq('cpu_listing_id', cpuListing.id);
         
         // Decrement favorite count
@@ -113,7 +148,7 @@ export default function CPUDetails() {
         // Add to favorites
         await supabase
           .from('cpu_favorites')
-          .insert({ cpu_listing_id: cpuListing.id });
+          .insert({ user_id: user.id, cpu_listing_id: cpuListing.id });
         
         // Increment favorite count
         await supabase

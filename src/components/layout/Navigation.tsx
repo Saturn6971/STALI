@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import { Heart } from 'lucide-react';
 import { NavigationProps } from '@/types';
 
 export default function Navigation({ isMobileMenuOpen, onMobileMenuToggle }: NavigationProps) {
@@ -34,6 +35,9 @@ export default function Navigation({ isMobileMenuOpen, onMobileMenuToggle }: Nav
             </Link>
             <Link href="/chat" className="text-gray-300 hover:text-white transition-colors duration-200 font-medium">
               Messages
+            </Link>
+            <Link href="/saved" className="text-gray-300 hover:text-white transition-colors duration-200 p-2 hover:bg-[var(--card-bg)] rounded-lg" title="Saved Listings">
+              <Heart className="w-5 h-5" />
             </Link>
             <div className="h-6 w-px bg-gray-600"></div>
             <Link href="/cpus/sell" className="bg-[var(--brand)] hover:bg-[var(--brand-light)] text-white px-6 py-2 rounded-lg font-medium transition-all duration-200 hover:scale-105">
@@ -74,6 +78,10 @@ export default function Navigation({ isMobileMenuOpen, onMobileMenuToggle }: Nav
               </Link>
               <Link href="/chat" className="text-gray-300 hover:text-white transition-colors duration-200 font-medium py-2">
                 Messages
+              </Link>
+              <Link href="/saved" className="text-gray-300 hover:text-white transition-colors duration-200 font-medium py-2 flex items-center gap-2">
+                <Heart className="w-4 h-4" />
+                Saved
               </Link>
               <div className="pt-4">
                 <Link href="/cpus/sell" className="w-full bg-[var(--brand)] hover:bg-[var(--brand-light)] text-white px-6 py-3 rounded-lg font-medium transition-all duration-200 block text-center">

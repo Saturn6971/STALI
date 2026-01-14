@@ -86,6 +86,17 @@ export default function AccountPage() {
       setError(null);
       setSuccess(null);
 
+      // Update Supabase auth user metadata
+      const { error: authError } = await supabase.auth.updateUser({
+        data: {
+          display_name: formData.display_name || null,
+          username: formData.username,
+        },
+      });
+
+      if (authError) throw authError;
+
+      // Update custom users table
       const { error } = await supabase
         .from('users')
         .update({

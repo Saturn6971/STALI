@@ -16,11 +16,9 @@ export type {
   Category, 
   User, 
   System, 
-  Review,
   CPUManufacturer,
   CPUModel,
   CPUListing,
-  CPUReview,
   CPUFavorite,
   GPUListing
 } from '@/types';
