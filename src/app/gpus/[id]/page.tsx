@@ -29,6 +29,34 @@ export default function GPUDetails() {
     }
   }, [params.id, user]);
 
+  // Check if user has favorited this GPU
+  useEffect(() => {
+    const checkFavoriteStatus = async () => {
+      if (!user || !params.id) {
+        setIsFavorited(false);
+        return;
+      }
+
+      try {
+        const { data, error } = await supabase
+          .from('gpu_favorites')
+          .select('id')
+          .eq('user_id', user.id)
+          .eq('gpu_listing_id', params.id as string)
+          .single();
+
+        if (error && error.code !== 'PGRST116') {
+          console.error('Error checking favorite status:', error);
+        }
+        setIsFavorited(!!data);
+      } catch (err) {
+        console.error('Error checking favorite status:', err);
+      }
+    };
+
+    checkFavoriteStatus();
+  }, [user, params.id]);
+
   const fetchGPU = async (id: string) => {
     try {
       setLoading(true);
@@ -99,6 +127,12 @@ export default function GPUDetails() {
   const handleFavorite = async () => {
     if (!gpu) return;
     
+    // Require authentication
+    if (!user) {
+      router.push('/auth?redirect=' + encodeURIComponent(`/gpus/${gpu.id}`));
+      return;
+    }
+    
     try {
       setIsFavoriting(true);
 
@@ -106,20 +140,34 @@ export default function GPUDetails() {
         const { error } = await supabase
           .from('gpu_favorites')
           .delete()
-          .eq('user_id', user?.id)
+          .eq('user_id', user.id)
           .eq('gpu_listing_id', gpu.id);
         
         if (error) throw error;
+        
+        // Decrement favorite count
+        await supabase
+          .from('gpu_listings')
+          .update({ favorite_count: Math.max(0, (gpu.favorite_count || 0) - 1) })
+          .eq('id', gpu.id);
+        
         setIsFavorited(false);
       } else {
         const { error } = await supabase
           .from('gpu_favorites')
           .insert({
-            user_id: user?.id,
+            user_id: user.id,
             gpu_listing_id: gpu.id
           });
         
         if (error) throw error;
+        
+        // Increment favorite count
+        await supabase
+          .from('gpu_listings')
+          .update({ favorite_count: (gpu.favorite_count || 0) + 1 })
+          .eq('id', gpu.id);
+        
         setIsFavorited(true);
       }
     } catch (error) {

@@ -51,17 +51,6 @@ export interface System {
   seller?: User
 }
 
-export interface Review {
-  id: string
-  system_id: string
-  reviewer_id: string
-  rating: number
-  title: string | null
-  comment: string | null
-  created_at: string
-  updated_at: string
-}
-
 // Component props types
 export interface CategoryCardProps {
   id: string
@@ -155,23 +144,6 @@ export interface CPUListing {
   // Joined data
   cpu_model?: CPUModel
   seller?: User
-}
-
-export interface CPUReview {
-  id: string
-  cpu_listing_id: string
-  reviewer_id: string
-  rating: number
-  title: string | null
-  comment: string | null
-  performance_rating: number | null
-  value_rating: number | null
-  reliability_rating: number | null
-  verified_purchase: boolean
-  created_at: string
-  updated_at: string
-  // Joined data
-  reviewer?: User
 }
 
 export interface CPUFavorite {
@@ -295,4 +267,19 @@ export interface SystemComparisonProps {
   systems: System[]
   onRemove: (id: string) => void
   onClear: () => void
+}
+
+// User rating types
+export interface UserRating {
+  id: string
+  conversation_id: string
+  rater_id: string
+  rated_user_id: string
+  rating: number
+  comment: string | null
+  created_at: string
+  updated_at: string
+  // Joined data
+  rater?: User
+  rated_user?: User
 }

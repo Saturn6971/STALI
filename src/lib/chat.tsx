@@ -62,6 +62,17 @@ export interface Conversation {
   unread_count?: number;
 }
 
+export interface UserRating {
+  id: string;
+  conversation_id: string;
+  rater_id: string;
+  rated_user_id: string;
+  rating: number;
+  comment: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
 interface ChatContextType {
   conversations: Conversation[];
   currentConversation: Conversation | null;
@@ -73,6 +84,8 @@ interface ChatContextType {
   markAsRead: (conversationId: string) => Promise<void>;
   setCurrentConversation: (conversation: Conversation | null) => void;
   refreshConversations: () => Promise<void>;
+  getUserRating: (conversationId: string, ratedUserId: string) => Promise<UserRating | null>;
+  submitUserRating: (conversationId: string, ratedUserId: string, rating: number, comment: string) => Promise<UserRating | null>;
 }
 
 const ChatContext = createContext<ChatContextType | undefined>(undefined);
@@ -118,8 +131,8 @@ export function ChatProvider({ children }: { children: React.ReactNode }) {
         .order('last_message_at', { ascending: false });
 
       if (error) {
-        console.error('Error fetching conversations:', error);
-        throw new Error(error.message || 'Failed to fetch conversations');
+        console.error('Error fetching conversations:', JSON.stringify(error, null, 2));
+        throw new Error(error.message || error.code || 'Failed to fetch conversations');
       }
 
       // Process conversations to get last message and unread count
@@ -178,8 +191,8 @@ export function ChatProvider({ children }: { children: React.ReactNode }) {
         .order('created_at', { ascending: true });
 
       if (error) {
-        console.error('Error fetching messages:', error);
-        throw new Error(error.message || 'Failed to fetch messages');
+        console.error('Error fetching messages:', JSON.stringify(error, null, 2));
+        throw new Error(error.message || error.code || 'Failed to fetch messages');
       }
 
       setMessages(data || []);
@@ -285,14 +298,98 @@ export function ChatProvider({ children }: { children: React.ReactNode }) {
       // Add message to local state
       setMessages(prev => [...prev, data]);
       
-      // Refresh conversations to update last message
-      await fetchConversations();
+      // Refresh conversations in background (don't await to keep UI responsive)
+      fetchConversations();
 
       return data as Message;
     } catch (err) {
       console.error('Failed to send message:', err);
       setError(err instanceof Error ? err.message : 'Failed to send message');
       return null;
+    }
+  };
+
+  // Get user rating for a conversation
+  const getUserRating = async (conversationId: string, ratedUserId: string): Promise<UserRating | null> => {
+    if (!user) return null;
+
+    try {
+      const { data, error } = await supabase
+        .from('user_ratings')
+        .select('*')
+        .eq('conversation_id', conversationId)
+        .eq('rater_id', user.id)
+        .eq('rated_user_id', ratedUserId)
+        .maybeSingle();
+
+      if (error) {
+        console.error('Error fetching user rating:', error);
+        return null;
+      }
+
+      return data as UserRating | null;
+    } catch (err) {
+      console.error('Failed to fetch user rating:', err);
+      return null;
+    }
+  };
+
+  // Submit or update user rating
+  const submitUserRating = async (
+    conversationId: string,
+    ratedUserId: string,
+    rating: number,
+    comment: string
+  ): Promise<UserRating | null> => {
+    if (!user) return null;
+
+    try {
+      // Check if rating already exists
+      const existingRating = await getUserRating(conversationId, ratedUserId);
+
+      if (existingRating) {
+        // Update existing rating
+        const { data, error } = await supabase
+          .from('user_ratings')
+          .update({
+            rating,
+            comment: comment.trim() || null,
+            updated_at: new Date().toISOString()
+          })
+          .eq('id', existingRating.id)
+          .select()
+          .single();
+
+        if (error) {
+          console.error('Error updating user rating:', error);
+          throw new Error(error.message);
+        }
+
+        return data as UserRating;
+      } else {
+        // Insert new rating
+        const { data, error } = await supabase
+          .from('user_ratings')
+          .insert({
+            conversation_id: conversationId,
+            rater_id: user.id,
+            rated_user_id: ratedUserId,
+            rating,
+            comment: comment.trim() || null
+          })
+          .select()
+          .single();
+
+        if (error) {
+          console.error('Error inserting user rating:', error);
+          throw new Error(error.message);
+        }
+
+        return data as UserRating;
+      }
+    } catch (err) {
+      console.error('Failed to submit user rating:', err);
+      throw err;
     }
   };
 
@@ -316,18 +413,30 @@ export function ChatProvider({ children }: { children: React.ReactNode }) {
         )
       );
 
-      // Refresh conversations to update unread count
-      await fetchConversations();
+      // Refresh conversations in background to update unread count
+      fetchConversations();
     } catch (err) {
       console.error('Failed to mark messages as read:', err);
     }
   };
 
+  // Track current fetching conversation to prevent duplicate requests
+  const fetchingConversationRef = { current: null as string | null };
+
   // Set current conversation and fetch its messages
   const handleSetCurrentConversation = (conversation: Conversation | null) => {
+    // Skip if already set to the same conversation
+    if (currentConversation?.id === conversation?.id) return;
+    
     setCurrentConversation(conversation);
     if (conversation) {
-      fetchMessages(conversation.id);
+      // Prevent duplicate fetches for the same conversation
+      if (fetchingConversationRef.current === conversation.id) return;
+      fetchingConversationRef.current = conversation.id;
+      
+      fetchMessages(conversation.id).finally(() => {
+        fetchingConversationRef.current = null;
+      });
       markAsRead(conversation.id);
     } else {
       setMessages([]);
@@ -351,12 +460,19 @@ export function ChatProvider({ children }: { children: React.ReactNode }) {
         (payload) => {
           const newMessage = payload.new as Message;
           
-          // Only add message if it's for the current conversation
+          // Only process messages from other users (our own messages are added locally)
+          if (newMessage.sender_id === user.id) return;
+          
+          // Only add message if it's for the current conversation and not already in the list
           if (currentConversation && newMessage.conversation_id === currentConversation.id) {
-            setMessages(prev => [...prev, newMessage]);
+            setMessages(prev => {
+              // Avoid duplicates
+              if (prev.some(m => m.id === newMessage.id)) return prev;
+              return [...prev, newMessage];
+            });
           }
           
-          // Refresh conversations to update last message
+          // Refresh conversations to update last message (in background)
           fetchConversations();
         }
       )
@@ -388,7 +504,9 @@ export function ChatProvider({ children }: { children: React.ReactNode }) {
     sendMessage,
     markAsRead,
     setCurrentConversation: handleSetCurrentConversation,
-    refreshConversations: fetchConversations
+    refreshConversations: fetchConversations,
+    getUserRating,
+    submitUserRating
   };
 
   return (
