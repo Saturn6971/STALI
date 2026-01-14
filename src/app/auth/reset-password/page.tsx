@@ -77,11 +77,11 @@ export default function ResetPasswordPage() {
 
   if (isValidToken === false) {
     return (
-      <div className="min-h-screen bg-[var(--background)] flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+      <div className="min-h-screen bg-[var(--background)] flex items-center justify-center py-8 sm:py-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-md w-full text-center">
-          <div className="bg-[var(--card-bg)] rounded-2xl p-8 border border-[var(--card-border)]">
-            <h2 className="text-2xl font-bold text-white mb-4">Invalid Reset Link</h2>
-            <p className="text-gray-400 mb-6">
+          <div className="bg-[var(--card-bg)] rounded-xl sm:rounded-2xl p-5 sm:p-8 border border-[var(--card-border)]">
+            <h2 className="text-xl sm:text-2xl font-bold text-white mb-4">Invalid Reset Link</h2>
+            <p className="text-gray-400 text-sm sm:text-base mb-6">
               This password reset link is invalid or has expired. Please request a new one.
             </p>
             <Link
@@ -102,23 +102,23 @@ export default function ResetPasswordPage() {
         {/* Header */}
         <div className="text-center">
           <Link href="/" className="flex items-center justify-center space-x-2 mb-6">
-            <div className="w-12 h-12 bg-gradient-to-br from-[var(--brand)] to-[var(--brand-light)] rounded-lg flex items-center justify-center">
-              <span className="text-white text-2xl">🐺</span>
+            <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-br from-[var(--brand)] to-[var(--brand-light)] rounded-lg flex items-center justify-center">
+              <span className="text-white text-xl sm:text-2xl">🐺</span>
             </div>
-            <h1 className="text-3xl font-bold bg-gradient-to-r from-[var(--brand)] to-[var(--brand-light)] bg-clip-text text-transparent">
+            <h1 className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-[var(--brand)] to-[var(--brand-light)] bg-clip-text text-transparent">
               Stali
             </h1>
           </Link>
           
-          <h2 className="text-3xl font-bold text-white mb-2">Set New Password</h2>
-          <p className="text-gray-400">
+          <h2 className="text-2xl sm:text-3xl font-bold text-white mb-2">Set New Password</h2>
+          <p className="text-gray-400 text-sm sm:text-base">
             Enter your new password below.
           </p>
         </div>
 
         {/* Form */}
-        <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
-          <div className="bg-[var(--card-bg)] rounded-2xl p-8 border border-[var(--card-border)]">
+        <form className="mt-6 sm:mt-8 space-y-4 sm:space-y-6" onSubmit={handleSubmit}>
+          <div className="bg-[var(--card-bg)] rounded-xl sm:rounded-2xl p-5 sm:p-8 border border-[var(--card-border)]">
             <div className="space-y-4">
               {/* New Password */}
               <div>

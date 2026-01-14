@@ -235,17 +235,19 @@ export default function GPUDetails() {
     <div className="min-h-screen bg-[var(--background)] text-[var(--foreground)]">
       {/* Navigation */}
       <nav className="bg-[var(--card-bg)]/80 backdrop-blur-sm border-b border-[var(--card-border)] sticky top-0 z-50">
-        <div className="max-w-7xl mx-auto px-6 lg:px-12">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-12">
           <div className="flex items-center justify-between h-16">
             <Link href="/" className="flex items-center space-x-2">
               <div className="w-8 h-8 bg-gradient-to-br from-[var(--brand)] to-[var(--brand-light)] rounded-lg flex items-center justify-center">
                 <span className="text-white text-lg">🐺</span>
               </div>
-              <h1 className="text-2xl font-bold bg-gradient-to-r from-[var(--brand)] to-[var(--brand-light)] bg-clip-text text-transparent">
+              <h1 className="text-xl sm:text-2xl font-bold bg-gradient-to-r from-[var(--brand)] to-[var(--brand-light)] bg-clip-text text-transparent">
                 Stali
               </h1>
             </Link>
-            <div className="flex items-center space-x-4">
+            
+            {/* Desktop Navigation */}
+            <div className="hidden md:flex items-center space-x-4">
               <Link href="/gpus" className="text-gray-300 hover:text-white transition-colors duration-200 font-medium">
                 ← Back to GPUs
               </Link>
@@ -292,17 +294,40 @@ export default function GPUDetails() {
                 </div>
               )}
             </div>
+            
+            {/* Mobile Navigation */}
+            <div className="flex md:hidden items-center space-x-2">
+              <Link href="/gpus" className="text-gray-300 hover:text-white transition-colors duration-200 text-sm">
+                ← GPUs
+              </Link>
+              {user ? (
+                <button 
+                  onClick={handleContactSeller}
+                  disabled={isContacting || !!(user && user.id === gpu.seller_id)}
+                  className="bg-[var(--brand)] hover:bg-[var(--brand-light)] text-white px-3 py-1.5 rounded-lg font-medium text-sm transition-all duration-200 disabled:opacity-50"
+                >
+                  {isContacting ? '...' : (user && user.id === gpu.seller_id ? 'Your Listing' : 'Contact')}
+                </button>
+              ) : (
+                <Link 
+                  href="/auth"
+                  className="bg-[var(--brand)] hover:bg-[var(--brand-light)] text-white px-3 py-1.5 rounded-lg font-medium text-sm transition-all duration-200"
+                >
+                  Sign In
+                </Link>
+              )}
+            </div>
           </div>
         </div>
       </nav>
 
       {/* Main Content */}
-      <div className="max-w-7xl mx-auto px-6 lg:px-12 py-8">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-12 py-4 sm:py-8">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8 lg:gap-12">
           {/* Left Column - Images */}
-          <div className="space-y-4">
+          <div className="space-y-3 sm:space-y-4">
             {/* Main Image */}
-            <div className="aspect-square bg-[var(--card-bg)] rounded-2xl border border-[var(--card-border)] overflow-hidden">
+            <div className="aspect-square bg-[var(--card-bg)] rounded-xl sm:rounded-2xl border border-[var(--card-border)] overflow-hidden">
               {images.length > 0 ? (
                 <img 
                   src={images[selectedImageIndex]} 
@@ -358,7 +383,7 @@ export default function GPUDetails() {
                 </div>
               </div>
               
-              <h1 className="text-3xl lg:text-4xl font-bold text-white mb-2">{gpu.title}</h1>
+              <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white mb-2">{gpu.title}</h1>
               
               {gpu.gpu_model && (
                 <p className="text-xl text-gray-400 mb-4">
@@ -383,32 +408,32 @@ export default function GPUDetails() {
             </div>
 
             {/* Price */}
-            <div className="bg-[var(--card-bg)] rounded-2xl p-6 border border-[var(--card-border)]">
-              <div className="flex items-center justify-between mb-4">
+            <div className="bg-[var(--card-bg)] rounded-xl sm:rounded-2xl p-4 sm:p-6 border border-[var(--card-border)]">
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4 space-y-3 sm:space-y-0">
                 <div>
-                  <div className="flex items-center space-x-3">
-                    <span className="text-4xl font-bold text-white">{formatCurrency(gpu.price)}</span>
+                  <div className="flex items-center space-x-2 sm:space-x-3">
+                    <span className="text-2xl sm:text-4xl font-bold text-white">{formatCurrency(gpu.price)}</span>
                     {gpu.original_price && gpu.original_price > gpu.price && (
-                      <span className="text-2xl text-gray-400 line-through">{formatCurrency(gpu.original_price)}</span>
+                      <span className="text-lg sm:text-2xl text-gray-400 line-through">{formatCurrency(gpu.original_price)}</span>
                     )}
                   </div>
                   {gpu.original_price && gpu.original_price > gpu.price && (
-                    <span className="text-lg text-green-400 font-medium">
+                    <span className="text-base sm:text-lg text-green-400 font-medium">
                       Save {formatCurrency(gpu.original_price - gpu.price)}
                     </span>
                   )}
                 </div>
-                <div className="text-right">
-                  <div className="text-sm text-gray-400">Manufacturer</div>
-                  <div className="text-lg font-medium text-[var(--brand)]">{gpu.gpu_model?.manufacturer?.name}</div>
+                <div className="text-left sm:text-right">
+                  <div className="text-xs sm:text-sm text-gray-400">Manufacturer</div>
+                  <div className="text-base sm:text-lg font-medium text-[var(--brand)]">{gpu.gpu_model?.manufacturer?.name}</div>
                 </div>
               </div>
               
-              <div className="flex space-x-3">
+              <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-3">
                 <button 
                   onClick={handleContactSeller}
                   disabled={isContacting || !!(user && user.id === gpu.seller_id)}
-                  className="flex-1 bg-[var(--brand)] hover:bg-[var(--brand-light)] text-white py-4 rounded-lg font-medium text-lg transition-all duration-200 hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="flex-1 bg-[var(--brand)] hover:bg-[var(--brand-light)] text-white py-3 sm:py-4 rounded-lg font-medium text-base sm:text-lg transition-all duration-200 hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   {isContacting ? (
                     <div className="flex items-center justify-center">
@@ -421,7 +446,7 @@ export default function GPUDetails() {
                 <button 
                   onClick={handleFavorite}
                   disabled={isFavoriting}
-                  className={`px-6 py-4 border rounded-lg font-medium text-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed ${
+                  className={`px-4 sm:px-6 py-3 sm:py-4 border rounded-lg font-medium text-base sm:text-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed ${
                     isFavorited 
                       ? 'bg-[var(--brand)] text-white border-[var(--brand)]' 
                       : 'border-[var(--brand)] text-[var(--brand)] hover:bg-[var(--brand)] hover:text-white'
@@ -440,14 +465,14 @@ export default function GPUDetails() {
 
             {/* GPU Specifications */}
             {gpu.gpu_model && (
-              <div className="bg-[var(--card-bg)] rounded-2xl p-6 border border-[var(--card-border)]">
-                <h3 className="text-xl font-bold text-white mb-6">🎮 GPU Specifications</h3>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="flex items-center space-x-3 py-3 border-b border-[var(--card-border)]">
-                    <Monitor className="w-5 h-5 text-[var(--brand)]" />
+              <div className="bg-[var(--card-bg)] rounded-xl sm:rounded-2xl p-4 sm:p-6 border border-[var(--card-border)]">
+                <h3 className="text-lg sm:text-xl font-bold text-white mb-4 sm:mb-6">🎮 GPU Specifications</h3>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+                  <div className="flex items-center space-x-3 py-2 sm:py-3 border-b border-[var(--card-border)]">
+                    <Monitor className="w-4 h-4 sm:w-5 sm:h-5 text-[var(--brand)]" />
                     <div>
-                      <div className="text-sm text-gray-400">Memory</div>
-                      <div className="font-medium text-white">{gpu.gpu_model.memory_size}GB {gpu.gpu_model.memory_type}</div>
+                      <div className="text-xs sm:text-sm text-gray-400">Memory</div>
+                      <div className="text-sm sm:text-base font-medium text-white">{gpu.gpu_model.memory_size}GB {gpu.gpu_model.memory_type}</div>
                     </div>
                   </div>
                   
@@ -506,16 +531,16 @@ export default function GPUDetails() {
 
             {/* Description */}
             {gpu.description && (
-              <div className="bg-[var(--card-bg)] rounded-2xl p-6 border border-[var(--card-border)]">
-                <h3 className="text-xl font-bold text-white mb-4">📝 Description</h3>
-                <p className="text-gray-300 leading-relaxed">{gpu.description}</p>
+              <div className="bg-[var(--card-bg)] rounded-xl sm:rounded-2xl p-4 sm:p-6 border border-[var(--card-border)]">
+                <h3 className="text-lg sm:text-xl font-bold text-white mb-3 sm:mb-4">📝 Description</h3>
+                <p className="text-sm sm:text-base text-gray-300 leading-relaxed">{gpu.description}</p>
               </div>
             )}
 
             {/* Additional Information */}
-            <div className="bg-[var(--card-bg)] rounded-2xl p-6 border border-[var(--card-border)]">
-              <h3 className="text-xl font-bold text-white mb-6">ℹ️ Additional Information</h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="bg-[var(--card-bg)] rounded-xl sm:rounded-2xl p-4 sm:p-6 border border-[var(--card-border)]">
+              <h3 className="text-lg sm:text-xl font-bold text-white mb-4 sm:mb-6">ℹ️ Additional Information</h3>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                 {gpu.purchase_date && (
                   <div className="flex items-center space-x-3 py-3 border-b border-[var(--card-border)]">
                     <Calendar className="w-5 h-5 text-[var(--brand)]" />
@@ -568,8 +593,8 @@ export default function GPUDetails() {
             </div>
 
             {/* Location & Shipping */}
-            <div className="bg-[var(--card-bg)] rounded-2xl p-6 border border-[var(--card-border)]">
-              <h3 className="text-xl font-bold text-white mb-6">🚚 Location & Shipping</h3>
+            <div className="bg-[var(--card-bg)] rounded-xl sm:rounded-2xl p-4 sm:p-6 border border-[var(--card-border)]">
+              <h3 className="text-lg sm:text-xl font-bold text-white mb-4 sm:mb-6">🚚 Location & Shipping</h3>
               <div className="space-y-4">
                 {gpu.location && (
                   <div className="flex items-center space-x-3">

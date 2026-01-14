@@ -60,12 +60,12 @@ export default function DebugAuthPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[var(--background)] p-8">
+    <div className="min-h-screen bg-[var(--background)] p-4 sm:p-8">
       <div className="max-w-2xl mx-auto">
-        <h1 className="text-3xl font-bold text-white mb-8">Authentication Debug</h1>
+        <h1 className="text-2xl sm:text-3xl font-bold text-white mb-6 sm:mb-8">Authentication Debug</h1>
         
-        <div className="bg-[var(--card-bg)] rounded-lg p-6 border border-[var(--card-border)] mb-6">
-          <h2 className="text-xl font-semibold text-white mb-4">Test Connection</h2>
+        <div className="bg-[var(--card-bg)] rounded-lg p-4 sm:p-6 border border-[var(--card-border)] mb-4 sm:mb-6">
+          <h2 className="text-lg sm:text-xl font-semibold text-white mb-4">Test Connection</h2>
           <button
             onClick={testConnection}
             disabled={loading}
@@ -75,8 +75,8 @@ export default function DebugAuthPage() {
           </button>
         </div>
 
-        <div className="bg-[var(--card-bg)] rounded-lg p-6 border border-[var(--card-border)] mb-6">
-          <h2 className="text-xl font-semibold text-white mb-4">Test Authentication</h2>
+        <div className="bg-[var(--card-bg)] rounded-lg p-4 sm:p-6 border border-[var(--card-border)] mb-4 sm:mb-6">
+          <h2 className="text-lg sm:text-xl font-semibold text-white mb-4">Test Authentication</h2>
           
           <div className="space-y-4 mb-4">
             <input

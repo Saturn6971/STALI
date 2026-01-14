@@ -39,23 +39,23 @@ export default function ForgotPasswordPage() {
         {/* Header */}
         <div className="text-center">
           <Link href="/" className="flex items-center justify-center space-x-2 mb-6">
-            <div className="w-12 h-12 bg-gradient-to-br from-[var(--brand)] to-[var(--brand-light)] rounded-lg flex items-center justify-center">
-              <span className="text-white text-2xl">🐺</span>
+            <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-br from-[var(--brand)] to-[var(--brand-light)] rounded-lg flex items-center justify-center">
+              <span className="text-white text-xl sm:text-2xl">🐺</span>
             </div>
-            <h1 className="text-3xl font-bold bg-gradient-to-r from-[var(--brand)] to-[var(--brand-light)] bg-clip-text text-transparent">
+            <h1 className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-[var(--brand)] to-[var(--brand-light)] bg-clip-text text-transparent">
               Stali
             </h1>
           </Link>
           
-          <h2 className="text-3xl font-bold text-white mb-2">Reset Password</h2>
-          <p className="text-gray-400">
+          <h2 className="text-2xl sm:text-3xl font-bold text-white mb-2">Reset Password</h2>
+          <p className="text-gray-400 text-sm sm:text-base">
             Enter your email address and we'll send you a link to reset your password.
           </p>
         </div>
 
         {/* Form */}
-        <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
-          <div className="bg-[var(--card-bg)] rounded-2xl p-8 border border-[var(--card-border)]">
+        <form className="mt-6 sm:mt-8 space-y-4 sm:space-y-6" onSubmit={handleSubmit}>
+          <div className="bg-[var(--card-bg)] rounded-xl sm:rounded-2xl p-5 sm:p-8 border border-[var(--card-border)]">
             <div className="space-y-4">
               {/* Email */}
               <div>

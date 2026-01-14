@@ -233,14 +233,14 @@ export default function AccountPage() {
     <div className="min-h-screen bg-[var(--background)] text-[var(--foreground)]">
       {/* Navigation */}
       <nav className="bg-[var(--card-bg)]/80 backdrop-blur-sm border-b border-[var(--card-border)] sticky top-0 z-50">
-        <div className="max-w-7xl mx-auto px-6 lg:px-12">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-12">
           <div className="flex items-center justify-between h-16">
-            <Link href="/" className="text-2xl font-bold text-white">
+            <Link href="/" className="text-xl sm:text-2xl font-bold text-white">
               Stali
             </Link>
-            <div className="flex items-center space-x-4">
-              <Link href="/" className="text-gray-300 hover:text-white transition-colors duration-200 font-medium">
-                ← Back to Home
+            <div className="flex items-center space-x-2 sm:space-x-4">
+              <Link href="/" className="text-gray-300 hover:text-white transition-colors duration-200 font-medium text-sm sm:text-base">
+                <span className="hidden sm:inline">← Back to </span>Home
               </Link>
             </div>
           </div>
@@ -248,10 +248,10 @@ export default function AccountPage() {
       </nav>
 
       {/* Main Content */}
-      <div className="max-w-4xl mx-auto px-6 lg:px-12 py-12">
-        <div className="mb-8">
-          <h1 className="text-4xl font-bold text-white mb-2">Account Settings</h1>
-          <p className="text-gray-400">Manage your account information and preferences</p>
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-12 py-6 sm:py-12">
+        <div className="mb-6 sm:mb-8">
+          <h1 className="text-2xl sm:text-4xl font-bold text-white mb-2">Account Settings</h1>
+          <p className="text-sm sm:text-base text-gray-400">Manage your account information and preferences</p>
         </div>
 
         {/* Success/Error Messages */}
@@ -267,8 +267,8 @@ export default function AccountPage() {
         )}
 
         {/* Profile Information Section */}
-        <div className="bg-[var(--card-bg)] border border-[var(--card-border)] rounded-2xl p-6 mb-6">
-          <h2 className="text-2xl font-bold text-white mb-6">Profile Information</h2>
+        <div className="bg-[var(--card-bg)] border border-[var(--card-border)] rounded-xl sm:rounded-2xl p-4 sm:p-6 mb-4 sm:mb-6">
+          <h2 className="text-xl sm:text-2xl font-bold text-white mb-4 sm:mb-6">Profile Information</h2>
           
           <form onSubmit={handleProfileUpdate} className="space-y-6">
             <div>
@@ -341,7 +341,7 @@ export default function AccountPage() {
 
             {user && (
               <div className="pt-4 border-t border-[var(--card-border)]">
-                <div className="grid grid-cols-2 gap-4 text-sm">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 text-sm">
                   <div>
                     <span className="text-gray-400">Rating:</span>
                     <span className="ml-2 text-white font-medium">{user.rating.toFixed(1)} ⭐</span>
@@ -350,7 +350,7 @@ export default function AccountPage() {
                     <span className="text-gray-400">Reviews:</span>
                     <span className="ml-2 text-white font-medium">{user.review_count}</span>
                   </div>
-                  <div>
+                  <div className="sm:col-span-2">
                     <span className="text-gray-400">Member since:</span>
                     <span className="ml-2 text-white font-medium">
                       {new Date(user.created_at).toLocaleDateString()}
@@ -371,8 +371,8 @@ export default function AccountPage() {
         </div>
 
         {/* Change Password Section */}
-        <div className="bg-[var(--card-bg)] border border-[var(--card-border)] rounded-2xl p-6 mb-6">
-          <h2 className="text-2xl font-bold text-white mb-6">Change Password</h2>
+        <div className="bg-[var(--card-bg)] border border-[var(--card-border)] rounded-xl sm:rounded-2xl p-4 sm:p-6 mb-4 sm:mb-6">
+          <h2 className="text-xl sm:text-2xl font-bold text-white mb-4 sm:mb-6">Change Password</h2>
           
           <form onSubmit={handlePasswordChange} className="space-y-6">
             <div>
@@ -417,9 +417,9 @@ export default function AccountPage() {
         </div>
 
         {/* Delete Account Section */}
-        <div className="bg-[var(--card-bg)] border border-red-500/50 rounded-2xl p-6">
-          <h2 className="text-2xl font-bold text-red-400 mb-2">Danger Zone</h2>
-          <p className="text-gray-400 mb-6">Once you delete your account, there is no going back. Please be certain.</p>
+        <div className="bg-[var(--card-bg)] border border-red-500/50 rounded-xl sm:rounded-2xl p-4 sm:p-6">
+          <h2 className="text-xl sm:text-2xl font-bold text-red-400 mb-2">Danger Zone</h2>
+          <p className="text-sm sm:text-base text-gray-400 mb-4 sm:mb-6">Once you delete your account, there is no going back. Please be certain.</p>
           
           <button
             onClick={() => setShowDeleteModal(true)}

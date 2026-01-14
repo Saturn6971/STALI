@@ -74,25 +74,27 @@ export default function ChatListPage() {
     <div className="min-h-screen bg-[var(--background)] text-[var(--foreground)]">
       {/* Navigation */}
       <nav className="bg-[var(--card-bg)]/80 backdrop-blur-sm border-b border-[var(--card-border)] sticky top-0 z-50">
-        <div className="max-w-7xl mx-auto px-6 lg:px-12">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-12">
           <div className="flex items-center justify-between h-16">
             <Link href="/" className="flex items-center space-x-2">
               <div className="w-8 h-8 bg-gradient-to-br from-[var(--brand)] to-[var(--brand-light)] rounded-lg flex items-center justify-center">
                 <span className="text-white text-lg">🐺</span>
               </div>
-              <h1 className="text-2xl font-bold bg-gradient-to-r from-[var(--brand)] to-[var(--brand-light)] bg-clip-text text-transparent">
+              <h1 className="text-xl sm:text-2xl font-bold bg-gradient-to-r from-[var(--brand)] to-[var(--brand-light)] bg-clip-text text-transparent">
                 Stali
               </h1>
             </Link>
-            <div className="flex items-center space-x-4">
-              <Link href="/" className="text-gray-300 hover:text-white transition-colors duration-200 font-medium">
-                ← Back to Home
+            <div className="flex items-center space-x-2 sm:space-x-4">
+              <Link href="/" className="text-gray-300 hover:text-white transition-colors duration-200 font-medium text-sm sm:text-base">
+                <span className="hidden sm:inline">← Back to </span>Home
               </Link>
               <button
                 onClick={refreshConversations}
-                className="text-gray-300 hover:text-white transition-colors duration-200 font-medium"
+                className="text-gray-300 hover:text-white transition-colors duration-200 font-medium p-2 sm:p-0"
+                title="Refresh"
               >
-                🔄 Refresh
+                <span className="hidden sm:inline">🔄 Refresh</span>
+                <span className="sm:hidden">🔄</span>
               </button>
             </div>
           </div>
@@ -100,13 +102,13 @@ export default function ChatListPage() {
       </nav>
 
       {/* Header */}
-      <section className="px-6 lg:px-12 py-12 bg-gradient-to-r from-[var(--brand)]/10 to-[var(--brand-light)]/10">
+      <section className="px-4 sm:px-6 lg:px-12 py-8 sm:py-12 bg-gradient-to-r from-[var(--brand)]/10 to-[var(--brand-light)]/10">
         <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-8">
-            <h1 className="text-4xl lg:text-5xl font-bold mb-4">
+          <div className="text-center mb-6 sm:mb-8">
+            <h1 className="text-2xl sm:text-4xl lg:text-5xl font-bold mb-3 sm:mb-4">
               Messages
             </h1>
-            <p className="text-xl text-gray-400 max-w-3xl mx-auto">
+            <p className="text-base sm:text-xl text-gray-400 max-w-3xl mx-auto px-2">
               Chat with buyers and sellers about PC parts and systems
             </p>
           </div>
@@ -114,7 +116,7 @@ export default function ChatListPage() {
       </section>
 
       {/* Search */}
-      <section className="px-6 lg:px-12 py-6 border-b border-[var(--card-border)]">
+      <section className="px-4 sm:px-6 lg:px-12 py-4 sm:py-6 border-b border-[var(--card-border)]">
         <div className="max-w-7xl mx-auto">
           <div className="relative">
             <input
@@ -132,7 +134,7 @@ export default function ChatListPage() {
       </section>
 
       {/* Conversations List */}
-      <section className="px-6 lg:px-12 py-8">
+      <section className="px-4 sm:px-6 lg:px-12 py-6 sm:py-8">
         <div className="max-w-7xl mx-auto">
           {error ? (
             <div className="text-center py-20">
@@ -187,13 +189,13 @@ export default function ChatListPage() {
                   <Link
                     key={conversation.id}
                     href={`/chat/${conversation.id}`}
-                    className={`block bg-[var(--card-bg)] rounded-2xl border border-[var(--card-border)] p-6 transition-all duration-200 hover:scale-102 hover:border-[var(--brand)]/50 ${
+                    className={`block bg-[var(--card-bg)] rounded-xl sm:rounded-2xl border border-[var(--card-border)] p-4 sm:p-6 transition-all duration-200 hover:scale-[1.01] hover:border-[var(--brand)]/50 ${
                       isUnread ? 'ring-2 ring-[var(--brand)]/30' : ''
                     }`}
                   >
-                    <div className="flex items-center space-x-4">
+                    <div className="flex items-start sm:items-center space-x-3 sm:space-x-4">
                       {/* System Image */}
-                      <div className="w-16 h-16 rounded-lg overflow-hidden bg-gradient-to-br from-[var(--brand)]/20 to-[var(--brand-light)]/20 flex-shrink-0">
+                      <div className="w-12 h-12 sm:w-16 sm:h-16 rounded-lg overflow-hidden bg-gradient-to-br from-[var(--brand)]/20 to-[var(--brand-light)]/20 flex-shrink-0">
                         {listingImage ? (
                           <img 
                             src={listingImage} 
@@ -203,43 +205,43 @@ export default function ChatListPage() {
                           />
                         ) : (
                           <div className="flex w-full h-full items-center justify-center">
-                            <span className="text-2xl">🖥️</span>
+                            <span className="text-xl sm:text-2xl">🖥️</span>
                           </div>
                         )}
                       </div>
 
                       {/* Conversation Info */}
                       <div className="flex-1 min-w-0">
-                        <div className="flex items-center justify-between mb-2">
-                          <h3 className="text-lg font-bold text-white truncate">
+                        <div className="flex items-start sm:items-center justify-between mb-1 sm:mb-2 gap-2">
+                          <h3 className="text-base sm:text-lg font-bold text-white truncate">
                             {listing?.title || 'Conversation'}
                           </h3>
-                          <div className="flex items-center space-x-2">
+                          <div className="flex items-center space-x-2 flex-shrink-0">
                             {isUnread && (
-                              <span className="bg-[var(--brand)] text-white text-xs font-bold px-2 py-1 rounded-full">
+                              <span className="bg-[var(--brand)] text-white text-xs font-bold px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-full">
                                 {conversation.unread_count}
                               </span>
                             )}
-                            <span className="text-sm text-gray-400">
+                            <span className="text-xs sm:text-sm text-gray-400">
                               {formatTime(conversation.last_message_at)}
                             </span>
                           </div>
                         </div>
 
-                        <div className="flex items-center justify-between">
-                          <div className="flex items-center space-x-2">
-                            <span className="text-sm text-gray-400">
+                        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1">
+                          <div className="flex items-center space-x-2 text-sm">
+                            <span className="text-gray-400 hidden sm:inline">
                               {user.id === conversation.buyer_id ? 'Seller:' : 'Buyer:'}
                             </span>
-                            <span className="text-sm font-medium text-[var(--brand)]">
+                            <span className="font-medium text-[var(--brand)]">
                               {otherUser?.display_name || otherUser?.username || 'Unknown user'}
                             </span>
-                            <span className="text-sm text-gray-400">
+                            <span className="text-gray-400">
                               • {formatCurrency(listingPrice)}
                             </span>
                           </div>
                           {conversation.last_message && (
-                            <p className="text-sm text-gray-400 truncate max-w-xs">
+                            <p className="text-xs sm:text-sm text-gray-400 truncate max-w-full sm:max-w-xs">
                               {conversation.last_message.content}
                             </p>
                           )}
@@ -255,7 +257,7 @@ export default function ChatListPage() {
       </section>
 
       {/* Footer */}
-      <footer className="px-6 lg:px-12 py-8 border-t border-[var(--card-border)] bg-[var(--card-bg)]/50 mt-16">
+      <footer className="px-4 sm:px-6 lg:px-12 py-6 sm:py-8 border-t border-[var(--card-border)] bg-[var(--card-bg)]/50 mt-8 sm:mt-16">
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center">
           <div className="flex items-center space-x-2 mb-4 md:mb-0">
             <div className="w-6 h-6 bg-gradient-to-br from-[var(--brand)] to-[var(--brand-light)] rounded flex items-center justify-center">

@@ -249,17 +249,19 @@ export default function SystemDetails() {
     <div className="min-h-screen bg-[var(--background)] text-[var(--foreground)]">
       {/* Navigation */}
       <nav className="bg-[var(--card-bg)]/80 backdrop-blur-sm border-b border-[var(--card-border)] sticky top-0 z-50">
-        <div className="max-w-7xl mx-auto px-6 lg:px-12">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-12">
           <div className="flex items-center justify-between h-16">
             <Link href="/" className="flex items-center space-x-2">
               <div className="w-8 h-8 bg-gradient-to-br from-[var(--brand)] to-[var(--brand-light)] rounded-lg flex items-center justify-center">
                 <span className="text-white text-lg">🐺</span>
               </div>
-              <h1 className="text-2xl font-bold bg-gradient-to-r from-[var(--brand)] to-[var(--brand-light)] bg-clip-text text-transparent">
+              <h1 className="text-xl sm:text-2xl font-bold bg-gradient-to-r from-[var(--brand)] to-[var(--brand-light)] bg-clip-text text-transparent">
                 Stali
               </h1>
             </Link>
-            <div className="flex items-center space-x-4">
+            
+            {/* Desktop Navigation */}
+            <div className="hidden md:flex items-center space-x-4">
               <Link href="/systems" className="text-gray-300 hover:text-white transition-colors duration-200 font-medium">
                 ← Back to Systems
               </Link>
@@ -316,17 +318,49 @@ export default function SystemDetails() {
                 </div>
               )}
             </div>
+            
+            {/* Mobile Navigation */}
+            <div className="flex md:hidden items-center space-x-2">
+              <Link href="/systems" className="text-gray-300 hover:text-white transition-colors duration-200 text-sm">
+                ← Systems
+              </Link>
+              {user ? (
+                system.status === 'active' ? (
+                  <button 
+                    onClick={handleContactSeller}
+                    disabled={isContacting || !!(user && user.id === system.seller_id)}
+                    className="bg-[var(--brand)] hover:bg-[var(--brand-light)] text-white px-3 py-1.5 rounded-lg font-medium text-sm transition-all duration-200 disabled:opacity-50"
+                  >
+                    {isContacting ? '...' : (user && user.id === system.seller_id ? 'Your Listing' : 'Contact')}
+                  </button>
+                ) : system.status === 'draft' && user.id === system.seller_id ? (
+                  <Link
+                    href={`/seller/edit-listing/${system.id}`}
+                    className="bg-[var(--brand)] hover:bg-[var(--brand-light)] text-white px-3 py-1.5 rounded-lg font-medium text-sm transition-all duration-200"
+                  >
+                    Edit
+                  </Link>
+                ) : null
+              ) : (
+                <Link 
+                  href="/auth"
+                  className="bg-[var(--brand)] hover:bg-[var(--brand-light)] text-white px-3 py-1.5 rounded-lg font-medium text-sm transition-all duration-200"
+                >
+                  Sign In
+                </Link>
+              )}
+            </div>
           </div>
         </div>
       </nav>
 
       {/* Main Content */}
-      <div className="max-w-7xl mx-auto px-6 lg:px-12 py-8">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-12 py-4 sm:py-8">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8 lg:gap-12">
           {/* Left Column - Images */}
-          <div className="space-y-4">
+          <div className="space-y-3 sm:space-y-4">
             {/* Main Image */}
-            <div className="aspect-square bg-[var(--card-bg)] rounded-2xl border border-[var(--card-border)] overflow-hidden">
+            <div className="aspect-square bg-[var(--card-bg)] rounded-xl sm:rounded-2xl border border-[var(--card-border)] overflow-hidden">
               {images.length > 0 ? (
                 <img 
                   src={images[selectedImageIndex]} 
@@ -394,7 +428,7 @@ export default function SystemDetails() {
                 </div>
               </div>
               
-              <h1 className="text-3xl lg:text-4xl font-bold text-white mb-2">{system.title}</h1>
+              <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white mb-2">{system.title}</h1>
               
               <div className="flex items-center space-x-4 mb-4">
                 <div className="flex items-center space-x-2">
@@ -413,32 +447,32 @@ export default function SystemDetails() {
             </div>
 
             {/* Price */}
-            <div className="bg-[var(--card-bg)] rounded-2xl p-6 border border-[var(--card-border)]">
-              <div className="flex items-center justify-between mb-4">
+            <div className="bg-[var(--card-bg)] rounded-xl sm:rounded-2xl p-4 sm:p-6 border border-[var(--card-border)]">
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4 space-y-3 sm:space-y-0">
                 <div>
-                  <div className="flex items-center space-x-3">
-                    <span className="text-4xl font-bold text-white">{formatCurrency(system.price)}</span>
+                  <div className="flex items-center space-x-2 sm:space-x-3">
+                    <span className="text-2xl sm:text-4xl font-bold text-white">{formatCurrency(system.price)}</span>
                     {system.original_price && system.original_price > system.price && (
-                      <span className="text-2xl text-gray-400 line-through">{formatCurrency(system.original_price)}</span>
+                      <span className="text-lg sm:text-2xl text-gray-400 line-through">{formatCurrency(system.original_price)}</span>
                     )}
                   </div>
                   {system.original_price && system.original_price > system.price && (
-                    <span className="text-lg text-green-400 font-medium">
+                    <span className="text-base sm:text-lg text-green-400 font-medium">
                       Save {formatCurrency(system.original_price - system.price)}
                     </span>
                   )}
                 </div>
-                <div className="text-right">
-                  <div className="text-sm text-gray-400">Category</div>
-                  <div className="text-lg font-medium text-[var(--brand)]">{system.category?.name}</div>
+                <div className="text-left sm:text-right">
+                  <div className="text-xs sm:text-sm text-gray-400">Category</div>
+                  <div className="text-base sm:text-lg font-medium text-[var(--brand)]">{system.category?.name}</div>
                 </div>
               </div>
               
-              <div className="flex space-x-3">
+              <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-3">
                 <button 
                   onClick={handleContactSeller}
                   disabled={isContacting || !!(user && user.id === system.seller_id)}
-                  className="flex-1 bg-[var(--brand)] hover:bg-[var(--brand-light)] text-white py-4 rounded-lg font-medium text-lg transition-all duration-200 hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="flex-1 bg-[var(--brand)] hover:bg-[var(--brand-light)] text-white py-3 sm:py-4 rounded-lg font-medium text-base sm:text-lg transition-all duration-200 hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   {isContacting ? (
                     <div className="flex items-center justify-center">
@@ -469,12 +503,12 @@ export default function SystemDetails() {
             </div>
 
             {/* Gaming Compatibility */}
-            <div className="bg-[var(--card-bg)] rounded-2xl p-6 border border-[var(--card-border)]">
-              <div className="flex items-center justify-between mb-4">
-                <h3 className="text-xl font-bold text-white">🎮 Gaming Performance</h3>
+            <div className="bg-[var(--card-bg)] rounded-xl sm:rounded-2xl p-4 sm:p-6 border border-[var(--card-border)]">
+              <div className="flex items-center justify-between mb-3 sm:mb-4">
+                <h3 className="text-lg sm:text-xl font-bold text-white">🎮 Gaming Performance</h3>
                 <button 
                   onClick={() => setShowGamingCompatibility(!showGamingCompatibility)}
-                  className="text-[var(--brand)] hover:text-[var(--brand-light)] transition-colors"
+                  className="text-xs sm:text-sm text-[var(--brand)] hover:text-[var(--brand-light)] transition-colors"
                 >
                   {showGamingCompatibility ? 'Hide Details' : 'Show Details'}
                 </button>
@@ -516,9 +550,9 @@ export default function SystemDetails() {
             </div>
 
             {/* Specifications */}
-            <div className="bg-[var(--card-bg)] rounded-2xl p-6 border border-[var(--card-border)]">
-              <h3 className="text-xl font-bold text-white mb-6">📋 Specifications</h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="bg-[var(--card-bg)] rounded-xl sm:rounded-2xl p-4 sm:p-6 border border-[var(--card-border)]">
+              <h3 className="text-lg sm:text-xl font-bold text-white mb-4 sm:mb-6">📋 Specifications</h3>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                 {system.cpu && (
                   <div className="flex justify-between py-3 border-b border-[var(--card-border)]">
                     <span className="text-gray-400">CPU:</span>
@@ -572,15 +606,15 @@ export default function SystemDetails() {
 
             {/* Description */}
             {system.description && (
-              <div className="bg-[var(--card-bg)] rounded-2xl p-6 border border-[var(--card-border)]">
-                <h3 className="text-xl font-bold text-white mb-4">📝 Description</h3>
-                <p className="text-gray-300 leading-relaxed">{system.description}</p>
+              <div className="bg-[var(--card-bg)] rounded-xl sm:rounded-2xl p-4 sm:p-6 border border-[var(--card-border)]">
+                <h3 className="text-lg sm:text-xl font-bold text-white mb-3 sm:mb-4">📝 Description</h3>
+                <p className="text-sm sm:text-base text-gray-300 leading-relaxed">{system.description}</p>
               </div>
             )}
 
             {/* Seller Information */}
-            <div className="bg-[var(--card-bg)] rounded-2xl p-6 border border-[var(--card-border)]">
-              <h3 className="text-xl font-bold text-white mb-4">👤 Seller Information</h3>
+            <div className="bg-[var(--card-bg)] rounded-xl sm:rounded-2xl p-4 sm:p-6 border border-[var(--card-border)]">
+              <h3 className="text-lg sm:text-xl font-bold text-white mb-3 sm:mb-4">👤 Seller Information</h3>
               <div className="space-y-3">
                 <div className="flex justify-between">
                   <span className="text-gray-400">Name:</span>

@@ -202,41 +202,43 @@ export default function ChatPage() {
     <div className="min-h-screen bg-[var(--background)] text-[var(--foreground)] flex flex-col">
       {/* Navigation */}
       <nav className="bg-[var(--card-bg)]/80 backdrop-blur-sm border-b border-[var(--card-border)] sticky top-0 z-50">
-        <div className="max-w-7xl mx-auto px-6 lg:px-12">
-          <div className="flex items-center justify-between h-16">
-            <div className="flex items-center space-x-4">
-              <Link href="/chat" className="text-gray-300 hover:text-white transition-colors duration-200 font-medium">
-                ← Back to Messages
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-12">
+          <div className="flex items-center justify-between h-14 sm:h-16">
+            <div className="flex items-center space-x-2 sm:space-x-4 min-w-0">
+              <Link href="/chat" className="text-gray-300 hover:text-white transition-colors duration-200 font-medium flex-shrink-0">
+                <span className="hidden sm:inline">← Back to Messages</span>
+                <span className="sm:hidden">← Back</span>
               </Link>
-              <div className="h-6 w-px bg-gray-600"></div>
-              <div className="flex items-center space-x-3">
-                <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[var(--brand)] to-[var(--brand-light)] flex items-center justify-center">
-                  <span className="text-white text-lg">👤</span>
+              <div className="h-6 w-px bg-gray-600 hidden sm:block"></div>
+              <div className="flex items-center space-x-2 sm:space-x-3 min-w-0">
+                <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-gradient-to-br from-[var(--brand)] to-[var(--brand-light)] flex items-center justify-center flex-shrink-0">
+                  <span className="text-white text-sm sm:text-lg">👤</span>
                 </div>
-                <div>
-                  <h1 className="text-lg font-bold text-white">
+                <div className="min-w-0">
+                  <h1 className="text-sm sm:text-lg font-bold text-white truncate">
                     {otherUser?.display_name || otherUser?.username}
                   </h1>
-                  <p className="text-sm text-gray-400">
+                  <p className="text-xs sm:text-sm text-gray-400 hidden sm:block">
                     {user.id === conversation.buyer_id ? 'Seller' : 'Buyer'}
                   </p>
                 </div>
               </div>
             </div>
-            <div className="flex items-center space-x-3">
+            <div className="flex items-center space-x-2 sm:space-x-3 flex-shrink-0">
               <button
                 onClick={handleOpenRatingModal}
-                className="bg-[var(--card-border)] hover:bg-[var(--card-border)]/80 text-white px-4 py-2 rounded-lg font-medium transition-all duration-200 hover:scale-105 flex items-center space-x-2"
+                className="bg-[var(--card-border)] hover:bg-[var(--card-border)]/80 text-white px-2 sm:px-4 py-1.5 sm:py-2 rounded-lg font-medium transition-all duration-200 hover:scale-105 flex items-center space-x-1 sm:space-x-2 text-sm"
               >
                 <span>⭐</span>
-                <span>Rate User</span>
+                <span className="hidden sm:inline">Rate User</span>
               </button>
               {listingType && (
                 <Link
                   href={listingUrl}
-                  className="bg-[var(--brand)] hover:bg-[var(--brand-light)] text-white px-4 py-2 rounded-lg font-medium transition-all duration-200 hover:scale-105"
+                  className="bg-[var(--brand)] hover:bg-[var(--brand-light)] text-white px-2 sm:px-4 py-1.5 sm:py-2 rounded-lg font-medium transition-all duration-200 hover:scale-105 text-sm"
                 >
-                  View Listing
+                  <span className="hidden sm:inline">View Listing</span>
+                  <span className="sm:hidden">View</span>
                 </Link>
               )}
             </div>
@@ -245,10 +247,10 @@ export default function ChatPage() {
       </nav>
 
       {/* Listing Info */}
-      <div className="bg-[var(--card-bg)] border-b border-[var(--card-border)] px-6 lg:px-12 py-4">
+      <div className="bg-[var(--card-bg)] border-b border-[var(--card-border)] px-4 sm:px-6 lg:px-12 py-3 sm:py-4">
         <div className="max-w-7xl mx-auto">
-          <div className="flex items-center space-x-4">
-            <div className="w-16 h-16 rounded-lg overflow-hidden bg-gradient-to-br from-[var(--brand)]/20 to-[var(--brand-light)]/20 flex-shrink-0">
+          <div className="flex items-center space-x-3 sm:space-x-4">
+            <div className="w-12 h-12 sm:w-16 sm:h-16 rounded-lg overflow-hidden bg-gradient-to-br from-[var(--brand)]/20 to-[var(--brand-light)]/20 flex-shrink-0">
               {listingImageUrl ? (
                 <img 
                   src={listingImageUrl} 
@@ -258,13 +260,13 @@ export default function ChatPage() {
                 />
               ) : (
                 <div className="flex w-full h-full items-center justify-center">
-                  <span className="text-2xl">🖥️</span>
+                  <span className="text-xl sm:text-2xl">🖥️</span>
                 </div>
               )}
             </div>
-            <div>
-              <h2 className="text-xl font-bold text-white">{listing?.title || 'Listing'}</h2>
-              <p className="text-lg text-[var(--brand)] font-semibold">
+            <div className="min-w-0">
+              <h2 className="text-base sm:text-xl font-bold text-white truncate">{listing?.title || 'Listing'}</h2>
+              <p className="text-base sm:text-lg text-[var(--brand)] font-semibold">
                 {formatCurrency(listing?.price || 0)}
               </p>
             </div>
@@ -273,7 +275,7 @@ export default function ChatPage() {
       </div>
 
       {/* Messages */}
-      <div className="flex-1 overflow-y-auto px-6 lg:px-12 py-6">
+      <div className="flex-1 overflow-y-auto px-4 sm:px-6 lg:px-12 py-4 sm:py-6">
         <div className="max-w-4xl mx-auto">
           {messages.length === 0 ? (
             <div className="text-center py-20">
@@ -300,7 +302,7 @@ export default function ChatPage() {
                       </div>
                     )}
                     <div className={`flex ${isOwnMessage ? 'justify-end' : 'justify-start'}`}>
-                      <div className={`max-w-xs lg:max-w-md px-4 py-3 rounded-2xl ${
+                      <div className={`max-w-[85%] sm:max-w-xs lg:max-w-md px-3 sm:px-4 py-2 sm:py-3 rounded-2xl ${
                         isOwnMessage 
                           ? 'bg-[var(--brand)] text-white' 
                           : 'bg-[var(--card-bg)] text-white border border-[var(--card-border)]'
@@ -323,26 +325,26 @@ export default function ChatPage() {
       </div>
 
       {/* Message Input */}
-      <div className="bg-[var(--card-bg)] border-t border-[var(--card-border)] px-6 lg:px-12 py-4">
+      <div className="bg-[var(--card-bg)] border-t border-[var(--card-border)] px-4 sm:px-6 lg:px-12 py-3 sm:py-4">
         <div className="max-w-4xl mx-auto">
-          <form onSubmit={handleSendMessage} className="flex space-x-4">
+          <form onSubmit={handleSendMessage} className="flex space-x-2 sm:space-x-4">
             <input
               type="text"
               value={messageText}
               onChange={(e) => setMessageText(e.target.value)}
               placeholder="Type your message..."
-              className="flex-1 px-4 py-3 bg-[var(--background)] border border-[var(--card-border)] rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-[var(--brand)] transition-colors"
+              className="flex-1 px-3 sm:px-4 py-2 sm:py-3 bg-[var(--background)] border border-[var(--card-border)] rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-[var(--brand)] transition-colors text-sm sm:text-base"
               disabled={sending}
             />
             <button
               type="submit"
               disabled={!messageText.trim() || sending}
-              className="bg-[var(--brand)] hover:bg-[var(--brand-light)] disabled:bg-gray-600 text-white px-6 py-3 rounded-lg font-medium transition-all duration-200 hover:scale-105 disabled:hover:scale-100 disabled:cursor-not-allowed"
+              className="bg-[var(--brand)] hover:bg-[var(--brand-light)] disabled:bg-gray-600 text-white px-4 sm:px-6 py-2 sm:py-3 rounded-lg font-medium transition-all duration-200 hover:scale-105 disabled:hover:scale-100 disabled:cursor-not-allowed text-sm sm:text-base"
             >
               {sending ? (
                 <div className="flex items-center">
-                  <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
-                  Sending...
+                  <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white sm:mr-2"></div>
+                  <span className="hidden sm:inline">Sending...</span>
                 </div>
               ) : (
                 'Send'

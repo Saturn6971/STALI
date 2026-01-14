@@ -272,19 +272,19 @@ export default function SellerDashboard() {
     <div className="min-h-screen bg-[var(--background)] text-[var(--foreground)]">
       {/* Navigation */}
       <nav className="bg-[var(--card-bg)]/80 backdrop-blur-sm border-b border-[var(--card-border)] sticky top-0 z-50">
-        <div className="max-w-7xl mx-auto px-6 lg:px-12">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-12">
           <div className="flex items-center justify-between h-16">
             <Link href="/" className="flex items-center space-x-2">
               <div className="w-8 h-8 bg-gradient-to-br from-[var(--brand)] to-[var(--brand-light)] rounded-lg flex items-center justify-center">
                 <span className="text-white text-lg">🐺</span>
               </div>
-              <h1 className="text-2xl font-bold bg-gradient-to-r from-[var(--brand)] to-[var(--brand-light)] bg-clip-text text-transparent">
+              <h1 className="text-xl sm:text-2xl font-bold bg-gradient-to-r from-[var(--brand)] to-[var(--brand-light)] bg-clip-text text-transparent">
                 Stali
               </h1>
             </Link>
-            <div className="flex items-center space-x-4">
-              <Link href="/" className="text-gray-300 hover:text-white transition-colors duration-200 font-medium">
-                ← Back to Home
+            <div className="flex items-center space-x-2 sm:space-x-4">
+              <Link href="/" className="text-gray-300 hover:text-white transition-colors duration-200 font-medium text-sm sm:text-base">
+                <span className="hidden sm:inline">← Back to </span>Home
               </Link>
             </div>
           </div>
@@ -292,36 +292,36 @@ export default function SellerDashboard() {
       </nav>
 
       {/* Header */}
-      <section className="px-6 lg:px-12 py-12 bg-gradient-to-r from-[var(--brand)]/10 to-[var(--brand-light)]/10">
+      <section className="px-4 sm:px-6 lg:px-12 py-8 sm:py-12 bg-gradient-to-r from-[var(--brand)]/10 to-[var(--brand-light)]/10">
         <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-8">
-            <h1 className="text-4xl lg:text-5xl font-bold mb-4">
+          <div className="text-center mb-6 sm:mb-8">
+            <h1 className="text-2xl sm:text-4xl lg:text-5xl font-bold mb-3 sm:mb-4">
               Seller Dashboard
             </h1>
-            <p className="text-xl text-gray-400 max-w-3xl mx-auto">
+            <p className="text-base sm:text-xl text-gray-400 max-w-3xl mx-auto">
               Manage your PC parts and complete systems listings
             </p>
           </div>
           
           {/* Quick Actions */}
-          <div className="flex flex-col sm:flex-row gap-4 justify-center mb-8">
+          <div className="flex flex-col gap-3 sm:gap-4 sm:flex-row justify-center mb-6 sm:mb-8">
             <Link
               href="/seller/add-listing"
-              className="bg-[var(--brand)] hover:bg-[var(--brand-light)] text-white px-8 py-4 rounded-lg font-medium text-lg transition-all duration-200 hover:scale-105 text-center flex items-center justify-center space-x-2"
+              className="bg-[var(--brand)] hover:bg-[var(--brand-light)] text-white px-4 sm:px-8 py-3 sm:py-4 rounded-lg font-medium text-sm sm:text-lg transition-all duration-200 hover:scale-105 text-center flex items-center justify-center space-x-2"
             >
               <span>🖥️</span>
               <span>Sell Complete System</span>
             </Link>
             <Link
               href="/cpus/sell"
-              className="bg-[var(--brand)] hover:bg-[var(--brand-light)] text-white px-8 py-4 rounded-lg font-medium text-lg transition-all duration-200 hover:scale-105 text-center flex items-center justify-center space-x-2"
+              className="bg-[var(--brand)] hover:bg-[var(--brand-light)] text-white px-4 sm:px-8 py-3 sm:py-4 rounded-lg font-medium text-sm sm:text-lg transition-all duration-200 hover:scale-105 text-center flex items-center justify-center space-x-2"
             >
               <span>⚡</span>
               <span>Sell Individual CPU</span>
             </Link>
             <Link
               href="/gpus/sell"
-              className="bg-[var(--brand)] hover:bg-[var(--brand-light)] text-white px-8 py-4 rounded-lg font-medium text-lg transition-all duration-200 hover:scale-105 text-center flex items-center justify-center space-x-2"
+              className="bg-[var(--brand)] hover:bg-[var(--brand-light)] text-white px-4 sm:px-8 py-3 sm:py-4 rounded-lg font-medium text-sm sm:text-lg transition-all duration-200 hover:scale-105 text-center flex items-center justify-center space-x-2"
             >
               <span>🎮</span>
               <span>Sell Graphics Card</span>
@@ -331,39 +331,39 @@ export default function SellerDashboard() {
       </section>
 
       {/* Stats */}
-      <section className="px-6 lg:px-12 py-8">
+      <section className="px-4 sm:px-6 lg:px-12 py-6 sm:py-8">
         <div className="max-w-7xl mx-auto">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-            <div className="bg-[var(--card-bg)] rounded-2xl p-6 border border-[var(--card-border)] text-center">
-              <div className="text-3xl font-bold text-white mb-2">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-6 mb-6 sm:mb-8">
+            <div className="bg-[var(--card-bg)] rounded-xl sm:rounded-2xl p-4 sm:p-6 border border-[var(--card-border)] text-center">
+              <div className="text-xl sm:text-3xl font-bold text-white mb-1 sm:mb-2">
                 {systems.filter(s => s.status === 'active').length + gpuListings.filter(g => g.status === 'active').length + cpuListings.filter(c => c.status === 'active').length}
               </div>
-              <div className="text-gray-400">Active Listings</div>
+              <div className="text-xs sm:text-base text-gray-400">Active Listings</div>
             </div>
-            <div className="bg-[var(--card-bg)] rounded-2xl p-6 border border-[var(--card-border)] text-center">
-              <div className="text-3xl font-bold text-white mb-2">
+            <div className="bg-[var(--card-bg)] rounded-xl sm:rounded-2xl p-4 sm:p-6 border border-[var(--card-border)] text-center">
+              <div className="text-xl sm:text-3xl font-bold text-white mb-1 sm:mb-2">
                 {systems.filter(s => s.status === 'sold').length + gpuListings.filter(g => g.status === 'sold').length + cpuListings.filter(c => c.status === 'sold').length}
               </div>
-              <div className="text-gray-400">Sold Items</div>
+              <div className="text-xs sm:text-base text-gray-400">Sold Items</div>
             </div>
-            <div className="bg-[var(--card-bg)] rounded-2xl p-6 border border-[var(--card-border)] text-center">
-              <div className="text-3xl font-bold text-white mb-2">
+            <div className="bg-[var(--card-bg)] rounded-xl sm:rounded-2xl p-4 sm:p-6 border border-[var(--card-border)] text-center">
+              <div className="text-xl sm:text-3xl font-bold text-white mb-1 sm:mb-2">
                 {systems.reduce((sum, s) => sum + (s.view_count || 0), 0) + gpuListings.reduce((sum, g) => sum + (g.view_count || 0), 0) + cpuListings.reduce((sum, c) => sum + (c.view_count || 0), 0)}
               </div>
-              <div className="text-gray-400">Total Views</div>
+              <div className="text-xs sm:text-base text-gray-400">Total Views</div>
             </div>
-            <div className="bg-[var(--card-bg)] rounded-2xl p-6 border border-[var(--card-border)] text-center">
-              <div className="text-3xl font-bold text-white mb-2">
+            <div className="bg-[var(--card-bg)] rounded-xl sm:rounded-2xl p-4 sm:p-6 border border-[var(--card-border)] text-center">
+              <div className="text-xl sm:text-3xl font-bold text-white mb-1 sm:mb-2">
                 {systems.reduce((sum, s) => sum + (s.favorite_count || 0), 0) + gpuListings.reduce((sum, g) => sum + (g.favorite_count || 0), 0) + cpuListings.reduce((sum, c) => sum + (c.favorite_count || 0), 0)}
               </div>
-              <div className="text-gray-400">Total Favorites</div>
+              <div className="text-xs sm:text-base text-gray-400">Total Favorites</div>
             </div>
           </div>
         </div>
       </section>
 
       {/* Tabs */}
-      <section className="px-6 lg:px-12 py-4 border-b border-[var(--card-border)]">
+      <section className="px-4 sm:px-6 lg:px-12 py-4 border-b border-[var(--card-border)]">
         <div className="max-w-7xl mx-auto">
           <div className="flex space-x-1 bg-[var(--card-bg)] rounded-lg p-1">
             {[
@@ -374,7 +374,7 @@ export default function SellerDashboard() {
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id as any)}
-                className={`flex-1 py-2 px-4 rounded-md font-medium transition-all duration-200 ${
+                className={`flex-1 py-2 px-2 sm:px-4 rounded-md font-medium text-xs sm:text-base transition-all duration-200 ${
                   activeTab === tab.id
                     ? 'bg-[var(--brand)] text-white'
                     : 'text-gray-400 hover:text-white hover:bg-[var(--card-border)]'
@@ -388,10 +388,10 @@ export default function SellerDashboard() {
       </section>
 
       {/* Listings */}
-      <section className="px-6 lg:px-12 py-12">
+      <section className="px-4 sm:px-6 lg:px-12 py-8 sm:py-12">
         <div className="max-w-7xl mx-auto">
           {error ? (
-            <div className="text-center py-20">
+            <div className="text-center py-12 sm:py-20">
               <p className="text-red-400 mb-4">Error: {error}</p>
               <button 
                 onClick={fetchUserSystems}
@@ -401,27 +401,27 @@ export default function SellerDashboard() {
               </button>
             </div>
           ) : allListings.length === 0 ? (
-            <div className="text-center py-20">
-              <div className="text-6xl mb-4">📦</div>
-              <h3 className="text-2xl font-bold text-white mb-4">
+            <div className="text-center py-12 sm:py-20">
+              <div className="text-5xl sm:text-6xl mb-4">📦</div>
+              <h3 className="text-xl sm:text-2xl font-bold text-white mb-4">
                 {activeTab === 'active' ? 'No Active Listings' : 
                  activeTab === 'sold' ? 'No Sold Items' : 'No Drafts'}
               </h3>
-              <p className="text-gray-400 mb-6">
+              <p className="text-sm sm:text-base text-gray-400 mb-6">
                 {activeTab === 'active' ? 'Start by creating your first listing' : 
                  activeTab === 'sold' ? 'Your sold items will appear here' : 'Save drafts to work on later'}
               </p>
-              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <div className="flex flex-col gap-3 sm:gap-4 sm:flex-row justify-center">
                 <Link
                   href="/seller/add-listing"
-                  className="bg-[var(--brand)] hover:bg-[var(--brand-light)] text-white px-6 py-3 rounded-lg font-medium transition-all duration-200 hover:scale-105 text-center flex items-center justify-center space-x-2"
+                  className="bg-[var(--brand)] hover:bg-[var(--brand-light)] text-white px-4 sm:px-6 py-3 rounded-lg font-medium transition-all duration-200 hover:scale-105 text-center flex items-center justify-center space-x-2"
                 >
                   <span>🖥️</span>
                   <span>Sell Complete System</span>
                 </Link>
                 <Link
                   href="/cpus/sell"
-                  className="bg-[var(--brand)] hover:bg-[var(--brand-light)] text-white px-6 py-3 rounded-lg font-medium transition-all duration-200 hover:scale-105 text-center flex items-center justify-center space-x-2"
+                  className="bg-[var(--brand)] hover:bg-[var(--brand-light)] text-white px-4 sm:px-6 py-3 rounded-lg font-medium transition-all duration-200 hover:scale-105 text-center flex items-center justify-center space-x-2"
                 >
                   <span>⚡</span>
                   <span>Sell Individual CPU</span>
@@ -429,14 +429,14 @@ export default function SellerDashboard() {
               </div>
             </div>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-8">
               {allListings.map((listing) => (
                 <div
                   key={listing.id}
-                  className="bg-[var(--card-bg)] rounded-2xl border border-[var(--card-border)] overflow-hidden transition-all duration-300 hover:scale-102"
+                  className="bg-[var(--card-bg)] rounded-xl sm:rounded-2xl border border-[var(--card-border)] overflow-hidden transition-all duration-300 hover:scale-102"
                 >
                   {/* Image */}
-                  <div className="h-48 relative overflow-hidden bg-gradient-to-br from-[var(--brand)]/20 to-[var(--brand-light)]/20">
+                  <div className="h-40 sm:h-48 relative overflow-hidden bg-gradient-to-br from-[var(--brand)]/20 to-[var(--brand-light)]/20">
                     {listing.type === 'system' ? (
                       listing.image_url ? (
                         <img 
@@ -487,18 +487,18 @@ export default function SellerDashboard() {
                   </div>
 
                   {/* Content */}
-                  <div className="p-6">
-                    <div className="flex justify-between items-start mb-3">
-                      <h3 className="text-xl font-bold text-white">{listing.title}</h3>
-                      <span className={`px-2 py-1 rounded-full text-xs font-medium ${getConditionColor(listing.condition)}`}>
+                  <div className="p-4 sm:p-6">
+                    <div className="flex justify-between items-start mb-2 sm:mb-3">
+                      <h3 className="text-lg sm:text-xl font-bold text-white line-clamp-1">{listing.title}</h3>
+                      <span className={`px-2 py-1 rounded-full text-xs font-medium ${getConditionColor(listing.condition)} shrink-0 ml-2`}>
                         {listing.condition.replace('-', ' ')}
                       </span>
                     </div>
 
                     {/* Price */}
-                    <div className="mb-4">
+                    <div className="mb-3 sm:mb-4">
                       <div className="flex items-center space-x-2">
-                        <span className="text-2xl font-bold text-white">{formatCurrency(listing.price)}</span>
+                        <span className="text-xl sm:text-2xl font-bold text-white">{formatCurrency(listing.price)}</span>
                         {listing.original_price && listing.original_price > listing.price && (
                           <span className="text-lg text-gray-400 line-through">{formatCurrency(listing.original_price)}</span>
                         )}
@@ -506,33 +506,33 @@ export default function SellerDashboard() {
                     </div>
 
                     {/* Stats */}
-                    <div className="space-y-2 mb-4">
-                      <div className="flex justify-between text-sm">
+                    <div className="space-y-1 sm:space-y-2 mb-3 sm:mb-4">
+                      <div className="flex justify-between text-xs sm:text-sm">
                         <span className="text-gray-400">Views:</span>
                         <span className="text-gray-300">{listing.view_count || 0}</span>
                       </div>
-                      <div className="flex justify-between text-sm">
+                      <div className="flex justify-between text-xs sm:text-sm">
                         <span className="text-gray-400">Favorites:</span>
                         <span className="text-gray-300">{listing.favorite_count || 0}</span>
                       </div>
-                      <div className="flex justify-between text-sm">
+                      <div className="flex justify-between text-xs sm:text-sm">
                         <span className="text-gray-400">Created:</span>
                         <span className="text-gray-300">{new Date(listing.created_at).toLocaleDateString()}</span>
                       </div>
                     </div>
 
                     {/* Actions */}
-                    <div className="space-y-3">
+                    <div className="space-y-2 sm:space-y-3">
                       <div className="flex space-x-2">
                         <Link
                           href={listing.type === 'system' ? `/systems/${listing.id}` : listing.type === 'cpu' ? `/cpus/${listing.id}` : `/gpus/${listing.id}`}
-                          className="flex-1 bg-[var(--brand)] hover:bg-[var(--brand-light)] text-white py-2 rounded-lg font-medium text-center transition-all duration-200 hover:scale-105"
+                          className="flex-1 bg-[var(--brand)] hover:bg-[var(--brand-light)] text-white py-2 rounded-lg font-medium text-center text-sm sm:text-base transition-all duration-200 hover:scale-105"
                         >
                           View
                         </Link>
                         <Link
                           href={listing.type === 'system' ? `/seller/edit-listing/${listing.id}` : listing.type === 'cpu' ? `/cpus/sell` : `/gpus/sell`}
-                          className="flex-1 border border-[var(--brand)] text-[var(--brand)] hover:bg-[var(--brand)] hover:text-white py-2 rounded-lg font-medium text-center transition-all duration-200"
+                          className="flex-1 border border-[var(--brand)] text-[var(--brand)] hover:bg-[var(--brand)] hover:text-white py-2 rounded-lg font-medium text-center text-sm sm:text-base transition-all duration-200"
                         >
                           Edit
                         </Link>
@@ -544,13 +544,13 @@ export default function SellerDashboard() {
                           <>
                             <button
                               onClick={() => handleStatusChange(listing.id, 'sold', listing.type)}
-                              className="flex-1 bg-green-600 hover:bg-green-700 text-white py-2 rounded-lg font-medium text-center transition-all duration-200"
+                              className="flex-1 bg-green-600 hover:bg-green-700 text-white py-2 rounded-lg font-medium text-center text-xs sm:text-sm transition-all duration-200"
                             >
-                              Mark Sold
+                              <span className="hidden sm:inline">Mark </span>Sold
                             </button>
                             <button
                               onClick={() => handleStatusChange(listing.id, 'draft', listing.type)}
-                              className="flex-1 bg-yellow-600 hover:bg-yellow-700 text-white py-2 rounded-lg font-medium text-center transition-all duration-200"
+                              className="flex-1 bg-yellow-600 hover:bg-yellow-700 text-white py-2 rounded-lg font-medium text-center text-xs sm:text-sm transition-all duration-200"
                             >
                               Draft
                             </button>
@@ -583,7 +583,7 @@ export default function SellerDashboard() {
       </section>
 
       {/* Footer */}
-      <footer className="px-6 lg:px-12 py-8 border-t border-[var(--card-border)] bg-[var(--card-bg)]/50 mt-16">
+      <footer className="px-4 sm:px-6 lg:px-12 py-6 sm:py-8 border-t border-[var(--card-border)] bg-[var(--card-bg)]/50 mt-8 sm:mt-16">
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center">
           <div className="flex items-center space-x-2 mb-4 md:mb-0">
             <div className="w-6 h-6 bg-gradient-to-br from-[var(--brand)] to-[var(--brand-light)] rounded flex items-center justify-center">
@@ -591,7 +591,7 @@ export default function SellerDashboard() {
             </div>
             <span className="text-lg font-bold">Stali</span>
           </div>
-          <div className="text-gray-400 text-sm">
+          <div className="text-gray-400 text-xs sm:text-sm text-center">
             © 2026 Stali. Your premium PC parts marketplace.
           </div>
         </div>

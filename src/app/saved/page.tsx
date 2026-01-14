@@ -110,14 +110,14 @@ export default function SavedListingsPage() {
       </nav>
 
       {/* Main Content */}
-      <div className="max-w-7xl mx-auto px-6 lg:px-12 py-12">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-12 py-6 sm:py-12">
         {/* Header */}
-        <div className="mb-8">
-          <div className="flex items-center gap-3 mb-2">
-            <Heart className="w-8 h-8 text-red-500 fill-current" />
-            <h1 className="text-4xl font-bold text-white">Saved Listings</h1>
+        <div className="mb-6 sm:mb-8">
+          <div className="flex items-center gap-2 sm:gap-3 mb-2">
+            <Heart className="w-6 h-6 sm:w-8 sm:h-8 text-red-500 fill-current" />
+            <h1 className="text-2xl sm:text-4xl font-bold text-white">Saved Listings</h1>
           </div>
-          <p className="text-gray-400">
+          <p className="text-sm sm:text-base text-gray-400">
             {totalFavorites === 0 
               ? "You haven't saved any listings yet" 
               : `You have ${totalFavorites} saved listing${totalFavorites !== 1 ? 's' : ''}`
@@ -132,20 +132,20 @@ export default function SavedListingsPage() {
         )}
 
         {/* Tabs */}
-        <div className="flex flex-wrap gap-2 mb-8">
+        <div className="flex flex-wrap gap-2 mb-6 sm:mb-8 overflow-x-auto pb-2 -mx-4 px-4 sm:mx-0 sm:px-0">
           {tabs.map((tab) => (
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
-              className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-all duration-200 ${
+              className={`flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg font-medium transition-all duration-200 text-sm sm:text-base whitespace-nowrap ${
                 activeTab === tab.id
                   ? 'bg-[var(--brand)] text-white'
                   : 'bg-[var(--card-bg)] text-gray-300 hover:bg-[var(--card-border)] border border-[var(--card-border)]'
               }`}
             >
-              {tab.icon && <tab.icon className="w-4 h-4" />}
+              {tab.icon && <tab.icon className="w-3.5 h-3.5 sm:w-4 sm:h-4" />}
               {tab.label}
-              <span className={`px-2 py-0.5 rounded-full text-xs ${
+              <span className={`px-1.5 sm:px-2 py-0.5 rounded-full text-xs ${
                 activeTab === tab.id
                   ? 'bg-white/20'
                   : 'bg-[var(--card-border)]'
@@ -158,26 +158,26 @@ export default function SavedListingsPage() {
 
         {/* Empty State */}
         {totalFavorites === 0 && (
-          <div className="text-center py-20">
-            <Heart className="w-16 h-16 text-gray-600 mx-auto mb-4" />
-            <h2 className="text-2xl font-bold text-white mb-2">No saved listings yet</h2>
-            <p className="text-gray-400 mb-6">Start browsing and save listings you're interested in!</p>
-            <div className="flex justify-center gap-4">
+          <div className="text-center py-12 sm:py-20">
+            <Heart className="w-12 h-12 sm:w-16 sm:h-16 text-gray-600 mx-auto mb-4" />
+            <h2 className="text-xl sm:text-2xl font-bold text-white mb-2">No saved listings yet</h2>
+            <p className="text-sm sm:text-base text-gray-400 mb-6">Start browsing and save listings you're interested in!</p>
+            <div className="flex flex-col sm:flex-row justify-center gap-3 sm:gap-4">
               <Link
                 href="/systems"
-                className="bg-[var(--brand)] hover:bg-[var(--brand-light)] text-white px-6 py-3 rounded-lg font-medium transition-all duration-200"
+                className="bg-[var(--brand)] hover:bg-[var(--brand-light)] text-white px-5 sm:px-6 py-2.5 sm:py-3 rounded-lg font-medium transition-all duration-200 text-sm sm:text-base"
               >
                 Browse Systems
               </Link>
               <Link
                 href="/cpus"
-                className="bg-[var(--card-bg)] hover:bg-[var(--card-border)] text-white px-6 py-3 rounded-lg font-medium transition-all duration-200 border border-[var(--card-border)]"
+                className="bg-[var(--card-bg)] hover:bg-[var(--card-border)] text-white px-5 sm:px-6 py-2.5 sm:py-3 rounded-lg font-medium transition-all duration-200 border border-[var(--card-border)] text-sm sm:text-base"
               >
                 Browse CPUs
               </Link>
               <Link
                 href="/gpus"
-                className="bg-[var(--card-bg)] hover:bg-[var(--card-border)] text-white px-6 py-3 rounded-lg font-medium transition-all duration-200 border border-[var(--card-border)]"
+                className="bg-[var(--card-bg)] hover:bg-[var(--card-border)] text-white px-5 sm:px-6 py-2.5 sm:py-3 rounded-lg font-medium transition-all duration-200 border border-[var(--card-border)] text-sm sm:text-base"
               >
                 Browse GPUs
               </Link>
@@ -187,14 +187,14 @@ export default function SavedListingsPage() {
 
         {/* Systems */}
         {(activeTab === 'all' || activeTab === 'systems') && favoriteSystems.length > 0 && (
-          <div className="mb-12">
+          <div className="mb-8 sm:mb-12">
             {activeTab === 'all' && (
-              <h2 className="text-2xl font-bold text-white mb-6 flex items-center gap-2">
-                <Computer className="w-6 h-6" />
+              <h2 className="text-xl sm:text-2xl font-bold text-white mb-4 sm:mb-6 flex items-center gap-2">
+                <Computer className="w-5 h-5 sm:w-6 sm:h-6" />
                 Systems ({favoriteSystems.length})
               </h2>
             )}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
               {favoriteSystems.map((favorite) => {
                 const system = favorite.system;
                 if (!system) return null;
@@ -204,7 +204,7 @@ export default function SavedListingsPage() {
                 return (
                   <div
                     key={favorite.id}
-                    className="bg-[var(--card-bg)] border border-[var(--card-border)] rounded-2xl overflow-hidden hover:border-[var(--brand)]/50 transition-all duration-300 group"
+                    className="bg-[var(--card-bg)] border border-[var(--card-border)] rounded-xl sm:rounded-2xl overflow-hidden hover:border-[var(--brand)]/50 transition-all duration-300 group"
                   >
                     {/* Image */}
                     <Link href={`/systems/${system.id}`}>
@@ -297,14 +297,14 @@ export default function SavedListingsPage() {
 
         {/* CPUs */}
         {(activeTab === 'all' || activeTab === 'cpus') && favoriteCPUs.length > 0 && (
-          <div className="mb-12">
+          <div className="mb-8 sm:mb-12">
             {activeTab === 'all' && (
-              <h2 className="text-2xl font-bold text-white mb-6 flex items-center gap-2">
-                <Cpu className="w-6 h-6" />
+              <h2 className="text-xl sm:text-2xl font-bold text-white mb-4 sm:mb-6 flex items-center gap-2">
+                <Cpu className="w-5 h-5 sm:w-6 sm:h-6" />
                 CPUs ({favoriteCPUs.length})
               </h2>
             )}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
               {favoriteCPUs.map((favorite) => {
                 const cpu = favorite.cpu_listing;
                 if (!cpu) return null;
@@ -317,7 +317,7 @@ export default function SavedListingsPage() {
                 return (
                   <div
                     key={favorite.id}
-                    className="bg-[var(--card-bg)] border border-[var(--card-border)] rounded-2xl overflow-hidden hover:border-[var(--brand)]/50 transition-all duration-300 group"
+                    className="bg-[var(--card-bg)] border border-[var(--card-border)] rounded-xl sm:rounded-2xl overflow-hidden hover:border-[var(--brand)]/50 transition-all duration-300 group"
                   >
                     {/* Image */}
                     <Link href={`/cpus/${cpu.id}`}>
@@ -442,14 +442,14 @@ export default function SavedListingsPage() {
 
         {/* GPUs */}
         {(activeTab === 'all' || activeTab === 'gpus') && favoriteGPUs.length > 0 && (
-          <div className="mb-12">
+          <div className="mb-8 sm:mb-12">
             {activeTab === 'all' && (
-              <h2 className="text-2xl font-bold text-white mb-6 flex items-center gap-2">
-                <Monitor className="w-6 h-6" />
+              <h2 className="text-xl sm:text-2xl font-bold text-white mb-4 sm:mb-6 flex items-center gap-2">
+                <Monitor className="w-5 h-5 sm:w-6 sm:h-6" />
                 GPUs ({favoriteGPUs.length})
               </h2>
             )}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
               {favoriteGPUs.map((favorite) => {
                 const gpu = favorite.gpu_listing;
                 if (!gpu) return null;
@@ -462,7 +462,7 @@ export default function SavedListingsPage() {
                 return (
                   <div
                     key={favorite.id}
-                    className="bg-[var(--card-bg)] border border-[var(--card-border)] rounded-2xl overflow-hidden hover:border-[var(--brand)]/50 transition-all duration-300 group"
+                    className="bg-[var(--card-bg)] border border-[var(--card-border)] rounded-xl sm:rounded-2xl overflow-hidden hover:border-[var(--brand)]/50 transition-all duration-300 group"
                   >
                     {/* Image */}
                     <Link href={`/gpus/${gpu.id}`}>
@@ -583,3 +583,4 @@ export default function SavedListingsPage() {
     </div>
   );
 }
+

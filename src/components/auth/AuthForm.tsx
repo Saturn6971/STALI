@@ -85,23 +85,23 @@ export default function AuthForm({ mode, onModeChange }: AuthFormProps) {
   };
 
   return (
-    <div className="min-h-screen bg-[var(--background)] flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-md w-full space-y-8">
+    <div className="min-h-screen bg-[var(--background)] flex items-center justify-center py-8 sm:py-12 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-md w-full space-y-6 sm:space-y-8">
         {/* Header */}
         <div className="text-center">
-          <Link href="/" className="flex items-center justify-center space-x-2 mb-6">
-            <div className="w-12 h-12 bg-gradient-to-br from-[var(--brand)] to-[var(--brand-light)] rounded-lg flex items-center justify-center">
-              <span className="text-white text-2xl">🐺</span>
+          <Link href="/" className="flex items-center justify-center space-x-2 mb-4 sm:mb-6">
+            <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-br from-[var(--brand)] to-[var(--brand-light)] rounded-lg flex items-center justify-center">
+              <span className="text-white text-xl sm:text-2xl">🐺</span>
             </div>
-            <h1 className="text-3xl font-bold bg-gradient-to-r from-[var(--brand)] to-[var(--brand-light)] bg-clip-text text-transparent">
+            <h1 className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-[var(--brand)] to-[var(--brand-light)] bg-clip-text text-transparent">
               Stali
             </h1>
           </Link>
           
-          <h2 className="text-3xl font-bold text-white mb-2">
+          <h2 className="text-2xl sm:text-3xl font-bold text-white mb-2">
             {mode === 'signin' ? 'Welcome Back' : 'Create Account'}
           </h2>
-          <p className="text-gray-400">
+          <p className="text-sm sm:text-base text-gray-400">
             {mode === 'signin' 
               ? 'Sign in to your account to continue' 
               : 'Join Stali to buy and sell PC parts'
@@ -110,9 +110,9 @@ export default function AuthForm({ mode, onModeChange }: AuthFormProps) {
         </div>
 
         {/* Form */}
-        <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
-          <div className="bg-[var(--card-bg)] rounded-2xl p-8 border border-[var(--card-border)]">
-            <div className="space-y-4">
+        <form className="mt-6 sm:mt-8 space-y-4 sm:space-y-6" onSubmit={handleSubmit}>
+          <div className="bg-[var(--card-bg)] rounded-xl sm:rounded-2xl p-5 sm:p-8 border border-[var(--card-border)]">
+            <div className="space-y-3 sm:space-y-4">
               {/* Email */}
               <div>
                 <label htmlFor="email" className="block text-sm font-medium text-gray-300 mb-2">

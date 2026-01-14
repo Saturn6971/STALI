@@ -96,14 +96,14 @@ export default function Home() {
     <div className="min-h-screen bg-[var(--background)] text-[var(--foreground)]">
       {/* Navigation */}
       <nav className="bg-[var(--card-bg)]/80 backdrop-blur-sm border-b border-[var(--card-border)] sticky top-0 z-50">
-        <div className="max-w-7xl mx-auto px-6 lg:px-12">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-12">
           <div className="flex items-center justify-between h-16">
             {/* Logo */}
         <div className="flex items-center space-x-2">
           <div className="w-8 h-8 bg-gradient-to-br from-[var(--brand)] to-[var(--brand-light)] rounded-lg flex items-center justify-center">
             <span className="text-white text-lg">🐺</span>
           </div>
-          <h1 className="text-2xl font-bold bg-gradient-to-r from-[var(--brand)] to-[var(--brand-light)] bg-clip-text text-transparent">
+          <h1 className="text-xl sm:text-2xl font-bold bg-gradient-to-r from-[var(--brand)] to-[var(--brand-light)] bg-clip-text text-transparent">
             Stali
           </h1>
         </div>
@@ -271,37 +271,37 @@ export default function Home() {
       </nav>
 
       {/* Hero Section */}
-      <section id="home" className="px-6 lg:px-12 py-16 lg:py-24">
+      <section id="home" className="px-4 sm:px-6 lg:px-12 py-10 sm:py-16 lg:py-24">
         <div className="max-w-6xl mx-auto text-center">
-          <h2 className="text-4xl lg:text-6xl font-bold mb-6">
+          <h2 className="text-3xl sm:text-4xl lg:text-6xl font-bold mb-4 sm:mb-6">
             Premium PC Parts
             <span className="block bg-gradient-to-r from-blue-400 via-purple-500 to-pink-500 bg-clip-text text-transparent">
               Marketplace
             </span>
           </h2>
-          <p className="text-xl lg:text-2xl text-gray-400 mb-12 max-w-3xl mx-auto">
+          <p className="text-base sm:text-xl lg:text-2xl text-gray-400 mb-8 sm:mb-12 max-w-3xl mx-auto px-2">
             Buy and sell CPUs, GPUs, and complete PC systems. Your trusted marketplace for premium computer components.
           </p>
           
           {/* Category Cards */}
-          <div id="categories" className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
+          <div id="categories" className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6 lg:gap-8 mb-10 sm:mb-16">
             {categories.map((category) => (
               <div
                 key={category.id}
-                className={`relative p-8 rounded-2xl border border-[var(--card-border)] bg-[var(--card-bg)] transition-all duration-300 cursor-pointer group ${
+                className={`relative p-5 sm:p-8 rounded-xl sm:rounded-2xl border border-[var(--card-border)] bg-[var(--card-bg)] transition-all duration-300 cursor-pointer group ${
                   hoveredCard === category.id ? 'scale-105 shadow-2xl' : 'hover:scale-102'
                 }`}
                 onMouseEnter={() => setHoveredCard(category.id)}
                 onMouseLeave={() => setHoveredCard(null)}
               >
                 {/* Background Gradient */}
-                <div className={`absolute inset-0 rounded-2xl bg-gradient-to-br ${category.gradient} opacity-0 group-hover:opacity-100 transition-opacity duration-300`} />
+                <div className={`absolute inset-0 rounded-xl sm:rounded-2xl bg-gradient-to-br ${category.gradient} opacity-0 group-hover:opacity-100 transition-opacity duration-300`} />
                 
                 {/* Content */}
                 <div className="relative z-10">
-                  <div className="text-4xl mb-4">{category.icon}</div>
-                  <h3 className="text-2xl font-bold mb-3 text-white">{category.title}</h3>
-                  <p className="text-gray-400 mb-6">{category.description}</p>
+                  <div className="text-3xl sm:text-4xl mb-3 sm:mb-4">{category.icon}</div>
+                  <h3 className="text-xl sm:text-2xl font-bold mb-2 sm:mb-3 text-white">{category.title}</h3>
+                  <p className="text-sm sm:text-base text-gray-400 mb-4 sm:mb-6">{category.description}</p>
                   <Link 
                     href={category.id === 'systems' ? '/systems' : category.id === 'cpus' ? '/cpus' : category.id === 'gpus' ? '/gpus' : '#'}
                     className="w-full bg-[var(--brand)] hover:bg-[var(--brand-light)] text-white py-3 rounded-lg font-medium transition-all duration-200 hover:scale-105 block text-center"
@@ -314,18 +314,18 @@ export default function Home() {
           </div>
 
           {/* Sell Section */}
-          <div className="bg-gradient-to-r from-[var(--brand)]/10 to-[var(--brand-light)]/10 rounded-2xl p-8 lg:p-12 border border-[var(--brand)]/20">
-            <h3 className="text-3xl font-bold mb-4">Ready to Sell?</h3>
-            <p className="text-gray-400 mb-8 max-w-2xl mx-auto">
+          <div className="bg-gradient-to-r from-[var(--brand)]/10 to-[var(--brand-light)]/10 rounded-xl sm:rounded-2xl p-5 sm:p-8 lg:p-12 border border-[var(--brand)]/20">
+            <h3 className="text-2xl sm:text-3xl font-bold mb-3 sm:mb-4">Ready to Sell?</h3>
+            <p className="text-sm sm:text-base text-gray-400 mb-6 sm:mb-8 max-w-2xl mx-auto">
               List your PC parts and complete systems on Stali. Get fair prices and connect with buyers who appreciate quality components.
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link href="/seller" className="bg-[var(--brand)] hover:bg-[var(--brand-light)] text-white px-8 py-4 rounded-lg font-medium text-lg transition-all duration-200 hover:scale-105 text-center">
+            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center">
+              <Link href="/seller" className="bg-[var(--brand)] hover:bg-[var(--brand-light)] text-white px-6 sm:px-8 py-3 sm:py-4 rounded-lg font-medium text-base sm:text-lg transition-all duration-200 hover:scale-105 text-center">
                 Start Selling
               </Link>
               <a
                 href="#about"
-                className="border border-[var(--brand)] text-[var(--brand)] hover:bg-[var(--brand)] hover:text-white px-8 py-4 rounded-lg font-medium text-lg transition-all duration-200 text-center"
+                className="border border-[var(--brand)] text-[var(--brand)] hover:bg-[var(--brand)] hover:text-white px-6 sm:px-8 py-3 sm:py-4 rounded-lg font-medium text-base sm:text-lg transition-all duration-200 text-center"
               >
                 Learn More
               </a>
@@ -335,69 +335,69 @@ export default function Home() {
       </section>
 
       {/* Features Section */}
-      <section className="px-6 lg:px-12 py-16 bg-[var(--card-bg)]/50">
+      <section className="px-4 sm:px-6 lg:px-12 py-10 sm:py-16 bg-[var(--card-bg)]/50">
         <div className="max-w-6xl mx-auto">
-          <h3 className="text-3xl font-bold text-center mb-12">Why Choose Stali?</h3>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <h3 className="text-2xl sm:text-3xl font-bold text-center mb-8 sm:mb-12">Why Choose Stali?</h3>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 sm:gap-8">
             <div className="text-center">
-              <div className="w-16 h-16 bg-[var(--brand)]/20 rounded-full flex items-center justify-center mx-auto mb-4">
-                <span className="text-2xl">🛡️</span>
+              <div className="w-14 h-14 sm:w-16 sm:h-16 bg-[var(--brand)]/20 rounded-full flex items-center justify-center mx-auto mb-3 sm:mb-4">
+                <span className="text-xl sm:text-2xl">🛡️</span>
               </div>
-              <h4 className="text-xl font-bold mb-2">Secure Transactions</h4>
-              <p className="text-gray-400">Protected payments and verified sellers ensure safe transactions.</p>
+              <h4 className="text-lg sm:text-xl font-bold mb-2">Secure Transactions</h4>
+              <p className="text-sm sm:text-base text-gray-400">Protected payments and verified sellers ensure safe transactions.</p>
             </div>
             <div className="text-center">
-              <div className="w-16 h-16 bg-[var(--brand)]/20 rounded-full flex items-center justify-center mx-auto mb-4">
-                <span className="text-2xl">⚡</span>
+              <div className="w-14 h-14 sm:w-16 sm:h-16 bg-[var(--brand)]/20 rounded-full flex items-center justify-center mx-auto mb-3 sm:mb-4">
+                <span className="text-xl sm:text-2xl">⚡</span>
               </div>
-              <h4 className="text-xl font-bold mb-2">Fast Delivery</h4>
-              <p className="text-gray-400">Quick shipping and local pickup options for immediate satisfaction.</p>
+              <h4 className="text-lg sm:text-xl font-bold mb-2">Fast Delivery</h4>
+              <p className="text-sm sm:text-base text-gray-400">Quick shipping and local pickup options for immediate satisfaction.</p>
             </div>
-            <div className="text-center">
-              <div className="w-16 h-16 bg-[var(--brand)]/20 rounded-full flex items-center justify-center mx-auto mb-4">
-                <span className="text-2xl">⭐</span>
+            <div className="text-center sm:col-span-2 md:col-span-1">
+              <div className="w-14 h-14 sm:w-16 sm:h-16 bg-[var(--brand)]/20 rounded-full flex items-center justify-center mx-auto mb-3 sm:mb-4">
+                <span className="text-xl sm:text-2xl">⭐</span>
               </div>
-              <h4 className="text-xl font-bold mb-2">Quality Guaranteed</h4>
-              <p className="text-gray-400">All listings verified for authenticity and working condition.</p>
+              <h4 className="text-lg sm:text-xl font-bold mb-2">Quality Guaranteed</h4>
+              <p className="text-sm sm:text-base text-gray-400">All listings verified for authenticity and working condition.</p>
             </div>
           </div>
         </div>
       </section>
 
       {/* About Section */}
-      <section id="about" className="px-6 lg:px-12 py-16 bg-[var(--card-bg)]/30">
+      <section id="about" className="px-4 sm:px-6 lg:px-12 py-10 sm:py-16 bg-[var(--card-bg)]/30">
         <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-12">
-            <h3 className="text-3xl font-bold mb-4">About Stali</h3>
-            <p className="text-gray-400 text-lg max-w-3xl mx-auto">
+          <div className="text-center mb-8 sm:mb-12">
+            <h3 className="text-2xl sm:text-3xl font-bold mb-3 sm:mb-4">About Stali</h3>
+            <p className="text-sm sm:text-base lg:text-lg text-gray-400 max-w-3xl mx-auto px-2">
               Stali is the premier marketplace for PC enthusiasts, gamers, and professionals. We connect buyers and sellers of high-quality computer components, ensuring every transaction is secure and every product meets our quality standards.
             </p>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
             <div>
-              <h4 className="text-2xl font-bold mb-4">Our Mission</h4>
-              <p className="text-gray-400 mb-6">
+              <h4 className="text-xl sm:text-2xl font-bold mb-3 sm:mb-4">Our Mission</h4>
+              <p className="text-sm sm:text-base text-gray-400 mb-4 sm:mb-6">
                 To create a trusted platform where PC enthusiasts can buy and sell premium components with confidence. We believe in quality, transparency, and fair pricing for all our users.
               </p>
-              <div className="space-y-4">
+              <div className="space-y-3 sm:space-y-4">
                 <div className="flex items-center space-x-3">
                   <div className="w-2 h-2 bg-[var(--brand)] rounded-full"></div>
-                  <span className="text-gray-300">Verified sellers and authentic products</span>
+                  <span className="text-sm sm:text-base text-gray-300">Verified sellers and authentic products</span>
                 </div>
                 <div className="flex items-center space-x-3">
                   <div className="w-2 h-2 bg-[var(--brand)] rounded-full"></div>
-                  <span className="text-gray-300">Secure payment processing</span>
+                  <span className="text-sm sm:text-base text-gray-300">Secure payment processing</span>
                 </div>
                 <div className="flex items-center space-x-3">
                   <div className="w-2 h-2 bg-[var(--brand)] rounded-full"></div>
-                  <span className="text-gray-300">24/7 customer support</span>
+                  <span className="text-sm sm:text-base text-gray-300">24/7 customer support</span>
                 </div>
               </div>
             </div>
-            <div className="bg-gradient-to-br from-[var(--brand)]/20 to-[var(--brand-light)]/20 rounded-2xl p-8 text-center">
-              <div className="text-4xl mb-4">🚀</div>
-              <h4 className="text-xl font-bold mb-2">Join Our Community</h4>
-              <p className="text-gray-400 mb-6">
+            <div className="bg-gradient-to-br from-[var(--brand)]/20 to-[var(--brand-light)]/20 rounded-xl sm:rounded-2xl p-6 sm:p-8 text-center">
+              <div className="text-3xl sm:text-4xl mb-3 sm:mb-4">🚀</div>
+              <h4 className="text-lg sm:text-xl font-bold mb-2">Join Our Community</h4>
+              <p className="text-sm sm:text-base text-gray-400 mb-4 sm:mb-6">
                 Connect with thousands of PC enthusiasts, share builds, and discover the latest components.
               </p>
               <Link
@@ -412,22 +412,22 @@ export default function Home() {
       </section>
 
       {/* Contact Section */}
-      <section id="contact" className="px-6 lg:px-12 py-16">
+      <section id="contact" className="px-4 sm:px-6 lg:px-12 py-10 sm:py-16">
         <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-12">
-            <h3 className="text-3xl font-bold mb-4">Contact Us</h3>
-            <p className="text-gray-400 text-lg max-w-2xl mx-auto">
+          <div className="text-center mb-8 sm:mb-12">
+            <h3 className="text-2xl sm:text-3xl font-bold mb-3 sm:mb-4">Contact Us</h3>
+            <p className="text-gray-400 text-base sm:text-lg max-w-2xl mx-auto">
               Have questions? Need support? We're here to help. Reach out to our team anytime.
             </p>
           </div>
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-            <div className="space-y-8">
-              <div className="flex items-start space-x-4">
-                <div className="w-12 h-12 bg-[var(--brand)]/20 rounded-lg flex items-center justify-center flex-shrink-0">
-                  <span className="text-xl">📧</span>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 sm:gap-12">
+            <div className="space-y-6 sm:space-y-8">
+              <div className="flex items-start space-x-3 sm:space-x-4">
+                <div className="w-10 h-10 sm:w-12 sm:h-12 bg-[var(--brand)]/20 rounded-lg flex items-center justify-center flex-shrink-0">
+                  <span className="text-lg sm:text-xl">📧</span>
                 </div>
                 <div>
-                  <h4 className="text-xl font-bold mb-2">Email Support</h4>
+                  <h4 className="text-lg sm:text-xl font-bold mb-2">Email Support</h4>
                   <p className="text-gray-400 mb-2">Get help with your account, orders, or general questions.</p>
                   <a href="mailto:ali.dadak@student.htldornbirn.at" className="text-[var(--brand)] hover:text-[var(--brand-light)] transition-colors">
                     ali.dadak@student.htldornbirn.at
@@ -435,11 +435,11 @@ export default function Home() {
                 </div>
               </div>
               <div className="flex items-start space-x-4">
-                <div className="w-12 h-12 bg-[var(--brand)]/20 rounded-lg flex items-center justify-center flex-shrink-0">
-                  <span className="text-xl">🧾</span>
+                <div className="w-10 h-10 sm:w-12 sm:h-12 bg-[var(--brand)]/20 rounded-lg flex items-center justify-center flex-shrink-0">
+                  <span className="text-lg sm:text-xl">🧾</span>
                 </div>
                 <div>
-                  <h4 className="text-xl font-bold mb-2">Support Tickets</h4>
+                  <h4 className="text-lg sm:text-xl font-bold mb-2">Support Tickets</h4>
                   <p className="text-gray-400 mb-2">Open a ticket and we’ll reply via email.</p>
                   <a href="mailto:ali.dadak@student.htldornbirn.at?subject=Support%20Ticket" className="text-[var(--brand)] hover:text-[var(--brand-light)] transition-colors">
                     Create Ticket
@@ -447,11 +447,11 @@ export default function Home() {
                 </div>
               </div>
               <div className="flex items-start space-x-4">
-                <div className="w-12 h-12 bg-[var(--brand)]/20 rounded-lg flex items-center justify-center flex-shrink-0">
-                  <span className="text-xl">📚</span>
+                <div className="w-10 h-10 sm:w-12 sm:h-12 bg-[var(--brand)]/20 rounded-lg flex items-center justify-center flex-shrink-0">
+                  <span className="text-lg sm:text-xl">📚</span>
                 </div>
                 <div>
-                  <h4 className="text-xl font-bold mb-2">Help Center</h4>
+                  <h4 className="text-lg sm:text-xl font-bold mb-2">Help Center</h4>
                   <p className="text-gray-400 mb-2">Browse guides and FAQs for quick answers.</p>
                   <a href="#help" className="text-[var(--brand)] hover:text-[var(--brand-light)] transition-colors">
                     View Help Center
@@ -459,9 +459,9 @@ export default function Home() {
                 </div>
               </div>
             </div>
-            <div className="bg-[var(--card-bg)] rounded-2xl p-8 border border-[var(--card-border)]">
-              <h4 className="text-xl font-bold mb-6">Send us a message</h4>
-              <form className="space-y-6" onSubmit={handleSubmit}>
+            <div className="bg-[var(--card-bg)] rounded-xl sm:rounded-2xl p-5 sm:p-8 border border-[var(--card-border)]">
+              <h4 className="text-lg sm:text-xl font-bold mb-4 sm:mb-6">Send us a message</h4>
+              <form className="space-y-4 sm:space-y-6" onSubmit={handleSubmit}>
                 <div>
                   <label className="block text-sm font-medium text-gray-300 mb-2">Name</label>
                   <input
@@ -531,45 +531,45 @@ export default function Home() {
       </section>
 
       {/* Help Section */}
-      <section id="help" className="px-6 lg:px-12 py-16 bg-[var(--card-bg)]/30">
+      <section id="help" className="px-4 sm:px-6 lg:px-12 py-10 sm:py-16 bg-[var(--card-bg)]/30">
         <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-12">
-            <h3 className="text-3xl font-bold mb-4">Help Center</h3>
-            <p className="text-gray-400 text-lg max-w-2xl mx-auto">
+          <div className="text-center mb-8 sm:mb-12">
+            <h3 className="text-2xl sm:text-3xl font-bold mb-3 sm:mb-4">Help Center</h3>
+            <p className="text-sm sm:text-base lg:text-lg text-gray-400 max-w-2xl mx-auto">
               Find answers to common questions and learn how to get the most out of Stali.
             </p>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
             <button
               onClick={() => setOpenModal('buying')}
-              className="bg-[var(--card-bg)] rounded-xl p-6 border border-[var(--card-border)] hover:border-[var(--brand)]/50 transition-colors text-left cursor-pointer"
+              className="bg-[var(--card-bg)] rounded-lg sm:rounded-xl p-5 sm:p-6 border border-[var(--card-border)] hover:border-[var(--brand)]/50 transition-colors text-left cursor-pointer"
             >
-              <div className="text-3xl mb-4">🛒</div>
-              <h4 className="text-xl font-bold mb-3">Buying Guide</h4>
-              <p className="text-gray-400 mb-4">Learn how to find and purchase the perfect PC components.</p>
-              <span className="text-[var(--brand)] hover:text-[var(--brand-light)] transition-colors font-medium">
+              <div className="text-2xl sm:text-3xl mb-3 sm:mb-4">🛒</div>
+              <h4 className="text-lg sm:text-xl font-bold mb-2 sm:mb-3">Buying Guide</h4>
+              <p className="text-sm sm:text-base text-gray-400 mb-3 sm:mb-4">Learn how to find and purchase the perfect PC components.</p>
+              <span className="text-sm sm:text-base text-[var(--brand)] hover:text-[var(--brand-light)] transition-colors font-medium">
                 Read Guide →
               </span>
             </button>
             <button
               onClick={() => setOpenModal('selling')}
-              className="bg-[var(--card-bg)] rounded-xl p-6 border border-[var(--card-border)] hover:border-[var(--brand)]/50 transition-colors text-left cursor-pointer"
+              className="bg-[var(--card-bg)] rounded-lg sm:rounded-xl p-5 sm:p-6 border border-[var(--card-border)] hover:border-[var(--brand)]/50 transition-colors text-left cursor-pointer"
             >
-              <div className="text-3xl mb-4">💰</div>
-              <h4 className="text-xl font-bold mb-3">Selling Tips</h4>
-              <p className="text-gray-400 mb-4">Maximize your sales with our expert selling strategies.</p>
-              <span className="text-[var(--brand)] hover:text-[var(--brand-light)] transition-colors font-medium">
+              <div className="text-2xl sm:text-3xl mb-3 sm:mb-4">💰</div>
+              <h4 className="text-lg sm:text-xl font-bold mb-2 sm:mb-3">Selling Tips</h4>
+              <p className="text-sm sm:text-base text-gray-400 mb-3 sm:mb-4">Maximize your sales with our expert selling strategies.</p>
+              <span className="text-sm sm:text-base text-[var(--brand)] hover:text-[var(--brand-light)] transition-colors font-medium">
                 Learn More →
               </span>
             </button>
             <button
               onClick={() => setOpenModal('safety')}
-              className="bg-[var(--card-bg)] rounded-xl p-6 border border-[var(--card-border)] hover:border-[var(--brand)]/50 transition-colors text-left cursor-pointer"
+              className="bg-[var(--card-bg)] rounded-lg sm:rounded-xl p-5 sm:p-6 border border-[var(--card-border)] hover:border-[var(--brand)]/50 transition-colors text-left cursor-pointer sm:col-span-2 lg:col-span-1"
             >
-              <div className="text-3xl mb-4">🔒</div>
-              <h4 className="text-xl font-bold mb-3">Safety & Security</h4>
-              <p className="text-gray-400 mb-4">Stay safe while buying and selling on our platform.</p>
-              <span className="text-[var(--brand)] hover:text-[var(--brand-light)] transition-colors font-medium">
+              <div className="text-2xl sm:text-3xl mb-3 sm:mb-4">🔒</div>
+              <h4 className="text-lg sm:text-xl font-bold mb-2 sm:mb-3">Safety & Security</h4>
+              <p className="text-sm sm:text-base text-gray-400 mb-3 sm:mb-4">Stay safe while buying and selling on our platform.</p>
+              <span className="text-sm sm:text-base text-[var(--brand)] hover:text-[var(--brand-light)] transition-colors font-medium">
                 Safety Tips →
               </span>
             </button>
@@ -578,7 +578,7 @@ export default function Home() {
       </section>
 
       {/* Footer */}
-      <footer className="px-6 lg:px-12 py-8 border-t border-[var(--card-border)]">
+      <footer className="px-4 sm:px-6 lg:px-12 py-6 sm:py-8 border-t border-[var(--card-border)]">
         <div className="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center">
           <div className="flex items-center space-x-2 mb-4 md:mb-0">
             <div className="w-6 h-6 bg-gradient-to-br from-[var(--brand)] to-[var(--brand-light)] rounded flex items-center justify-center">
@@ -586,7 +586,7 @@ export default function Home() {
             </div>
             <span className="text-lg font-bold">Stali</span>
           </div>
-          <div className="text-gray-400 text-sm">
+          <div className="text-gray-400 text-xs sm:text-sm text-center">
             © 2026 Stali. Your premium PC parts marketplace.
           </div>
         </div>
@@ -781,3 +781,5 @@ export default function Home() {
     </div>
   );
 }
+
+

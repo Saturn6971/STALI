@@ -100,24 +100,26 @@ export default function CPUsPage() {
     <div className="min-h-screen bg-[var(--background)] text-[var(--foreground)]">
       {/* Navigation */}
       <nav className="bg-[var(--card-bg)]/80 backdrop-blur-sm border-b border-[var(--card-border)] sticky top-0 z-50">
-        <div className="max-w-7xl mx-auto px-6 lg:px-12">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-12">
           <div className="flex items-center justify-between h-16">
             <Link href="/" className="flex items-center space-x-2">
               <div className="w-8 h-8 bg-gradient-to-br from-[var(--brand)] to-[var(--brand-light)] rounded-lg flex items-center justify-center">
                 <span className="text-white text-lg">🐺</span>
               </div>
-              <h1 className="text-2xl font-bold bg-gradient-to-r from-[var(--brand)] to-[var(--brand-light)] bg-clip-text text-transparent">
+              <h1 className="text-xl sm:text-2xl font-bold bg-gradient-to-r from-[var(--brand)] to-[var(--brand-light)] bg-clip-text text-transparent">
                 Stali
               </h1>
             </Link>
-            <div className="flex items-center space-x-4">
+            
+            {/* Desktop Navigation */}
+            <div className="hidden md:flex items-center space-x-4">
               <Link href="/" className="text-gray-300 hover:text-white transition-colors duration-200 font-medium">
                 ← Back to Home
               </Link>
               
               {user ? (
                 <div className="flex items-center space-x-4">
-                  <span className="text-gray-300 text-sm">
+                  <span className="text-gray-300 text-sm hidden lg:inline">
                     Welcome, {user.user_metadata?.display_name || user.user_metadata?.username || user.email}
                   </span>
                   <button 
@@ -128,9 +130,9 @@ export default function CPUsPage() {
                   </button>
                   <Link 
                     href="/cpus/sell"
-                    className="bg-[var(--brand)] hover:bg-[var(--brand-light)] text-white px-6 py-2 rounded-lg font-medium transition-all duration-200 hover:scale-105"
+                    className="bg-[var(--brand)] hover:bg-[var(--brand-light)] text-white px-4 lg:px-6 py-2 rounded-lg font-medium transition-all duration-200 hover:scale-105"
                   >
-                    Sell Your CPU
+                    Sell CPU
                   </Link>
                 </div>
               ) : (
@@ -143,11 +145,35 @@ export default function CPUsPage() {
                   </Link>
                   <Link 
                     href="/auth"
-                    className="bg-[var(--brand)] hover:bg-[var(--brand-light)] text-white px-6 py-2 rounded-lg font-medium transition-all duration-200 hover:scale-105"
+                    className="bg-[var(--brand)] hover:bg-[var(--brand-light)] text-white px-4 lg:px-6 py-2 rounded-lg font-medium transition-all duration-200 hover:scale-105"
                   >
                     Sign Up
                   </Link>
                 </div>
+              )}
+            </div>
+
+            {/* Mobile Navigation */}
+            <div className="flex md:hidden items-center space-x-2">
+              <Link href="/" className="text-gray-300 hover:text-white p-2">
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                </svg>
+              </Link>
+              {user ? (
+                <Link 
+                  href="/cpus/sell"
+                  className="bg-[var(--brand)] hover:bg-[var(--brand-light)] text-white px-3 py-1.5 rounded-lg text-sm font-medium"
+                >
+                  Sell
+                </Link>
+              ) : (
+                <Link 
+                  href="/auth"
+                  className="bg-[var(--brand)] hover:bg-[var(--brand-light)] text-white px-3 py-1.5 rounded-lg text-sm font-medium"
+                >
+                  Sign In
+                </Link>
               )}
             </div>
           </div>
@@ -155,13 +181,13 @@ export default function CPUsPage() {
       </nav>
 
       {/* Header */}
-      <section className="px-6 lg:px-12 py-12 bg-gradient-to-r from-[var(--brand)]/10 to-[var(--brand-light)]/10">
+      <section className="px-4 sm:px-6 lg:px-12 py-8 sm:py-12 bg-gradient-to-r from-[var(--brand)]/10 to-[var(--brand-light)]/10">
         <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-8">
-            <h1 className="text-4xl lg:text-5xl font-bold mb-4">
+          <div className="text-center mb-6 sm:mb-8">
+            <h1 className="text-2xl sm:text-4xl lg:text-5xl font-bold mb-3 sm:mb-4">
               CPUs & Processors
             </h1>
-            <p className="text-xl text-gray-400 max-w-3xl mx-auto">
+            <p className="text-base sm:text-xl text-gray-400 max-w-3xl mx-auto px-2">
               High-performance processors from Intel, AMD, and more. Find the perfect CPU for your build.
             </p>
           </div>
@@ -169,11 +195,11 @@ export default function CPUsPage() {
       </section>
 
       {/* Filters and Sort */}
-      <section className="px-6 lg:px-12 py-8 border-b border-[var(--card-border)]">
+      <section className="px-4 sm:px-6 lg:px-12 py-4 sm:py-8 border-b border-[var(--card-border)]">
         <div className="max-w-7xl mx-auto">
-          <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6">
+          <div className="flex flex-col gap-4 sm:gap-6">
             {/* Filters */}
-            <div className="flex flex-wrap gap-3">
+            <div className="flex flex-wrap gap-2 sm:gap-3 overflow-x-auto pb-2 -mx-4 px-4 sm:mx-0 sm:px-0">
               {cpuFilters.map((filter) => (
                 <button
                   key={filter.id}
@@ -201,24 +227,24 @@ export default function CPUsPage() {
             </div>
 
             {/* Sort and View Controls */}
-            <div className="flex items-center space-x-4">
+            <div className="flex flex-wrap items-center gap-3 sm:gap-4">
               <button
                 onClick={() => setShowFilters(!showFilters)}
-                className={`px-4 py-2 rounded-lg font-medium transition-all duration-200 ${
+                className={`px-3 sm:px-4 py-2 rounded-lg font-medium transition-all duration-200 text-sm sm:text-base ${
                   showFilters || Object.values(filters).some(v => Array.isArray(v) ? v.length > 0 : v !== '' && v !== 'newest')
                     ? 'bg-[var(--brand)] text-white'
                     : 'bg-[var(--card-bg)] text-gray-300 hover:text-white hover:bg-[var(--card-border)]'
                 }`}
               >
-                🔍 Advanced Filters
+                🔍 <span className="hidden sm:inline">Advanced </span>Filters
               </button>
               
-              <div className="flex items-center space-x-3">
-                <span className="text-gray-400 font-medium">Sort by:</span>
+              <div className="flex items-center space-x-2 sm:space-x-3 flex-1 sm:flex-none">
+                <span className="text-gray-400 font-medium text-sm hidden sm:inline">Sort by:</span>
                 <select
                   value={filters.sortBy}
                   onChange={(e) => setFilters({...filters, sortBy: e.target.value as CPUFilters['sortBy']})}
-                  className="bg-[var(--card-bg)] border border-[var(--card-border)] rounded-lg px-4 py-2 text-white focus:outline-none focus:border-[var(--brand)] transition-colors"
+                  className="bg-[var(--card-bg)] border border-[var(--card-border)] rounded-lg px-2 sm:px-4 py-2 text-white text-sm focus:outline-none focus:border-[var(--brand)] transition-colors flex-1 sm:flex-none"
                 >
                   {sortOptions.map((option) => (
                     <option key={option.id} value={option.id} className="bg-[var(--card-bg)]">
@@ -229,7 +255,7 @@ export default function CPUsPage() {
               </div>
 
               {/* View Mode Toggle */}
-              <div className="flex items-center bg-[var(--card-bg)] rounded-lg shadow-sm border border-[var(--card-border)]">
+              <div className="hidden sm:flex items-center bg-[var(--card-bg)] rounded-lg shadow-sm border border-[var(--card-border)]">
                 <button
                   onClick={() => setViewMode('grid')}
                   className={`p-2 rounded-l-lg transition-colors ${
@@ -254,14 +280,14 @@ export default function CPUsPage() {
 
       {/* Advanced Filters */}
       {showFilters && (
-        <section className="px-6 lg:px-12 py-8 bg-[var(--card-bg)]/30 border-b border-[var(--card-border)]">
+        <section className="px-4 sm:px-6 lg:px-12 py-4 sm:py-8 bg-[var(--card-bg)]/30 border-b border-[var(--card-border)]">
           <div className="max-w-7xl mx-auto">
-            <div className="mb-6">
-              <h3 className="text-lg font-semibold text-white mb-2">Advanced Filters</h3>
-              <p className="text-sm text-gray-400">Refine your search with detailed filters</p>
+            <div className="mb-4 sm:mb-6">
+              <h3 className="text-base sm:text-lg font-semibold text-white mb-1 sm:mb-2">Advanced Filters</h3>
+              <p className="text-xs sm:text-sm text-gray-400">Refine your search with detailed filters</p>
             </div>
             
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-x-6 sm:gap-y-6">
               {/* Search */}
               <div className="min-w-0">
                 <label className="block text-sm font-medium text-gray-300 mb-2">Search</label>
@@ -394,7 +420,7 @@ export default function CPUsPage() {
       )}
 
       {/* CPUs Grid */}
-      <section className="px-6 lg:px-12 py-12">
+      <section className="px-4 sm:px-6 lg:px-12 py-6 sm:py-12">
         <div className="max-w-7xl mx-auto">
           {loading ? (
             <div className="flex justify-center items-center py-20">

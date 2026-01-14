@@ -219,17 +219,19 @@ export default function CPUDetails() {
     <div className="min-h-screen bg-[var(--background)] text-[var(--foreground)]">
       {/* Navigation */}
       <nav className="bg-[var(--card-bg)]/80 backdrop-blur-sm border-b border-[var(--card-border)] sticky top-0 z-50">
-        <div className="max-w-7xl mx-auto px-6 lg:px-12">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-12">
           <div className="flex items-center justify-between h-16">
             <Link href="/" className="flex items-center space-x-2">
               <div className="w-8 h-8 bg-gradient-to-br from-[var(--brand)] to-[var(--brand-light)] rounded-lg flex items-center justify-center">
                 <span className="text-white text-lg">🐺</span>
               </div>
-              <h1 className="text-2xl font-bold bg-gradient-to-r from-[var(--brand)] to-[var(--brand-light)] bg-clip-text text-transparent">
+              <h1 className="text-xl sm:text-2xl font-bold bg-gradient-to-r from-[var(--brand)] to-[var(--brand-light)] bg-clip-text text-transparent">
                 Stali
               </h1>
             </Link>
-            <div className="flex items-center space-x-4">
+            
+            {/* Desktop Navigation */}
+            <div className="hidden md:flex items-center space-x-4">
               <Link href="/cpus" className="text-gray-300 hover:text-white transition-colors duration-200 font-medium">
                 ← Back to CPUs
               </Link>
@@ -269,17 +271,39 @@ export default function CPUDetails() {
                 </div>
               )}
             </div>
+            
+            {/* Mobile Navigation */}
+            <div className="flex md:hidden items-center space-x-2">
+              <Link href="/cpus" className="text-gray-300 hover:text-white transition-colors duration-200 text-sm">
+                ← CPUs
+              </Link>
+              {user ? (
+                <button 
+                  onClick={handleContactSeller}
+                  className="bg-[var(--brand)] hover:bg-[var(--brand-light)] text-white px-3 py-1.5 rounded-lg font-medium text-sm transition-all duration-200"
+                >
+                  {user.id === cpuListing.seller_id ? 'Your Listing' : 'Contact'}
+                </button>
+              ) : (
+                <Link 
+                  href="/auth"
+                  className="bg-[var(--brand)] hover:bg-[var(--brand-light)] text-white px-3 py-1.5 rounded-lg font-medium text-sm transition-all duration-200"
+                >
+                  Sign In
+                </Link>
+              )}
+            </div>
           </div>
         </div>
       </nav>
 
       {/* Main Content */}
-      <div className="max-w-7xl mx-auto px-6 lg:px-12 py-8">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-12 py-4 sm:py-8">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8 lg:gap-12">
           {/* Left Column - Images */}
-          <div className="space-y-4">
+          <div className="space-y-3 sm:space-y-4">
             {/* Main Image */}
-            <div className="aspect-square bg-[var(--card-bg)] rounded-2xl border border-[var(--card-border)] overflow-hidden">
+            <div className="aspect-square bg-[var(--card-bg)] rounded-xl sm:rounded-2xl border border-[var(--card-border)] overflow-hidden">
               {images.length > 0 ? (
                 <img 
                   src={images[selectedImageIndex]} 
@@ -335,7 +359,7 @@ export default function CPUDetails() {
                 </div>
               </div>
               
-              <h1 className="text-3xl lg:text-4xl font-bold text-white mb-2">{cpuListing.title}</h1>
+              <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white mb-2">{cpuListing.title}</h1>
               
               {cpuListing.cpu_model && (
                 <p className="text-xl text-gray-400 mb-4">
@@ -360,37 +384,37 @@ export default function CPUDetails() {
             </div>
 
             {/* Price */}
-            <div className="bg-[var(--card-bg)] rounded-2xl p-6 border border-[var(--card-border)]">
-              <div className="flex items-center justify-between mb-4">
+            <div className="bg-[var(--card-bg)] rounded-xl sm:rounded-2xl p-4 sm:p-6 border border-[var(--card-border)]">
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4 space-y-3 sm:space-y-0">
                 <div>
-                  <div className="flex items-center space-x-3">
-                    <span className="text-4xl font-bold text-white">{formatCurrency(cpuListing.price)}</span>
+                  <div className="flex items-center space-x-2 sm:space-x-3">
+                    <span className="text-2xl sm:text-4xl font-bold text-white">{formatCurrency(cpuListing.price)}</span>
                     {cpuListing.original_price && cpuListing.original_price > cpuListing.price && (
-                      <span className="text-2xl text-gray-400 line-through">{formatCurrency(cpuListing.original_price)}</span>
+                      <span className="text-lg sm:text-2xl text-gray-400 line-through">{formatCurrency(cpuListing.original_price)}</span>
                     )}
                   </div>
                   {cpuListing.original_price && cpuListing.original_price > cpuListing.price && (
-                    <span className="text-lg text-green-400 font-medium">
+                    <span className="text-base sm:text-lg text-green-400 font-medium">
                       Save {formatCurrency(cpuListing.original_price - cpuListing.price)}
                     </span>
                   )}
                 </div>
-                <div className="text-right">
-                  <div className="text-sm text-gray-400">Manufacturer</div>
-                  <div className="text-lg font-medium text-[var(--brand)]">{cpuListing.cpu_model?.manufacturer?.name}</div>
+                <div className="text-left sm:text-right">
+                  <div className="text-xs sm:text-sm text-gray-400">Manufacturer</div>
+                  <div className="text-base sm:text-lg font-medium text-[var(--brand)]">{cpuListing.cpu_model?.manufacturer?.name}</div>
                 </div>
               </div>
               
-              <div className="flex space-x-3">
+              <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-3">
                 <button 
                   onClick={handleContactSeller}
-                  className="flex-1 bg-[var(--brand)] hover:bg-[var(--brand-light)] text-white py-4 rounded-lg font-medium text-lg transition-all duration-200 hover:scale-105"
+                  className="flex-1 bg-[var(--brand)] hover:bg-[var(--brand-light)] text-white py-3 sm:py-4 rounded-lg font-medium text-base sm:text-lg transition-all duration-200 hover:scale-105"
                 >
                   {user && user.id === cpuListing.seller_id ? 'Your Listing' : 'Contact Seller'}
                 </button>
                 <button 
                   onClick={handleFavorite}
-                  className={`px-6 py-4 border rounded-lg font-medium text-lg transition-all duration-200 ${
+                  className={`px-4 sm:px-6 py-3 sm:py-4 border rounded-lg font-medium text-base sm:text-lg transition-all duration-200 ${
                     isFavorited 
                       ? 'bg-[var(--brand)] text-white border-[var(--brand)]' 
                       : 'border-[var(--brand)] text-[var(--brand)] hover:bg-[var(--brand)] hover:text-white'
@@ -403,9 +427,9 @@ export default function CPUDetails() {
 
             {/* CPU Specifications */}
             {cpuListing.cpu_model && (
-              <div className="bg-[var(--card-bg)] rounded-2xl p-6 border border-[var(--card-border)]">
-                <h3 className="text-xl font-bold text-white mb-6">⚡ CPU Specifications</h3>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="bg-[var(--card-bg)] rounded-xl sm:rounded-2xl p-4 sm:p-6 border border-[var(--card-border)]">
+                <h3 className="text-lg sm:text-xl font-bold text-white mb-4 sm:mb-6">⚡ CPU Specifications</h3>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                   <div className="flex items-center space-x-3 py-3 border-b border-[var(--card-border)]">
                     <Cpu className="w-5 h-5 text-[var(--brand)]" />
                     <div>
@@ -468,9 +492,9 @@ export default function CPUDetails() {
             )}
 
             {/* Additional Details */}
-            <div className="bg-[var(--card-bg)] rounded-2xl p-6 border border-[var(--card-border)]">
-              <h3 className="text-xl font-bold text-white mb-6">📋 Additional Details</h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="bg-[var(--card-bg)] rounded-xl sm:rounded-2xl p-4 sm:p-6 border border-[var(--card-border)]">
+              <h3 className="text-lg sm:text-xl font-bold text-white mb-4 sm:mb-6">📋 Additional Details</h3>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                 {cpuListing.purchase_date && (
                   <div className="flex justify-between py-3 border-b border-[var(--card-border)]">
                     <span className="text-gray-400">Purchase Date:</span>
@@ -510,8 +534,8 @@ export default function CPUDetails() {
             </div>
 
             {/* Location & Shipping */}
-            <div className="bg-[var(--card-bg)] rounded-2xl p-6 border border-[var(--card-border)]">
-              <h3 className="text-xl font-bold text-white mb-6">🚚 Location & Shipping</h3>
+            <div className="bg-[var(--card-bg)] rounded-xl sm:rounded-2xl p-4 sm:p-6 border border-[var(--card-border)]">
+              <h3 className="text-lg sm:text-xl font-bold text-white mb-4 sm:mb-6">🚚 Location & Shipping</h3>
               <div className="space-y-3">
                 {cpuListing.location && (
                   <div className="flex justify-between">
@@ -532,15 +556,15 @@ export default function CPUDetails() {
 
             {/* Description */}
             {cpuListing.description && (
-              <div className="bg-[var(--card-bg)] rounded-2xl p-6 border border-[var(--card-border)]">
-                <h3 className="text-xl font-bold text-white mb-4">📝 Description</h3>
-                <p className="text-gray-300 leading-relaxed">{cpuListing.description}</p>
+              <div className="bg-[var(--card-bg)] rounded-xl sm:rounded-2xl p-4 sm:p-6 border border-[var(--card-border)]">
+                <h3 className="text-lg sm:text-xl font-bold text-white mb-3 sm:mb-4">📝 Description</h3>
+                <p className="text-sm sm:text-base text-gray-300 leading-relaxed">{cpuListing.description}</p>
               </div>
             )}
 
             {/* Seller Information */}
-            <div className="bg-[var(--card-bg)] rounded-2xl p-6 border border-[var(--card-border)]">
-              <h3 className="text-xl font-bold text-white mb-4">👤 Seller Information</h3>
+            <div className="bg-[var(--card-bg)] rounded-xl sm:rounded-2xl p-4 sm:p-6 border border-[var(--card-border)]">
+              <h3 className="text-lg sm:text-xl font-bold text-white mb-3 sm:mb-4">👤 Seller Information</h3>
               <div className="space-y-3">
                 <div className="flex justify-between">
                   <span className="text-gray-400">Name:</span>
@@ -573,7 +597,7 @@ export default function CPUDetails() {
       </div>
 
       {/* Footer */}
-      <footer className="px-6 lg:px-12 py-8 border-t border-[var(--card-border)] bg-[var(--card-bg)]/50 mt-16">
+      <footer className="px-4 sm:px-6 lg:px-12 py-6 sm:py-8 border-t border-[var(--card-border)] bg-[var(--card-bg)]/50 mt-8 sm:mt-16">
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center">
           <div className="flex items-center space-x-2 mb-4 md:mb-0">
             <div className="w-6 h-6 bg-gradient-to-br from-[var(--brand)] to-[var(--brand-light)] rounded flex items-center justify-center">
@@ -581,7 +605,7 @@ export default function CPUDetails() {
             </div>
             <span className="text-lg font-bold">Stali</span>
           </div>
-          <div className="text-gray-400 text-sm">
+          <div className="text-gray-400 text-xs sm:text-sm text-center">
             © 2026 Stali. Your premium PC parts marketplace.
           </div>
         </div>

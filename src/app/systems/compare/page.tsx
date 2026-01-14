@@ -88,30 +88,31 @@ function SystemCompareContent() {
       <div className="min-h-screen bg-[var(--background)]">
         {/* Navigation */}
         <nav className="bg-[var(--card-bg)]/80 backdrop-blur-sm border-b border-[var(--card-border)] sticky top-0 z-50">
-          <div className="max-w-7xl mx-auto px-6 lg:px-12">
-            <div className="flex items-center justify-between h-16">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-12">
+            <div className="flex items-center justify-between h-14 sm:h-16">
               <Link href="/" className="flex items-center space-x-2">
-                <div className="w-8 h-8 bg-gradient-to-br from-[var(--brand)] to-[var(--brand-light)] rounded-lg flex items-center justify-center">
-                  <span className="text-white text-lg">🐺</span>
+                <div className="w-7 h-7 sm:w-8 sm:h-8 bg-gradient-to-br from-[var(--brand)] to-[var(--brand-light)] rounded-lg flex items-center justify-center">
+                  <span className="text-white text-base sm:text-lg">🐺</span>
                 </div>
-                <h1 className="text-2xl font-bold bg-gradient-to-r from-[var(--brand)] to-[var(--brand-light)] bg-clip-text text-transparent">
+                <h1 className="text-xl sm:text-2xl font-bold bg-gradient-to-r from-[var(--brand)] to-[var(--brand-light)] bg-clip-text text-transparent">
                   Stali
                 </h1>
               </Link>
-              <Link href="/systems" className="text-gray-300 hover:text-white transition-colors duration-200 font-medium">
-                ← Back to Systems
+              <Link href="/systems" className="text-gray-300 hover:text-white transition-colors duration-200 font-medium text-sm sm:text-base">
+                <span className="hidden sm:inline">← Back to Systems</span>
+                <span className="sm:hidden">← Systems</span>
               </Link>
             </div>
           </div>
         </nav>
 
-        <div className="max-w-7xl mx-auto px-6 lg:px-12 py-20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-12 py-12 sm:py-20">
           <div className="text-center">
-            <h1 className="text-3xl font-bold text-white mb-4">System Comparison</h1>
-            <p className="text-gray-400 mb-8">No systems selected for comparison</p>
+            <h1 className="text-2xl sm:text-3xl font-bold text-white mb-3 sm:mb-4">System Comparison</h1>
+            <p className="text-gray-400 mb-6 sm:mb-8 text-sm sm:text-base">No systems selected for comparison</p>
             <Link
               href="/systems"
-              className="bg-[var(--brand)] hover:bg-[var(--brand-light)] text-white px-6 py-3 rounded-lg font-medium transition-all duration-200 hover:scale-105"
+              className="bg-[var(--brand)] hover:bg-[var(--brand-light)] text-white px-5 sm:px-6 py-2.5 sm:py-3 rounded-lg font-medium transition-all duration-200 hover:scale-105 text-sm sm:text-base"
             >
               Browse Systems
             </Link>
@@ -125,19 +126,20 @@ function SystemCompareContent() {
     <div className="min-h-screen bg-[var(--background)]">
       {/* Navigation */}
       <nav className="bg-[var(--card-bg)]/80 backdrop-blur-sm border-b border-[var(--card-border)] sticky top-0 z-50">
-        <div className="max-w-7xl mx-auto px-6 lg:px-12">
-          <div className="flex items-center justify-between h-16">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-12">
+          <div className="flex items-center justify-between h-14 sm:h-16">
             <Link href="/" className="flex items-center space-x-2">
-              <div className="w-8 h-8 bg-gradient-to-br from-[var(--brand)] to-[var(--brand-light)] rounded-lg flex items-center justify-center">
-                <span className="text-white text-lg">🐺</span>
+              <div className="w-7 h-7 sm:w-8 sm:h-8 bg-gradient-to-br from-[var(--brand)] to-[var(--brand-light)] rounded-lg flex items-center justify-center">
+                <span className="text-white text-base sm:text-lg">🐺</span>
               </div>
-              <h1 className="text-2xl font-bold bg-gradient-to-r from-[var(--brand)] to-[var(--brand-light)] bg-clip-text text-transparent">
+              <h1 className="text-xl sm:text-2xl font-bold bg-gradient-to-r from-[var(--brand)] to-[var(--brand-light)] bg-clip-text text-transparent">
                 Stali
               </h1>
             </Link>
             <div className="flex items-center space-x-4">
-              <Link href="/systems" className="text-gray-300 hover:text-white transition-colors duration-200 font-medium">
-                ← Back to Systems
+              <Link href="/systems" className="text-gray-300 hover:text-white transition-colors duration-200 font-medium text-sm sm:text-base">
+                <span className="hidden sm:inline">← Back to Systems</span>
+                <span className="sm:hidden">← Systems</span>
               </Link>
             </div>
           </div>
@@ -145,10 +147,10 @@ function SystemCompareContent() {
       </nav>
 
       {/* Main Content */}
-      <div className="max-w-7xl mx-auto px-6 lg:px-12 py-8">
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-white mb-2">System Comparison</h1>
-          <p className="text-gray-400">Compare {comparisonSystems.length} systems side by side</p>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-12 py-6 sm:py-8">
+        <div className="mb-6 sm:mb-8">
+          <h1 className="text-2xl sm:text-3xl font-bold text-white mb-1 sm:mb-2">System Comparison</h1>
+          <p className="text-gray-400 text-sm sm:text-base">Compare {comparisonSystems.length} systems side by side</p>
         </div>
 
         <SystemComparison 
@@ -159,15 +161,15 @@ function SystemCompareContent() {
       </div>
 
       {/* Footer */}
-      <footer className="px-6 lg:px-12 py-8 border-t border-[var(--card-border)] bg-[var(--card-bg)]/50 mt-16">
+      <footer className="px-4 sm:px-6 lg:px-12 py-6 sm:py-8 border-t border-[var(--card-border)] bg-[var(--card-bg)]/50 mt-12 sm:mt-16">
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center">
-          <div className="flex items-center space-x-2 mb-4 md:mb-0">
-            <div className="w-6 h-6 bg-gradient-to-br from-[var(--brand)] to-[var(--brand-light)] rounded flex items-center justify-center">
-              <span className="text-white text-sm">🐺</span>
+          <div className="flex items-center space-x-2 mb-3 md:mb-0">
+            <div className="w-5 h-5 sm:w-6 sm:h-6 bg-gradient-to-br from-[var(--brand)] to-[var(--brand-light)] rounded flex items-center justify-center">
+              <span className="text-white text-xs sm:text-sm">🐺</span>
             </div>
-            <span className="text-lg font-bold">Stali</span>
+            <span className="text-base sm:text-lg font-bold">Stali</span>
           </div>
-          <div className="text-gray-400 text-sm">
+          <div className="text-gray-400 text-xs sm:text-sm text-center">
             © 2026 Stali. Your premium PC parts marketplace.
           </div>
         </div>

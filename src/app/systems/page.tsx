@@ -200,24 +200,26 @@ export default function CompleteSystems() {
     <div className="min-h-screen bg-[var(--background)] text-[var(--foreground)]">
       {/* Navigation */}
       <nav className="bg-[var(--card-bg)]/80 backdrop-blur-sm border-b border-[var(--card-border)] sticky top-0 z-50">
-        <div className="max-w-7xl mx-auto px-6 lg:px-12">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-12">
           <div className="flex items-center justify-between h-16">
             <Link href="/" className="flex items-center space-x-2">
               <div className="w-8 h-8 bg-gradient-to-br from-[var(--brand)] to-[var(--brand-light)] rounded-lg flex items-center justify-center">
                 <span className="text-white text-lg">🐺</span>
               </div>
-              <h1 className="text-2xl font-bold bg-gradient-to-r from-[var(--brand)] to-[var(--brand-light)] bg-clip-text text-transparent">
+              <h1 className="text-xl sm:text-2xl font-bold bg-gradient-to-r from-[var(--brand)] to-[var(--brand-light)] bg-clip-text text-transparent">
                 Stali
               </h1>
             </Link>
-            <div className="flex items-center space-x-4">
+            
+            {/* Desktop Navigation */}
+            <div className="hidden md:flex items-center space-x-4">
               <Link href="/" className="text-gray-300 hover:text-white transition-colors duration-200 font-medium">
                 ← Back to Home
               </Link>
               
               {user ? (
                 <div className="flex items-center space-x-4">
-                  <span className="text-gray-300 text-sm">
+                  <span className="text-gray-300 text-sm hidden lg:inline">
                     Welcome, {user.user_metadata?.display_name || user.user_metadata?.username || user.email}
                   </span>
                   <button 
@@ -228,9 +230,9 @@ export default function CompleteSystems() {
                   </button>
                   <Link 
                     href="/seller"
-                    className="bg-[var(--brand)] hover:bg-[var(--brand-light)] text-white px-6 py-2 rounded-lg font-medium transition-all duration-200 hover:scale-105"
+                    className="bg-[var(--brand)] hover:bg-[var(--brand-light)] text-white px-4 lg:px-6 py-2 rounded-lg font-medium transition-all duration-200 hover:scale-105"
                   >
-                    Sell Your System
+                    Sell System
                   </Link>
                 </div>
               ) : (
@@ -243,11 +245,35 @@ export default function CompleteSystems() {
                   </Link>
                   <Link 
                     href="/auth"
-                    className="bg-[var(--brand)] hover:bg-[var(--brand-light)] text-white px-6 py-2 rounded-lg font-medium transition-all duration-200 hover:scale-105"
+                    className="bg-[var(--brand)] hover:bg-[var(--brand-light)] text-white px-4 lg:px-6 py-2 rounded-lg font-medium transition-all duration-200 hover:scale-105"
                   >
                     Sign Up
                   </Link>
                 </div>
+              )}
+            </div>
+
+            {/* Mobile Navigation */}
+            <div className="flex md:hidden items-center space-x-2">
+              <Link href="/" className="text-gray-300 hover:text-white p-2">
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                </svg>
+              </Link>
+              {user ? (
+                <Link 
+                  href="/seller"
+                  className="bg-[var(--brand)] hover:bg-[var(--brand-light)] text-white px-3 py-1.5 rounded-lg text-sm font-medium"
+                >
+                  Sell
+                </Link>
+              ) : (
+                <Link 
+                  href="/auth"
+                  className="bg-[var(--brand)] hover:bg-[var(--brand-light)] text-white px-3 py-1.5 rounded-lg text-sm font-medium"
+                >
+                  Sign In
+                </Link>
               )}
             </div>
           </div>
@@ -255,13 +281,13 @@ export default function CompleteSystems() {
       </nav>
 
       {/* Header */}
-      <section className="px-6 lg:px-12 py-12 bg-gradient-to-r from-[var(--brand)]/10 to-[var(--brand-light)]/10">
+      <section className="px-4 sm:px-6 lg:px-12 py-8 sm:py-12 bg-gradient-to-r from-[var(--brand)]/10 to-[var(--brand-light)]/10">
         <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-8">
-            <h1 className="text-4xl lg:text-5xl font-bold mb-4">
+          <div className="text-center mb-6 sm:mb-8">
+            <h1 className="text-2xl sm:text-4xl lg:text-5xl font-bold mb-3 sm:mb-4">
               Complete PC Systems
             </h1>
-            <p className="text-xl text-gray-400 max-w-3xl mx-auto">
+            <p className="text-base sm:text-xl text-gray-400 max-w-3xl mx-auto px-2">
               Ready-to-use computers for gaming, work, and everything in between. All systems are tested and verified.
             </p>
           </div>
@@ -269,11 +295,11 @@ export default function CompleteSystems() {
       </section>
 
       {/* Filters and Sort */}
-      <section className="px-6 lg:px-12 py-8 border-b border-[var(--card-border)]">
+      <section className="px-4 sm:px-6 lg:px-12 py-4 sm:py-8 border-b border-[var(--card-border)]">
         <div className="max-w-7xl mx-auto">
-          <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6">
+          <div className="flex flex-col gap-4 sm:gap-6">
             {/* Filters */}
-            <div className="flex flex-wrap gap-3">
+            <div className="flex flex-wrap gap-2 sm:gap-3 overflow-x-auto pb-2 -mx-4 px-4 sm:mx-0 sm:px-0">
               {filters.map((filter) => (
                 <button
                   key={filter.id}
@@ -323,10 +349,10 @@ export default function CompleteSystems() {
 
       {/* Gaming Filter */}
       {showGamingFilter && (
-        <section className="px-6 lg:px-12 py-8">
+        <section className="px-4 sm:px-6 lg:px-12 py-6 sm:py-8">
           <div className="max-w-7xl mx-auto">
-            <div className="bg-[var(--card-bg)] border border-[var(--card-border)] rounded-2xl p-6">
-              <h3 className="text-lg font-semibold text-white mb-4">Gaming Filter</h3>
+            <div className="bg-[var(--card-bg)] border border-[var(--card-border)] rounded-xl sm:rounded-2xl p-4 sm:p-6">
+              <h3 className="text-base sm:text-lg font-semibold text-white mb-3 sm:mb-4">Gaming Filter</h3>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div className="md:col-span-3">
                   <label className="block text-sm font-medium text-gray-300 mb-2">Game</label>

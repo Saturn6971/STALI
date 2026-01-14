@@ -254,24 +254,24 @@ export default function GamingFilter({ onFilterChange, className = '' }: GamingF
   };
 
   return (
-    <div className={`bg-[var(--card-bg)] rounded-2xl p-6 border border-[var(--card-border)] ${className}`}>
-      <h3 className="text-xl font-bold mb-6 text-white">🎮 Gaming Performance Filter</h3>
+    <div className={`bg-[var(--card-bg)] rounded-xl sm:rounded-2xl p-4 sm:p-6 border border-[var(--card-border)] ${className}`}>
+      <h3 className="text-lg sm:text-xl font-bold mb-4 sm:mb-6 text-white">🎮 Gaming Performance Filter</h3>
       
       {/* Game Selection */}
-      <div className="mb-6">
-        <h4 className="text-lg font-semibold mb-3 text-gray-300">Select Games You Want to Play</h4>
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
+      <div className="mb-4 sm:mb-6">
+        <h4 className="text-base sm:text-lg font-semibold mb-2 sm:mb-3 text-gray-300">Select Games You Want to Play</h4>
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2 sm:gap-3">
           {popularGames.map((game) => (
             <button
               key={game.id}
               onClick={() => handleGameToggle(game.id)}
-              className={`p-3 rounded-lg border transition-all duration-200 text-left ${
+              className={`p-2 sm:p-3 rounded-lg border transition-all duration-200 text-left ${
                 selectedGames.includes(game.id)
                   ? 'border-[var(--brand)] bg-[var(--brand)]/20 text-white'
                   : 'border-[var(--card-border)] bg-[var(--card-bg)] text-gray-300 hover:border-[var(--brand)]/50'
               }`}
             >
-              <div className="font-medium text-sm">{game.name}</div>
+              <div className="font-medium text-xs sm:text-sm">{game.name}</div>
               <div className="text-xs text-gray-400">{game.genre}</div>
             </button>
           ))}
@@ -279,7 +279,7 @@ export default function GamingFilter({ onFilterChange, className = '' }: GamingF
       </div>
 
       {/* Performance Settings */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 mb-4 sm:mb-6">
         {/* Resolution */}
         <div>
           <label className="block text-sm font-medium text-gray-300 mb-2">Resolution</label>
@@ -337,9 +337,9 @@ export default function GamingFilter({ onFilterChange, className = '' }: GamingF
 
       {/* Expected Performance */}
       {selectedGames.length > 0 && (
-        <div className="bg-[var(--background)] rounded-lg p-4">
-          <h4 className="text-lg font-semibold mb-3 text-white">Expected Performance</h4>
-          <div className="space-y-2">
+        <div className="bg-[var(--background)] rounded-lg p-3 sm:p-4">
+          <h4 className="text-base sm:text-lg font-semibold mb-2 sm:mb-3 text-white">Expected Performance</h4>
+          <div className="space-y-1.5 sm:space-y-2">
             {selectedGames.map((gameId) => {
               const game = popularGames.find(g => g.id === gameId);
               if (!game) return null;
