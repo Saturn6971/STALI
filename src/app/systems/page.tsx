@@ -584,18 +584,6 @@ export default function CompleteSystems() {
                           >
                             {isInComparison(system.id) ? '✓ Added' : '+ Compare'}
                           </button>
-                          {user && user.id !== system.seller_id && (
-                            <button 
-                              className="px-4 py-3 border border-[var(--brand)] text-[var(--brand)] hover:bg-[var(--brand)] hover:text-white rounded-lg font-medium transition-all duration-200"
-                              onClick={(e) => {
-                                e.preventDefault();
-                                e.stopPropagation();
-                                // Handle contact seller
-                              }}
-                            >
-                              💬
-                            </button>
-                          )}
                         </div>
                   </div>
                 </Link>

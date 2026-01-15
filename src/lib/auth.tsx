@@ -29,6 +29,16 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         const { data, error } = await supabase.auth.getSession();
 
         if (error) {
+          // Handle invalid refresh token error gracefully - this is expected when
+          // tokens expire or are invalidated. Sign out to clear stale session data.
+          if (error.message?.includes('Refresh Token') || error.name === 'AuthApiError') {
+            console.warn('Session expired or invalid, clearing auth state');
+            await supabase.auth.signOut();
+            setSession(null);
+            setUser(null);
+            setLoading(false);
+            return;
+          }
           console.error('Failed to fetch auth session', error);
           setLoading(false);
           return;
@@ -48,7 +58,17 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     // Listen for auth changes
     const {
       data: { subscription },
-    } = supabase.auth.onAuthStateChange((_event, session) => {
+    } = supabase.auth.onAuthStateChange(async (event, session) => {
+      // Handle token refresh errors by signing out
+      if (event === 'TOKEN_REFRESHED' && !session) {
+        console.warn('Token refresh failed, clearing auth state');
+        await supabase.auth.signOut();
+        setSession(null);
+        setUser(null);
+        setLoading(false);
+        return;
+      }
+      
       setSession(session);
       setUser(session?.user ?? null);
       setLoading(false);

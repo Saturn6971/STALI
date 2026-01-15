@@ -193,14 +193,9 @@ export const useGPUFiltered = (filters: GPUFilters) => {
         `)
         .eq('status', 'active');
 
-      // Apply filters
-      if (filters.manufacturers.length > 0) {
-        query = query.in('gpu_model.manufacturer.name', filters.manufacturers);
-      }
-
-      if (filters.memorySizes.length > 0) {
-        query = query.in('gpu_model.memory_size', filters.memorySizes);
-      }
+      // Apply filters that work on direct columns (not nested relations)
+      // Note: Supabase can't properly filter on nested relations - it returns all rows
+      // but only includes data for nested objects that match. So we apply those client-side.
 
       if (filters.priceRange[0] > 0 || filters.priceRange[1] < 10000) {
         query = query.gte('price', filters.priceRange[0]);
@@ -211,7 +206,8 @@ export const useGPUFiltered = (filters: GPUFilters) => {
         query = query.in('condition', filters.condition);
       }
 
-      // Note: search is applied client-side to support nested relation filtering
+      // Note: manufacturers, memorySizes, and search are applied client-side 
+      // because Supabase can't filter on nested relations properly
 
       // Apply sorting
       switch (filters.sortBy) {
@@ -242,7 +238,7 @@ export const useGPUFiltered = (filters: GPUFilters) => {
         return;
       }
 
-      // Apply client-side filtering for manufacturer and search (Supabase can't filter on nested relations)
+      // Apply client-side filtering for nested relations (Supabase can't filter on nested relations properly)
       let filteredData = data || [];
 
       // Filter by manufacturer
@@ -250,6 +246,14 @@ export const useGPUFiltered = (filters: GPUFilters) => {
         filteredData = filteredData.filter((gpu) => {
           const name = gpu.gpu_model?.manufacturer?.name?.toLowerCase() || '';
           return filters.manufacturers.some((m) => name.includes(m.toLowerCase()));
+        });
+      }
+
+      // Filter by memory size
+      if (filters.memorySizes && filters.memorySizes.length > 0) {
+        filteredData = filteredData.filter((gpu) => {
+          const memorySize = gpu.gpu_model?.memory_size;
+          return memorySize !== undefined && memorySize !== null && filters.memorySizes.includes(memorySize);
         });
       }
 

@@ -26,18 +26,19 @@ export default function GPUsPage() {
   const [showFilters, setShowFilters] = useState(false);
 
   const { manufacturers } = useGPUManufacturers();
+  const { gpuListings: allGpuListings } = useGPUs(); // Unfiltered list for filter options
   const { gpuListings, loading, error } = useGPUFiltered(filters);
   const { user, signOut } = useAuth();
 
-  // Extract unique values for filters
+  // Extract unique values for filters from ALL listings (not filtered ones)
   const uniqueMemorySizes = Array.from(new Set(
-    gpuListings
+    allGpuListings
       .map(gpu => gpu.gpu_model?.memory_size)
       .filter((size): size is number => typeof size === 'number')
   )).sort((a, b) => a - b);
 
   const uniqueConditions = Array.from(new Set(
-    gpuListings.map(gpu => gpu.condition)
+    allGpuListings.map(gpu => gpu.condition)
   ));
 
   const manufacturerNames = manufacturers.map(m => m.name);
